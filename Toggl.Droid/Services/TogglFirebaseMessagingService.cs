@@ -1,51 +1,39 @@
-using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using Android.App;
+using Android.App.Job;
+using Android.Content;
 using Firebase.Messaging;
-using Toggl.Core.Extensions;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Services
 {
     [Service]
-    [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
+    [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
     public class TogglFirebaseMessagingService : FirebaseMessagingService
     {
-        private IDisposable syncDisposable;
-        
         public override void OnMessageReceived(RemoteMessage message)
         {
             var dependencyContainer = AndroidDependencyContainer.Instance;
             var userIsLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userIsLoggedIn) return;
-            
-            var interactorFactory = dependencyContainer.InteractorFactory;
-            var dependencyContainerSchedulerProvider = dependencyContainer.SchedulerProvider;
 
-            var syncInteractor = togglApplication().IsInForeground
-                ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
-                : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
-
-            var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications(); 
-
-            syncDisposable = shouldHandlePushNotifications
-                .SelectMany(willHandlePushNotification => willHandlePushNotification
-                    ? syncInteractor.Execute().SelectUnit()
-                    : Observable.Return(Unit.Default))
-                .ObserveOn(dependencyContainerSchedulerProvider.BackgroundScheduler)
-                .Subscribe(_ => StopSelf());
+            scheduleJob(dependencyContainer);
         }
-
-        private TogglApplication togglApplication() => (TogglApplication) Application;
-
-        protected override void Dispose(bool disposing)
+        
+        private void scheduleJob(AndroidDependencyContainer dependencyContainer)
         {
-            base.Dispose(disposing);
+            bool hasPendingJobScheduled = dependencyContainer.KeyValueStorage.GetBool(SyncJobService.HasPendingJobScheduledKey);
+            if (hasPendingJobScheduled) return;
             
-            if (!disposing) return;
+            dependencyContainer.KeyValueStorage.SetBool(SyncJobService.HasPendingJobScheduledKey, true);
             
-            syncDisposable?.Dispose();
+            var jobClass = Java.Lang.Class.FromType(typeof(SyncJobService));
+            var jobScheduler = (JobScheduler) GetSystemService(JobSchedulerService);
+            var serviceName = new ComponentName(this, jobClass);
+            var jobInfo = new JobInfo.Builder(SyncJobService.JobId, serviceName)
+                .SetImportantWhileForeground(true)
+                .SetRequiredNetworkType(NetworkType.Any)
+                .Build();
+
+            jobScheduler.Schedule(jobInfo);
         }
     }
 }

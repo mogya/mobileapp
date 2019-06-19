@@ -3,6 +3,7 @@ using Android.App;
 using Android.Arch.Lifecycle;
 using Android.Content;
 using Android.Runtime;
+using Android.Util;
 using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;
@@ -15,7 +16,7 @@ namespace Toggl.Droid
     {
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
-        public bool IsInForeground { get; private set; } = true;
+        public bool IsInForeground { get; private set; } = false;
         
         public TogglApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)

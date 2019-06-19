@@ -358,6 +358,7 @@
       <DependentUpon>SelectProjectActivity.cs</DependentUpon>
     </Compile>
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
+    <Compile Include="Services\SyncJobService.cs" />
     <Compile Include="Services\TogglFirebaseIIDService.cs" />
     <Compile Include="Services\TogglFirebaseMessagingService.cs" />
     <Compile Include="Services\PushNotificationsTokenServiceAndroid.cs" />

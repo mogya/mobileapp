@@ -37,7 +37,7 @@ namespace Toggl.Droid.Services
             return false;
         }
 
-        private TogglApplication getTogglApplication() => (TogglApplication) Application;
+        private new TogglApplication Application => base.Application as TogglApplication;
 
         private void runSync(JobParameters parameters)
         {
@@ -53,7 +53,7 @@ namespace Toggl.Droid.Services
             if (shouldRunSync)
             {
                 var interactorFactory = dependencyContainer.InteractorFactory;
-                var syncInteractor = getTogglApplication().IsInForeground
+                var syncInteractor = Application.IsInForeground
                     ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
                     : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 

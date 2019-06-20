@@ -28,7 +28,7 @@ namespace Toggl.Droid.Services
             => FetchConfiguration(extractRatingViewConfiguration);
 
         public IObservable<PushNotificationsConfiguration> PushNotificationsConfiguration
-            => Observable.Return(new PushNotificationsConfiguration(false, false));
+            => FetchConfiguration(extractPushNotificationsConfiguration);
         
         private RatingViewConfiguration extractRatingViewConfiguration(FirebaseRemoteConfig remoteConfig)
             => new RatingViewConfiguration(

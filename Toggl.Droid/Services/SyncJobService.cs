@@ -13,49 +13,67 @@ namespace Toggl.Droid.Services
         Permission = "android.permission.BIND_JOB_SERVICE",
         Exported = true)]
     public class SyncJobService : JobService
-    { 
-        public override bool OnStartJob(JobParameters @params)
+    {
+        public override bool OnStartJob(JobParameters parameters)
         {
             Task.Run(() =>
             {
-                var dependencyContainer = AndroidDependencyContainer.Instance;
-                var keyValueStorage = dependencyContainer.KeyValueStorage;
-                if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
+                try
                 {
-                    keyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, false);
-                    JobFinished(@params, false);
-                    return;
+                    runSync(parameters);
                 }
-
-                var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications();
-                var shouldRunSync = shouldHandlePushNotifications.Wait();
-
-                if (shouldRunSync)
+                catch (Exception exception)
                 {
-                    var interactorFactory = dependencyContainer.InteractorFactory;
-                    var syncInteractor = getTogglApplication().IsInForeground
-                        ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
-                        : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
-
-                    syncInteractor.Execute().Wait();
+                    finishJobClearingPendingSyncJobLock(parameters);
                 }
-
-                keyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, false);
-                JobFinished(@params, false);
             }).ConfigureAwait(false);
 
             return true;
         }
 
-        public override bool OnStopJob(JobParameters @params)
+        public override bool OnStopJob(JobParameters parameters)
         {
-            AndroidDependencyContainer.Instance
-                .KeyValueStorage
-                .SetBool(HasPendingSyncJobServiceScheduledKey, false);
-
+            clearPendingSyncJobLock();
             return false;
         }
 
         private TogglApplication getTogglApplication() => (TogglApplication) Application;
+
+        private void runSync(JobParameters parameters)
+        {
+            var dependencyContainer = AndroidDependencyContainer.Instance;
+            if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
+            {
+                finishJobClearingPendingSyncJobLock(parameters);
+                return;
+            }
+
+            var shouldHandlePushNotifications = dependencyContainer.RemoteConfigService.ShouldHandlePushNotifications();
+            var shouldRunSync = shouldHandlePushNotifications.Wait();
+            if (shouldRunSync)
+            {
+                var interactorFactory = dependencyContainer.InteractorFactory;
+                var syncInteractor = getTogglApplication().IsInForeground
+                    ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
+                    : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
+
+                syncInteractor.Execute().Wait();
+            }
+
+            finishJobClearingPendingSyncJobLock(parameters);
+        }
+
+        private void finishJobClearingPendingSyncJobLock(JobParameters parameters)
+        {
+            clearPendingSyncJobLock();
+            JobFinished(parameters, false);
+        }
+
+        private void clearPendingSyncJobLock()
+        {
+            AndroidDependencyContainer.Instance
+                .KeyValueStorage
+                .SetBool(HasPendingSyncJobServiceScheduledKey, false);
+        }
     }
 }

@@ -56,6 +56,7 @@ namespace Toggl.Droid.Services
             return false;
         }
 
-        private TogglApplication getTogglApplication() => (TogglApplication) Application;
+        private new TogglApplication Application => base.Application as TogglApplication;
+
     }
 }

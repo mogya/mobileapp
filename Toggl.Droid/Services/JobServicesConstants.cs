@@ -6,5 +6,6 @@ namespace Toggl.Droid.Services
         public const int BackgroundSyncJobServiceJobId = 1;
 
         public const string HasPendingSyncJobServiceScheduledKey = "HasPendingSyncJobServiceScheduledKey";
+        public const string LastSyncJobScheduledAtKey = "LastSyncJobScheduledAtKey";
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.App.Job;
 using Toggl.Core.Extensions;
+using static Toggl.Droid.Services.JobServicesConstants;
 
 namespace Toggl.Droid.Services
 {
@@ -12,10 +13,7 @@ namespace Toggl.Droid.Services
         Permission = "android.permission.BIND_JOB_SERVICE",
         Exported = true)]
     public class SyncJobService : JobService
-    {
-        public const string HasPendingJobScheduledKey = "HasPendingJobScheduledKey";
-        public const int JobId = 1111;
-
+    { 
         public override bool OnStartJob(JobParameters @params)
         {
             Task.Run(() =>
@@ -24,7 +22,7 @@ namespace Toggl.Droid.Services
                 var keyValueStorage = dependencyContainer.KeyValueStorage;
                 if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())
                 {
-                    keyValueStorage.SetBool(HasPendingJobScheduledKey, false);
+                    keyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, false);
                     JobFinished(@params, false);
                     return;
                 }
@@ -42,7 +40,7 @@ namespace Toggl.Droid.Services
                     syncInteractor.Execute().Wait();
                 }
 
-                keyValueStorage.SetBool(HasPendingJobScheduledKey, false);
+                keyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, false);
                 JobFinished(@params, false);
             }).ConfigureAwait(false);
 
@@ -53,7 +51,7 @@ namespace Toggl.Droid.Services
         {
             AndroidDependencyContainer.Instance
                 .KeyValueStorage
-                .SetBool(HasPendingJobScheduledKey, false);
+                .SetBool(HasPendingSyncJobServiceScheduledKey, false);
 
             return false;
         }

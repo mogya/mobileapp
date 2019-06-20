@@ -2,6 +2,7 @@ using Android.App;
 using Android.App.Job;
 using Android.Content;
 using Firebase.Messaging;
+using static Toggl.Droid.Services.JobServicesConstants;
 
 namespace Toggl.Droid.Services
 {
@@ -15,15 +16,15 @@ namespace Toggl.Droid.Services
             var userIsLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userIsLoggedIn) return;
 
-            bool hasPendingJobScheduled = dependencyContainer.KeyValueStorage.GetBool(SyncJobService.HasPendingJobScheduledKey);
+            bool hasPendingJobScheduled = dependencyContainer.KeyValueStorage.GetBool(HasPendingSyncJobServiceScheduledKey);
             if (hasPendingJobScheduled) return;
             
-            dependencyContainer.KeyValueStorage.SetBool(SyncJobService.HasPendingJobScheduledKey, true);
+            dependencyContainer.KeyValueStorage.SetBool(HasPendingSyncJobServiceScheduledKey, true);
             
             var jobClass = Java.Lang.Class.FromType(typeof(SyncJobService));
             var jobScheduler = (JobScheduler) GetSystemService(JobSchedulerService);
             var serviceName = new ComponentName(this, jobClass);
-            var jobInfo = new JobInfo.Builder(SyncJobService.JobId, serviceName)
+            var jobInfo = new JobInfo.Builder(SyncJobServiceJobId, serviceName)
                 .SetImportantWhileForeground(true)
                 .SetRequiredNetworkType(NetworkType.Any)
                 .Build();

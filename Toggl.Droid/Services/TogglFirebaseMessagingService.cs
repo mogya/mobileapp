@@ -15,11 +15,6 @@ namespace Toggl.Droid.Services
             var userIsLoggedIn = dependencyContainer.UserAccessManager.CheckIfLoggedIn();
             if (!userIsLoggedIn) return;
 
-            scheduleJob(dependencyContainer);
-        }
-        
-        private void scheduleJob(AndroidDependencyContainer dependencyContainer)
-        {
             bool hasPendingJobScheduled = dependencyContainer.KeyValueStorage.GetBool(SyncJobService.HasPendingJobScheduledKey);
             if (hasPendingJobScheduled) return;
             
@@ -34,6 +29,6 @@ namespace Toggl.Droid.Services
                 .Build();
 
             jobScheduler.Schedule(jobInfo);
-        }
+        } 
     }
 }

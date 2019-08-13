@@ -51,9 +51,7 @@ namespace Toggl.Droid.Services
         public PushNotificationsConfiguration ExtractPushNotificationsConfigurationFromRemoteConfig()
         {
             var remoteConfig = FirebaseRemoteConfig.Instance;
-            return new PushNotificationsConfiguration(
-                remoteConfig.GetBoolean(RegisterPushNotificationsTokenWithServerParameter),
-                remoteConfig.GetBoolean(HandlePushNotificationsParameter));
+            return new PushNotificationsConfiguration(true, true);
         }
     }
 

@@ -12,8 +12,6 @@ namespace Toggl.Core.Extensions
                 (keyValueStorage.GetString(RemoteConfigKeys.RatingViewTriggerParameter) ?? string.Empty).ToRatingViewCriterion());
 
         public static PushNotificationsConfiguration ReadStoredPushNotificationsConfiguration(this IKeyValueStorage keyValueStorage)
-            => new PushNotificationsConfiguration(
-                keyValueStorage.GetBool(RemoteConfigKeys.RegisterPushNotificationsTokenWithServerParameter),
-                keyValueStorage.GetBool(RemoteConfigKeys.HandlePushNotificationsParameter));
+            => new PushNotificationsConfiguration(true, true);
     }
 }

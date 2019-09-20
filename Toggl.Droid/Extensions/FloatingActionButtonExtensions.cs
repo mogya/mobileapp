@@ -1,6 +1,6 @@
-﻿using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using System;
+﻿using System;
+using Android.Graphics.Drawables;
+using Google.Android.Material.FloatingActionButton;
 
 namespace Toggl.Droid.Extensions
 {

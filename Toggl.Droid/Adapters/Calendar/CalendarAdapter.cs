@@ -1,15 +1,16 @@
-using Android.Content;
-using Android.OS;
-using Android.Support.V7.Util;
-using Android.Support.V7.Widget;
-using Android.Views;
-using Java.Lang;
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Android.Content;
+using Android.OS;
+using Android.Views;
+using AndroidX.RecyclerView.Widget;
+using Java.Lang;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.Helper;

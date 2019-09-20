@@ -1,9 +1,11 @@
-﻿using Android.Support.Design.Widget;
-using Android.Support.V7.Widget;
+﻿
+
 using Android.Views;
 using Android.Widget;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.AppBar;
+using Google.Android.Material.FloatingActionButton;
 using Toggl.Droid.Views;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
 {

@@ -1,10 +1,11 @@
-using Android.Arch.Lifecycle;
-using Android.Support.Constraints;
-using Android.Support.V7.Widget;
 using Firebase.Provider;
 using Newtonsoft.Json.Converters;
 using System;
-using V4Space = Android.Support.V4.Widget.Space;
+using AndroidX.AppCompat.Widget;
+using AndroidX.CardView.Widget;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.Lifecycle;
+using V4Space = AndroidX.Legacy.Widget.Space;
 
 namespace Toggl.Droid
 {

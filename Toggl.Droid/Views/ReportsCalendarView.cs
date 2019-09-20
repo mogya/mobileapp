@@ -1,8 +1,5 @@
 using Android.Content;
 using Android.Runtime;
-using Android.Support.V4.Content;
-using Android.Support.V4.View;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Widget;
 using System;
@@ -12,6 +9,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using AndroidX.Core.Content;
+using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager.Widget;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;

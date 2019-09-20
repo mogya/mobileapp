@@ -1,6 +1,6 @@
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
+
 using Android.Views;
 using System;
 using System.Collections.Generic;

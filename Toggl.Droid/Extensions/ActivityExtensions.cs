@@ -2,13 +2,14 @@
 using Android.App.Job;
 using Android.Content;
 using Android.Graphics;
-using Android.Support.V4.App;
+
 using Android.Util;
 using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using AndroidX.Core.App;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Services;

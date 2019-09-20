@@ -1,10 +1,11 @@
 ﻿using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V4.Content;
+
 using Android.Util;
 using Android.Widget;
 using System;
+using AndroidX.Core.Content;
 using Toggl.Droid.Extensions;
 using static Toggl.Core.UI.Helper.Colors;
 

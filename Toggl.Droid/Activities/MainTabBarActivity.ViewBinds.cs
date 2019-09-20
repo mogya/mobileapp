@@ -1,5 +1,6 @@
-﻿using Android.Support.Design.Widget;
+﻿
 using Android.Views;
+using Google.Android.Material.BottomNavigation;
 
 namespace Toggl.Droid.Activities
 {

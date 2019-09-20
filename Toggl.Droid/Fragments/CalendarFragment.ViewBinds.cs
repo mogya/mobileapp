@@ -1,6 +1,7 @@
-using Android.Support.Design.Widget;
+
 using Android.Views;
 using Android.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Droid.Views;
 
 namespace Toggl.Droid.Fragments

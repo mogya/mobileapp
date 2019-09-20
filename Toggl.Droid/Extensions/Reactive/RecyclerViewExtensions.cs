@@ -1,11 +1,13 @@
-using Android.Support.V7.Widget;
+
+
 using System;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Reactive;
 using Toggl.Droid.ViewHelpers;
+using Observable = System.Reactive.Linq.Observable;
 
 namespace Toggl.Droid.Extensions.Reactive
 {

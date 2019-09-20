@@ -1,12 +1,11 @@
 using Android.OS;
-using Android.Support.V7.Util;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Java.Lang;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Collections;
 using Toggl.Droid.ViewHolders;
 

@@ -6,7 +6,7 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Activities;
-using Fragment = Android.Support.V4.App.Fragment;
+
 
 namespace Toggl.Droid.Presentation
 {

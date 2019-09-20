@@ -1,7 +1,5 @@
 ﻿using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Util;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Collections;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared;

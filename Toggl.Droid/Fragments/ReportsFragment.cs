@@ -1,9 +1,9 @@
 ﻿using Android.OS;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
+
 using Android.Views;
 using System;
 using System.Reactive.Linq;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Droid.Adapters;

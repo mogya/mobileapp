@@ -1,5 +1,7 @@
-﻿using Android.Support.Design.Widget;
+﻿
 using Android.Widget;
+using Google.Android.Material.FloatingActionButton;
+using Google.Android.Material.TextField;
 
 namespace Toggl.Droid.Activities
 {

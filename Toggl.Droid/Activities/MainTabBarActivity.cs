@@ -1,11 +1,11 @@
-﻿using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.App;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
@@ -15,7 +15,7 @@ using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Fragments;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using Fragment = Android.Support.V4.App.Fragment;
+using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {
@@ -149,7 +149,7 @@ namespace Toggl.Droid.Activities
             reportsRequestedEndDate = null;
         }
 
-        private Fragment getCachedFragment(int itemId)
+        private AndroidX.Fragment.App.Fragment getCachedFragment(int itemId)
         {
             if (fragments.TryGetValue(itemId, out var fragment))
                 return fragment;

@@ -2,11 +2,6 @@ using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Content;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
-using Android.Support.V7.Widget.Helper;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -33,6 +28,9 @@ using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
 using System.Linq;
+using AndroidX.Core.Content;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.Snackbar;
 
 namespace Toggl.Droid.Fragments
 {

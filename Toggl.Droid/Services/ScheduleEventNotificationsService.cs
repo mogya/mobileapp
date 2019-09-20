@@ -1,7 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.Support.V4.App;
+
 using System;
+using AndroidX.Core.App;
 
 namespace Toggl.Droid.Services
 {

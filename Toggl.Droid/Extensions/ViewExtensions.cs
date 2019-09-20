@@ -1,18 +1,12 @@
-﻿using Android.Animation;
-using Android.Content;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
+﻿using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Shared;
-using Color = Toggl.Shared.Color;
+using AndroidX.Core.Widget;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.AppBar;
 using AndroidColor = Android.Graphics.Color;
-using Android.App;
 using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions

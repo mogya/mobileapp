@@ -1,5 +1,6 @@
-using Android.Support.V7.Widget;
+
 using Android.Widget;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
 
 namespace Toggl.Droid.Activities

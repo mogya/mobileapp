@@ -1218,7 +1218,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_illustration_error_workspace.png" />
     <AndroidResource Include="Resources\layout\ReportsFragmentWorkspaceName.axml" />
     <AndroidResource Include="Resources\drawable\workspace_white.xml" />
-    <AndroidResource Include="Resources\values-v23\Strings.xml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragment.axml" />
     <AndroidResource Include="Resources\layout\SelectDefaultWorkspaceFragmentCell.axml" />
     <AndroidResource Include="Resources\drawable\bg_noise_login.png" />

@@ -9,7 +9,7 @@ using System.CodeDom.Compiler;
 
 namespace Toggl.iOS.ViewControllers
 {
-	[Register ("CalendarViewController")]
+	[Register ("CalendarDayViewController")]
 	partial class CalendarDayViewController
 	{
 		[Outlet]

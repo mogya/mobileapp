@@ -69,18 +69,21 @@ namespace Toggl.iOS.ViewControllers
 
         public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
-            var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
+            try
+            {
+                var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
 
-            if (targetViewController == SelectedViewController
-                && tryGetScrollableController() is IScrollableToTop scrollable)
-            {
-                scrollable.ScrollToTop();
-            }
-            else if (targetViewController is ReactiveNavigationController navigationController)
-            {
-                if (navigationController.TopViewController is IReactiveViewController reactiveViewController)
-                    reactiveViewController.DismissFromNavigationController();
-            }
+                if (targetViewController == SelectedViewController
+                    && tryGetScrollableController() is IScrollableToTop scrollable)
+                {
+                    scrollable.ScrollToTop();
+                }
+                else if (targetViewController is ReactiveNavigationController navigationController)
+                {
+                    if (navigationController.TopViewController is IReactiveViewController reactiveViewController)
+                        reactiveViewController.DismissFromNavigationController();
+                }
+
 
             UIViewController tryGetScrollableController()
             {
@@ -91,6 +94,11 @@ namespace Toggl.iOS.ViewControllers
                     return nav.TopViewController;
 
                 return null;
+            }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Fuck");
             }
         }
 

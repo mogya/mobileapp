@@ -1393,6 +1393,7 @@
     <InterfaceDefinition Include="Cells\Settings\SettingsAnnotationCell.xib" />
     <InterfaceDefinition Include="Cells\Settings\SettingsButtonCell.xib" />
     <InterfaceDefinition Include="Cells\Common\SelectorCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -1988,6 +1989,10 @@
     </Compile>
     <Compile Include="ViewSources\Generic\Common\SelectorTableViewSource.cs" />
     <Compile Include="Helper\Handoff.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
+      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">

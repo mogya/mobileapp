@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarDayViewController">
             <connections>
                 <outlet property="CalendarCollectionView" destination="NhI-Kn-KUq" id="MHb-E0-Sdr"/>
                 <outlet property="CurrentDateLabel" destination="xyD-rD-i58" id="K1n-Dy-Y0w"/>

@@ -23,7 +23,7 @@ namespace Toggl.iOS.Presentation
                 case AboutViewModel vm:
                     return new AboutViewController(vm);
                 case CalendarViewModel vm:
-                    return new CalendarViewController(vm);
+                    return new CalendarDayViewController(vm);
                 case CalendarPermissionDeniedViewModel vm:
                     return new CalendarPermissionDeniedViewController(vm);
                 case CalendarSettingsViewModel vm:

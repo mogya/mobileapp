@@ -1352,7 +1352,7 @@
     <InterfaceDefinition Include="Cells\Settings\LicensesViewCell.xib" />
     <InterfaceDefinition Include="ViewControllers\NoWorkspaceViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Settings\SendFeedbackViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\Calendar\CalendarDayViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CalendarItemView.xib" />
     <InterfaceDefinition Include="Cells\Calendar\CurrentTimeSupplementaryView.xib" />
@@ -1777,9 +1777,9 @@
       <DependentUpon>SendFeedbackViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ReactiveCollectionViewCell.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.cs" />
-    <Compile Include="ViewControllers\Calendar\CalendarViewController.designer.cs">
-      <DependentUpon>CalendarViewController.cs</DependentUpon>
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.cs" />
+    <Compile Include="ViewControllers\Calendar\CalendarDayViewController.designer.cs">
+      <DependentUpon>CalendarDayViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.cs" />
     <Compile Include="ViewControllers\Calendar\CalendarPermissionDeniedViewController.designer.cs">

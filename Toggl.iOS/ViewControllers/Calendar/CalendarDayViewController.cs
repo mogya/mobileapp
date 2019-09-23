@@ -15,7 +15,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
+    public sealed partial class CalendarDayViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
     {
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
@@ -31,8 +31,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
 
-        public CalendarViewController(CalendarViewModel viewModel)
-            : base(viewModel, nameof(CalendarViewController))
+        public CalendarDayViewController(CalendarViewModel viewModel)
+            : base(viewModel, nameof(CalendarDayViewController))
         {
             timeService = IosDependencyContainer.Instance.TimeService;
         }

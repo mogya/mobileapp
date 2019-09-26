@@ -15,7 +15,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class CalendarDayViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
+    public sealed partial class CalendarDayViewController : ReactiveViewController<CalendarDayViewModel>, IScrollableToTop
     {
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
@@ -29,50 +29,56 @@ namespace Toggl.iOS.ViewControllers
         private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
         private CalendarCollectionViewZoomHelper zoomHelper;
 
-        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
+        public float ScrollOffset => (float)CalendarCollectionView.ContentOffset.Y;
 
-        public CalendarDayViewController(CalendarViewModel viewModel)
+        public CalendarDayViewController(CalendarDayViewModel viewModel)
             : base(viewModel, nameof(CalendarDayViewController))
         {
             timeService = IosDependencyContainer.Instance.TimeService;
+        }
+
+        public void SetScrollOffset(float scrollOffset)
+        {
+            CalendarCollectionView?.SetContentOffset(new CGPoint(0, scrollOffset), false);
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-//            ExtendedNavbarView.BackgroundColor = NavigationController.NavigationBar.BackgroundColor;
-            TimeTrackedTodayLabel.Font = TimeTrackedTodayLabel.Font.GetMonospacedDigitFont();
-
             TitleLabel.Text = Resources.Welcome;
             DescriptionLabel.Text = Resources.CalendarFeatureDescription;
             GetStartedButton.SetTitle(Resources.GetStarted, UIControlState.Normal);
 
-            settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
+            //var dayLabel = new UILabel(new CGRect(10, 10, 500, 100));
+            //dayLabel.Text = ViewModel.Date.ToString();
+            //dayLabel.TextColor = UIColor.Black;
+            //dayLabel.BackgroundColor = UIColor.LightGray;
+            //View.AddSubview(dayLabel);
 
-            ViewModel
-                .ShouldShowOnboarding
-                .FirstAsync()
-                .Subscribe(
-                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1 : 0)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.ShouldShowOnboarding
-                .Subscribe(OnboardingView.Rx().IsVisibleWithFade())
-                .DisposedBy(DisposeBag);
-
-            GetStartedButton.Rx()
-                .BindAction(ViewModel.GetStarted)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.TimeTrackedToday
-                .Subscribe(TimeTrackedTodayLabel.Rx().Text())
-                .DisposedBy(DisposeBag);
-
-            ViewModel.CurrentDate
-                .Subscribe(CurrentDateLabel.Rx().Text())
-                .DisposedBy(DisposeBag);
-
+//            ViewModel
+//                .ShouldShowOnboarding
+//                .FirstAsync()
+//                .Subscribe(
+//                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1 : 0)
+//                .DisposedBy(DisposeBag);
+//
+//            ViewModel.ShouldShowOnboarding
+//                .Subscribe(OnboardingView.Rx().IsVisibleWithFade())
+//                .DisposedBy(DisposeBag);
+//
+//            GetStartedButton.Rx()
+//                .BindAction(ViewModel.GetStarted)
+//                .DisposedBy(DisposeBag);
+//
+//            ViewModel.TimeTrackedToday
+//                .Subscribe(TimeTrackedTodayLabel.Rx().Text())
+//                .DisposedBy(DisposeBag);
+//
+//            ViewModel.CurrentDate
+//                .Subscribe(CurrentDateLabel.Rx().Text())
+//                .DisposedBy(DisposeBag);
+//
             dataSource = new CalendarCollectionViewSource(
                 timeService,
                 CalendarCollectionView,
@@ -90,29 +96,29 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.DataSource = dataSource;
             CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
-            dataSource.ItemTapped
-                .Subscribe(ViewModel.OnItemTapped.Inputs)
-                .DisposedBy(DisposeBag);
-
-            settingsButton.Rx()
-                .BindAction(ViewModel.SelectCalendars)
-                .DisposedBy(DisposeBag);
-
-            editItemHelper.EditCalendarItem
-                .Subscribe(ViewModel.OnUpdateTimeEntry.Inputs)
-                .DisposedBy(DisposeBag);
-
-            editItemHelper.LongPressCalendarEvent
-                .Subscribe(ViewModel.OnCalendarEventLongPressed.Inputs)
-                .DisposedBy(DisposeBag);
-
-            ViewModel.SettingsAreVisible
-                .Subscribe(settingsButton.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
-            createFromSpanHelper.CreateFromSpan
-                .Subscribe(ViewModel.OnDurationSelected.Inputs)
-                .DisposedBy(DisposeBag);
+//            dataSource.ItemTapped
+//                .Subscribe(ViewModel.OnItemTapped.Inputs)
+//                .DisposedBy(DisposeBag);
+//
+//            settingsButton.Rx()
+//                .BindAction(ViewModel.SelectCalendars)
+//                .DisposedBy(DisposeBag);
+//
+//            editItemHelper.EditCalendarItem
+//                .Subscribe(ViewModel.OnUpdateTimeEntry.Inputs)
+//                .DisposedBy(DisposeBag);
+//
+//            editItemHelper.LongPressCalendarEvent
+//                .Subscribe(ViewModel.OnCalendarEventLongPressed.Inputs)
+//                .DisposedBy(DisposeBag);
+//
+//            ViewModel.SettingsAreVisible
+//                .Subscribe(settingsButton.Rx().IsVisible())
+//                .DisposedBy(DisposeBag);
+//
+//            createFromSpanHelper.CreateFromSpan
+//                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+//                .DisposedBy(DisposeBag);
 
             CalendarCollectionView.LayoutIfNeeded();
         }
@@ -122,11 +128,6 @@ namespace Toggl.iOS.ViewControllers
             base.ViewWillAppear(animated);
 
             NavigationItem.TitleView = titleImage;
-            NavigationItem.RightBarButtonItems = new[]
-            {
-                new UIBarButtonItem(settingsButton)
-            };
-
             layout.InvalidateCurrentTimeLayout();
         }
 
@@ -137,7 +138,7 @@ namespace Toggl.iOS.ViewControllers
             if (CalendarCollectionView.ContentSize.Height == 0)
                 return;
 
-            selectGoodScrollPoint(timeService.CurrentDateTime.LocalDateTime.TimeOfDay);
+            //selectGoodScrollPoint(timeService.CurrentDateTime.LocalDateTime.TimeOfDay);
         }
 
         public void ScrollToTop()

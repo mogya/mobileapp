@@ -13,13 +13,37 @@ namespace Toggl.iOS.ViewControllers.Calendar
 	partial class CalendarViewController
 	{
 		[Outlet]
+		UIKit.UILabel DailyTrackedTimeLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView DayViewContainer { get; set; }
+
+		[Outlet]
+		UIKit.UILabel SelectedDateLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIButton SettingsButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (DailyTrackedTimeLabel != null) {
+				DailyTrackedTimeLabel.Dispose ();
+				DailyTrackedTimeLabel = null;
+			}
+
 			if (DayViewContainer != null) {
 				DayViewContainer.Dispose ();
 				DayViewContainer = null;
+			}
+
+			if (SelectedDateLabel != null) {
+				SelectedDateLabel.Dispose ();
+				SelectedDateLabel = null;
+			}
+
+			if (SettingsButton != null) {
+				SettingsButton.Dispose ();
+				SettingsButton = null;
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace Toggl.iOS.ViewControllers
         {
             { typeof(MainViewModel), "icTime" },
             { typeof(ReportsViewModel), "icReports" },
-            { typeof(CalendarViewModel), "icCalendar" },
+            { typeof(NewCalendarViewModel), "icCalendar" },
             { typeof(SettingsViewModel), "icSettings" }
         };
 
@@ -26,7 +26,7 @@ namespace Toggl.iOS.ViewControllers
         {
             { typeof(MainViewModel), Resources.Timer },
             { typeof(ReportsViewModel), Resources.Reports },
-            { typeof(CalendarViewModel), Resources.Calendar },
+            { typeof(NewCalendarViewModel), Resources.Calendar },
             { typeof(SettingsViewModel), Resources.Settings }
         };
 

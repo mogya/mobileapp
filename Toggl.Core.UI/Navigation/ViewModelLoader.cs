@@ -312,20 +312,20 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
-            if (viewModelType == typeof(CalendarViewModel))
+            if (viewModelType == typeof(NewCalendarViewModel))
             {
-                return new CalendarViewModel(
+                return new NewCalendarViewModel(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
+                    dependencyContainer.RxActionFactory,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.PermissionsChecker);
             }
 
             if (viewModelType == typeof(SelectUserCalendarsViewModel))

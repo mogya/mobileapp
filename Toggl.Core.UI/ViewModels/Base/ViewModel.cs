@@ -8,7 +8,8 @@ namespace Toggl.Core.UI.ViewModels
 {
     public abstract class ViewModel<TInput, TOutput> : IViewModel
     {
-        private readonly INavigationService navigationService;
+        protected INavigationService NavigationService { get; }
+
         private readonly TaskCompletionSource<TOutput> resultCompletionSource =
             new TaskCompletionSource<TOutput>();
 
@@ -20,7 +21,7 @@ namespace Toggl.Core.UI.ViewModels
         {
             Ensure.Argument.IsNotNull(navigationService, nameof(navigationService));
 
-            this.navigationService = navigationService;
+            this.NavigationService = navigationService;
         }
 
         public virtual Task Initialize(TInput payload)
@@ -69,7 +70,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public Task<TNavigationOutput> Navigate<TViewModel, TNavigationInput, TNavigationOutput>(TNavigationInput payload)
             where TViewModel : ViewModel<TNavigationInput, TNavigationOutput>
-            => navigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
+            => NavigationService.Navigate<TViewModel, TNavigationInput, TNavigationOutput>(payload, View);
 
         public Task Navigate<TViewModel>()
             where TViewModel : ViewModel<Unit, Unit>

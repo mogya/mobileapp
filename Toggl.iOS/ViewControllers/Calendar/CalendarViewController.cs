@@ -43,18 +43,9 @@ namespace Toggl.iOS.ViewControllers.Calendar
             pageViewController.DidMoveToParentViewController(this);
 
             var today = DateTimeOffset.Now;
-            var currentDayViewController = viewControllerAtIndex(0);
-            var viewControllers = new[]
-            {
-                currentDayViewController
-            };
+            var viewControllers = new[] { viewControllerAtIndex(0) };
+            viewControllers[0].SetGoodScrollPoint();
             pageViewController.SetViewControllers(viewControllers, UIPageViewControllerNavigationDirection.Forward, false, null);
-        }
-
-        private CalendarDayViewController viewControllerForDate(DateTimeOffset date)
-        {
-            var vm = ViewModel.DayViewModelFor(date);
-            return new CalendarDayViewController(vm);
         }
 
         public UIViewController GetPreviousViewController(UIPageViewController pageViewController, UIViewController referenceViewController)

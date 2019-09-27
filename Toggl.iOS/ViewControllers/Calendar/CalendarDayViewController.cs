@@ -20,7 +20,6 @@ namespace Toggl.iOS.ViewControllers
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
 
-        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
         private readonly ITimeService timeService;
 
         private CalendarCollectionViewLayout layout;
@@ -90,7 +89,6 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
 
-            NavigationItem.TitleView = titleImage;
             layout.InvalidateCurrentTimeLayout();
         }
 
@@ -99,14 +97,14 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView?.SetContentOffset(CGPoint.Empty, true);
         }
 
-        private void selectGoodScrollPoint(TimeSpan timeOfDay)
+        public void SetGoodScrollPoint()
         {
             var frameHeight =
                 CalendarCollectionView.Frame.Height
-                    - CalendarCollectionView.ContentInset.Top
-                    - CalendarCollectionView.ContentInset.Bottom;
+                - CalendarCollectionView.ContentInset.Top
+                - CalendarCollectionView.ContentInset.Bottom;
             var hoursOnScreen = frameHeight / (CalendarCollectionView.ContentSize.Height / 24);
-            var centeredHour = calculateCenteredHour(timeOfDay.TotalHours, hoursOnScreen);
+            var centeredHour = calculateCenteredHour(timeService.CurrentDateTime.ToLocalTime().TimeOfDay.TotalHours, hoursOnScreen);
 
             var offsetY = (centeredHour / 24) * CalendarCollectionView.ContentSize.Height - (frameHeight / 2);
             var scrollPointY = offsetY.Clamp(0, CalendarCollectionView.ContentSize.Height - frameHeight);

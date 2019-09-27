@@ -55,7 +55,7 @@ namespace Toggl.iOS.ViewControllers
                 ViewModel.TimeOfDayFormat,
                 ViewModel.CalendarItems);
 
-            layout = new CalendarCollectionViewLayout(timeService, dataSource);
+            layout = new CalendarCollectionViewLayout(ViewModel.Date.ToLocalTime().Date, timeService, dataSource);
 
             editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, timeService, dataSource, layout);
             createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);

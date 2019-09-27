@@ -69,6 +69,7 @@ namespace Toggl.iOS.Views.Calendar
         }
 
         public CalendarCollectionViewLayout(
+            DateTime date,
             ITimeService timeService,
             ICalendarCollectionViewLayoutDataSource dataSource)
             : base()
@@ -76,10 +77,9 @@ namespace Toggl.iOS.Views.Calendar
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
 
-            this.timeService = timeService;
+            this.date = date;
             this.dataSource = dataSource;
-
-            date = timeService.CurrentDateTime.ToLocalTime().Date;
+            this.timeService = timeService;
 
             timeService
                 .MidnightObservable

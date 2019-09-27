@@ -5,8 +5,11 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
+using Toggl.Core.Calendar;
 using Toggl.Core.DataSources;
+using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
+using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
@@ -94,8 +97,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         public CalendarDayViewModel DayViewModelFor(DateTimeOffset date)
             => new CalendarDayViewModel(
                 date,
+                timeService,
                 dataSource,
                 userPreferences,
+                rxActionFactory,
+                analyticsService,
                 backgroundService,
                 schedulerProvider,
                 interactorFactory,

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive.Linq;
 using Foundation;
-using Toggl.Core.UI.Transformations;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Presentation;
 using Toggl.Shared.Extensions;
 using UIKit;
 

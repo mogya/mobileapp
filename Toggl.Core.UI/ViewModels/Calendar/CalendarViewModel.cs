@@ -66,15 +66,9 @@
 //
 //        public UIAction SelectCalendars { get; }
 //
-//        public InputAction<CalendarItem> OnItemTapped { get; }
-//
-//        public InputAction<CalendarItem> OnCalendarEventLongPressed { get; }
-//
-//        public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
+
 //
 //        public InputAction<DateTimeOffset> CreateTimeEntryAtOffset { get; }
-//
-//        public InputAction<CalendarItem> OnUpdateTimeEntry { get; }
 //
 //        public ObservableGroupedOrderedCollection<CalendarItem> CalendarItems { get; }
 //
@@ -149,8 +143,8 @@
 //            GetStarted = rxActionFactory.FromAsync(getStarted);
 //            SkipOnboarding = rxActionFactory.FromAction(skipOnboarding);
 //            LinkCalendars = rxActionFactory.FromAsync(() => linkCalendars(false));
-//            OnItemTapped = rxActionFactory.FromAsync<CalendarItem>(handleCalendarItem);
-//            OnCalendarEventLongPressed = rxActionFactory.FromAsync<CalendarItem>(handleCalendarEventLongPressed);
+
+
 //
 //            SettingsAreVisible = onboardingObservable
 //                .SelectMany(_ => permissionsChecker.CalendarPermissionGranted)
@@ -165,12 +159,9 @@
 //
 //            SelectCalendars = rxActionFactory.FromAsync(() => selectUserCalendars(false), SettingsAreVisible);
 //
-//            OnDurationSelected = rxActionFactory.FromAsync<(DateTimeOffset StartTime, TimeSpan Duration)>(
-//                tuple => durationSelected(tuple.StartTime, tuple.Duration));
 //
 //            CreateTimeEntryAtOffset = rxActionFactory.FromAsync<DateTimeOffset>(createTimeEntryAtOffset);
 //
-//            OnUpdateTimeEntry = rxActionFactory.FromAsync<CalendarItem>(updateTimeEntry);
 //        }
 //
 //        public void Init(string eventId)
@@ -285,21 +276,6 @@
 //            }
 //        }
 //
-//        private async Task handleCalendarItem(CalendarItem calendarItem)
-//        {
-//            switch (calendarItem.Source)
-//            {
-//                case CalendarItemSource.TimeEntry when calendarItem.TimeEntryId.HasValue:
-//                    analyticsService.EditViewOpenedFromCalendar.Track();
-//                    await Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
-//                    break;
-//
-//                case CalendarItemSource.Calendar:
-//                    await createTimeEntryFromCalendarItem(calendarItem);
-//                    break;
-//            }
-//        }
-//
 //        private async Task handleCalendarEventLongPressed(CalendarItem calendarItem)
 //        {
 //            var runningStartedNow =
@@ -327,26 +303,7 @@
 //            }
 //        }
 //
-//        private async Task createTimeEntryFromCalendarItem(CalendarItem calendarItem)
-//        {
-//            var workspace = await interactorFactory.GetDefaultWorkspace()
-//                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarViewModel.handleCalendarItem")
-//                .Execute();
-//            var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
-//            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent).Execute();
-//        }
-//
-//        private async Task durationSelected(DateTimeOffset startTime, TimeSpan duration)
-//        {
-//            var workspace = await interactorFactory.GetDefaultWorkspace()
-//                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarViewModel.durationSelected")
-//                .Execute();
-//
-//            var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
-//            var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
-//
-//            await Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
-//        }
+
 //
 //        private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
 //        {

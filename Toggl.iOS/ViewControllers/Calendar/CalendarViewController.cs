@@ -9,14 +9,14 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Calendar
 {
-    public sealed partial class CalendarViewController : ReactiveViewController<NewCalendarViewModel>, IUIPageViewControllerDataSource, IUIPageViewControllerDelegate
+    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IUIPageViewControllerDataSource, IUIPageViewControllerDelegate
     {
         private const int minAllowedPageIndex = -14;
         private const int maxAllowedPageIndex = 0;
 
         private UIPageViewController pageViewController;
 
-        public CalendarViewController(NewCalendarViewModel calendarViewModel)
+        public CalendarViewController(CalendarViewModel calendarViewModel)
             : base(calendarViewModel, nameof(CalendarViewController))
         {
         }

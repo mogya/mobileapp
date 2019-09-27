@@ -18,7 +18,7 @@ namespace Toggl.iOS.ViewControllers
         {
             { typeof(MainViewModel), "icTime" },
             { typeof(ReportsViewModel), "icReports" },
-            { typeof(NewCalendarViewModel), "icCalendar" },
+            { typeof(CalendarViewModel), "icCalendar" },
             { typeof(SettingsViewModel), "icSettings" }
         };
 
@@ -26,7 +26,7 @@ namespace Toggl.iOS.ViewControllers
         {
             { typeof(MainViewModel), Resources.Timer },
             { typeof(ReportsViewModel), Resources.Reports },
-            { typeof(NewCalendarViewModel), Resources.Calendar },
+            { typeof(CalendarViewModel), Resources.Calendar },
             { typeof(SettingsViewModel), Resources.Settings }
         };
 
@@ -69,21 +69,18 @@ namespace Toggl.iOS.ViewControllers
 
         public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
         {
-            try
+            var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
+
+            if (targetViewController == SelectedViewController
+                && tryGetScrollableController() is IScrollableToTop scrollable)
             {
-                var targetViewController = ViewControllers.Single(vc => vc.TabBarItem == item);
-
-                if (targetViewController == SelectedViewController
-                    && tryGetScrollableController() is IScrollableToTop scrollable)
-                {
-                    scrollable.ScrollToTop();
-                }
-                else if (targetViewController is ReactiveNavigationController navigationController)
-                {
-                    if (navigationController.TopViewController is IReactiveViewController reactiveViewController)
-                        reactiveViewController.DismissFromNavigationController();
-                }
-
+                scrollable.ScrollToTop();
+            }
+            else if (targetViewController is ReactiveNavigationController navigationController)
+            {
+                if (navigationController.TopViewController is IReactiveViewController reactiveViewController)
+                    reactiveViewController.DismissFromNavigationController();
+            }
 
             UIViewController tryGetScrollableController()
             {
@@ -94,11 +91,6 @@ namespace Toggl.iOS.ViewControllers
                     return nav.TopViewController;
 
                 return null;
-            }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Fuck");
             }
         }
 

@@ -24,13 +24,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     public sealed class CalendarDayViewModel : ViewModel
     {
         private readonly ITimeService timeService;
-        private readonly ITogglDataSource dataSource;
-        private readonly IUserPreferences userPreferences;
-        private readonly IRxActionFactory rxActionFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly ISchedulerProvider schedulerProvider;
-        private readonly IBackgroundService backgroundService;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -49,32 +44,27 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             DateTimeOffset date,
             ITimeService timeService,
             ITogglDataSource dataSource,
-            IUserPreferences userPreferences,
             IRxActionFactory rxActionFactory,
+            IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IBackgroundService backgroundService,
-            ISchedulerProvider schedulerProvider,
             IInteractorFactory interactorFactory,
+            ISchedulerProvider schedulerProvider,
             INavigationService navigationService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
-            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
+            Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
 
-            this.Date = date;
-            this.dataSource = dataSource;
+            Date = date;
             this.timeService = timeService;
-            this.rxActionFactory = rxActionFactory;
-            this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
-            this.backgroundService = backgroundService;
-            this.schedulerProvider = schedulerProvider;
             this.interactorFactory = interactorFactory;
 
             OnItemTapped = rxActionFactory.FromAsync<CalendarItem>(handleCalendarItem);
@@ -85,7 +75,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
 
             var preferences = dataSource.Preferences.Current;
-
             TimeOfDayFormat = preferences
                 .Select(current => current.TimeOfDayFormat)
                 .AsDriver(schedulerProvider);

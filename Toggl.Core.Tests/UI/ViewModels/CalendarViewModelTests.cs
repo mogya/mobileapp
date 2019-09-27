@@ -1181,7 +1181,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 DataSource.Preferences.Current
                     .Returns(preferencesObservable);
-                InteractorFactory.ObserveTimeTracked().Execute()
+                InteractorFactory.ObserveTimeTrackedToday().Execute()
                     .Returns(trackedTimeSubject.AsObservable());
             }
         }

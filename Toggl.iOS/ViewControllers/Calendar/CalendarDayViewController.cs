@@ -1,11 +1,6 @@
 using CoreGraphics;
-using System;
-using System.Reactive.Linq;
 using Toggl.Core;
-using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels.Calendar;
-using Toggl.iOS.Extensions;
-using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;

@@ -26,7 +26,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly MainViewModel mainViewModel;
         private readonly ReportsViewModel reportsViewModel;
-        private readonly NewCalendarViewModel calendarViewModel;
+        private readonly CalendarViewModel calendarViewModel;
         private readonly SettingsViewModel settingsViewModel;
 
         private bool hasOpenedReports = false;
@@ -109,7 +109,7 @@ namespace Toggl.Core.UI.ViewModels
                 schedulerProvider,
                 rxActionFactory);
 
-            calendarViewModel = new NewCalendarViewModel(
+            calendarViewModel = new CalendarViewModel(
                 dataSource,
                 timeService,
                 rxActionFactory,
@@ -117,10 +117,8 @@ namespace Toggl.Core.UI.ViewModels
                 analyticsService,
                 backgroundService,
                 interactorFactory,
-                onboardingStorage,
                 schedulerProvider,
-                navigationService,
-                permissionsChecker);
+                navigationService);
 
             settingsViewModel = new SettingsViewModel(
                 dataSource,

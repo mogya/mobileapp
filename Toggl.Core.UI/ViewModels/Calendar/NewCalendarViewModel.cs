@@ -14,6 +14,7 @@ using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Transformations;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
@@ -32,15 +33,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
-        public IObservable<TimeFormat> TimeOfDayFormat { get; }
-
-        public IObservable<string> DailyTrackedTime { get; }
-
-        public IObservable<string> CurrentlyShownDate { get; }
+        public IObservable<string> CurrentlyShownDateString { get; }
 
         public UIAction SelectCalendars { get; }
 
-        public InputAction<DateTimeOffset> UpdateCurrentlyShownDate { get; }
+        public BehaviorRelay<int> CurrentlyVisiblePage { get; }
 
         public NewCalendarViewModel(
             ITogglDataSource dataSource,
@@ -79,40 +76,19 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.permissionsChecker = permissionsChecker;
 
             SelectCalendars = rxActionFactory.FromAsync(linkCalendars);
-            UpdateCurrentlyShownDate = rxActionFactory.FromAction((DateTimeOffset _) => { });
+
+            CurrentlyVisiblePage = new BehaviorRelay<int>(0);
 
             var preferences = dataSource.Preferences.Current;
 
-            var currentlyShownDateObservable = UpdateCurrentlyShownDate.Inputs
-                .StartWith(timeService.CurrentDateTime);
-
             var dateFormatObservable = preferences.Select(current => current.DateFormat);
-            CurrentlyShownDate = currentlyShownDateObservable
-                .Select(dateTime => dateTime.ToLocalTime().Date)
+            CurrentlyShownDateString = CurrentlyVisiblePage
+                .Select(pageIndexToDate)
                 .DistinctUntilChanged()
                 .CombineLatest(
                     dateFormatObservable,
                     (date, dateFormat) => DateTimeToFormattedString.Convert(date, dateFormat.Long))
                 .AsDriver(schedulerProvider);
-
-            var durationFormat = preferences.Select(current => current.DurationFormat);
-            currentlyShownDateObservable
-                .CombineLatest(
-                    durationFormat,
-
-                    )
-
-            TimeOfDayFormat = preferences
-                .Select(current => current.TimeOfDayFormat)
-                .AsDriver(schedulerProvider);
-
-//            var durationFormat = preferences.Select(current => current.DurationFormat);
-//            var timeTrackedToday = interactorFactory.ObserveTimeTrackedToday().Execute();
-
-//            DailyTrackedTime = timeTrackedToday
-//                .StartWith(TimeSpan.Zero)
-//                .CombineLatest(durationFormat, DurationAndFormatToString.Convert)
-//                .AsDriver(schedulerProvider);
         }
 
         public CalendarDayViewModel DayViewModelFor(DateTimeOffset date)
@@ -135,7 +111,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             if (calendarsExist)
             {
                 var calendarIds = await Navigate<SelectUserCalendarsViewModel, bool, string[]>(false);
-
                 interactorFactory.SetEnabledCalendars(calendarIds).Execute();
             }
             else
@@ -158,5 +133,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 await Navigate<CalendarPermissionDeniedViewModel, Unit>();
             }
         }
+
+        private DateTimeOffset pageIndexToDate(int index)
+            => timeService.CurrentDateTime.ToLocalTime().Date.AddDays(index);
     }
 }

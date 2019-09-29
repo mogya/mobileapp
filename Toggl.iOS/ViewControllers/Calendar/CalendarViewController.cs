@@ -26,7 +26,7 @@ namespace Toggl.iOS.ViewControllers.Calendar
             base.ViewDidLoad();
 
             SettingsButton.Rx()
-                .BindAction(ViewModel.SelectCalendars)
+                .BindAction(ViewModel.OpenSettings)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CurrentlyShownDateString

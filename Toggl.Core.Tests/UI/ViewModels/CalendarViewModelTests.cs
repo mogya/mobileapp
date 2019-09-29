@@ -133,92 +133,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheSelectCalendarsAction : CalendarViewModelTest
+        public sealed class TheOpenSettingsAction : CalendarViewModelTest
         {
-            protected override void AdditionalSetup()
-            {
-                OnboardingStorage
-                    .CompletedCalendarOnboarding()
-                    .Returns(true);
-
-                PermissionsChecker
-                    .CalendarPermissionGranted
-                    .Returns(Observable.Return(true));
-
-                NavigationService
-                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>(), View)
-                    .Returns(new string[0]);
-
-                InteractorFactory
-                    .GetUserCalendars()
-                    .Execute()
-                    .Returns(Observable.Return(new UserCalendar().Yield()));
-
-                View
-                    .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
-                    .Returns(Observable.Return(Unit.Default));
-
-                TestScheduler.AdvanceBy(1);
-            }
-
             [Fact, LogIfTooSlow]
-            public async Task NavigatesToTheSelectUserCalendarsViewModelWhenThereAreCalendars()
+            public void NavigatesToTheSettingsViewModel()
             {
-                ViewModel.SelectCalendars.Execute();
-                TestScheduler.Start();
+                ViewModel.OpenSettings.Execute();
 
-                await NavigationService
-                    .Received()
-                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>(), ViewModel.View);
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task DoesNotNavigateToTheSelectUserCalendarsViewModelWhenThereAreNoCalendars()
-            {
-                InteractorFactory.GetUserCalendars().Execute().Returns(
-                    Observable.Return(new UserCalendar[0])
-                );
-
-                ViewModel.SelectCalendars.Execute();
-                TestScheduler.Start();
-
-                await View.Received()
-                    .Alert(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task ShowsADialogWhenThereAreNoCalendars()
-            {
-                InteractorFactory.GetUserCalendars().Execute().Returns(
-                    Observable.Return(new UserCalendar[0])
-                );
-
-                ViewModel.SelectCalendars.Execute();
-                TestScheduler.Start();
-
-                await NavigationService.DidNotReceive()
-                    .Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>(), ViewModel.View);
-            }
-
-            [Property]
-            public void SetsTheEnabledCalendarsWhenThereAreCalendars(NonEmptyString[] nonEmptyStrings)
-            {
-                if (nonEmptyStrings == null) return;
-
-                InteractorFactory.ClearReceivedCalls();
-                var viewModel = CreateViewModel();
-                viewModel.AttachView(View);
-                var calendarIds = nonEmptyStrings.Select(str => str.Get).ToArray();
-                NavigationService.Navigate<SelectUserCalendarsViewModel, bool, string[]>(Arg.Any<bool>(), viewModel.View).Returns(calendarIds);
-                View.RequestCalendarAuthorization().Returns(Observable.Return(true));
-                InteractorFactory.GetUserCalendars().Execute().Returns(
-                    Observable.Return(new UserCalendar[] { new UserCalendar() })
-                );
-
-                viewModel.SelectCalendars.Execute();
-                TestScheduler.Start();
-
-                InteractorFactory.Received().SetEnabledCalendars(calendarIds).Execute();
+                NavigationService.Received().Navigate<SettingsViewModel>(View);
             }
         }
 

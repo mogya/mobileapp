@@ -31,7 +31,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         public IObservable<string> CurrentlyShownDateString { get; }
 
-        public UIAction SelectCalendars { get; }
+        public UIAction OpenSettings { get; }
 
         public BehaviorRelay<int> CurrentlyVisiblePage { get; }
 
@@ -65,7 +65,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.interactorFactory = interactorFactory;
             this.schedulerProvider = schedulerProvider;
 
-            SelectCalendars = rxActionFactory.FromAsync(linkCalendars);
+            OpenSettings = rxActionFactory.FromAsync(openSettings);
 
             CurrentlyVisiblePage = new BehaviorRelay<int>(0);
 
@@ -94,40 +94,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 schedulerProvider,
                 NavigationService);
 
-        private async Task selectUserCalendars()
-        {
-            var calendarsExist = await interactorFactory
-                .GetUserCalendars()
-                .Execute()
-                .Select(calendars => calendars.Any());
-
-            if (calendarsExist)
-            {
-                var calendarIds = await Navigate<SelectUserCalendarsViewModel, bool, string[]>(false);
-                interactorFactory.SetEnabledCalendars(calendarIds).Execute();
-            }
-            else
-            {
-                await View.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
-            }
-        }
-
-        private async Task linkCalendars()
-        {
-            var calendarPermissionGranted = await View.RequestCalendarAuthorization();
-            if (calendarPermissionGranted)
-            {
-                await selectUserCalendars();
-                var notificationPermissionGranted = await View.RequestNotificationAuthorization();
-                userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
-            }
-            else
-            {
-                await Navigate<CalendarPermissionDeniedViewModel, Unit>();
-            }
-        }
-
         private DateTimeOffset pageIndexToDate(int index)
             => timeService.CurrentDateTime.ToLocalTime().Date.AddDays(index);
+
+        private Task openSettings()
+            => Navigate<SettingsViewModel>();
     }
 }

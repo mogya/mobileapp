@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toggl.iOS.Extensions
+namespace Toggl.Shared.Extensions
 {
     public static class TimeSpanExtensions
     {

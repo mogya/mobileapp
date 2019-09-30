@@ -69,6 +69,31 @@ namespace Toggl.Core.Tests.Calendar
                 .And.Contain((attributes) =>
                     attributes.StartTime == calendarItems[2].StartTime && attributes.TotalColumns == 1);
         }
+        
+        [Fact, LogIfTooSlow]
+        public void WhenTwoItemsShouldOverlapBecauseOfMinimumDurationForUIPurposes()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem("1", CalendarItemSource.TimeEntry,
+                    new DateTimeOffset(2018, 11, 21, 8, 0, 0, TimeSpan.Zero), TimeSpan.FromSeconds(10), "Item 1",
+                    CalendarIconKind.None),
+                new CalendarItem("2", CalendarItemSource.TimeEntry,
+                    new DateTimeOffset(2018, 11, 21, 8, 0, 11, TimeSpan.Zero), TimeSpan.FromSeconds(10), "Item 2",
+                    CalendarIconKind.None)
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateLayoutAttributes(calendarItems);
+
+            layoutAttributes.Should().HaveSameCount(calendarItems)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == calendarItems[0].StartTime && attributes.TotalColumns == 2 && attributes.ColumnIndex == 0)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == calendarItems[1].StartTime && attributes.TotalColumns == 2 && attributes.ColumnIndex == 1);
+        }
 
         [Fact, LogIfTooSlow]
         public void WhenThreeItemsOverlapButOnlyTwoColumnsAreRequired()

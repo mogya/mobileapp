@@ -1883,7 +1883,6 @@
     <Compile Include="Views\Tag\NewTagViewCell.designer.cs">
       <DependentUpon>NewTagViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.cs" />
     <Compile Include="Views\StartTimeEntry\ReactiveProjectSuggestionViewCell.designer.cs">
       <DependentUpon>ReactiveProjectSuggestionViewCell.cs</DependentUpon>

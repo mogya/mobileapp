@@ -16,6 +16,7 @@ namespace Toggl.Core.UI.Calendar
         private static readonly TimeSpan offsetFromNow = TimeSpan.FromMinutes(7);
         private static readonly List<CalendarItemLayoutAttributes> emptyAttributes = new List<CalendarItemLayoutAttributes>();
         private readonly ITimeService timeService;
+        private readonly TimeSpan minimumDurationForUIPurposes = TimeSpan.FromMinutes(15);
 
         public CalendarLayoutCalculator(ITimeService timeService)
         {
@@ -58,7 +59,7 @@ namespace Toggl.Core.UI.Calendar
 
             var now = timeService.CurrentDateTime;
             var group = buckets.Last();
-            var maxEndTime = group.Max(i => i.Item.EndTime(now, offsetFromNow));
+            var maxEndTime = group.Max(i => endTime(i.Item, now));
             if (indexedItem.Item.StartTime.LocalDateTime < maxEndTime)
                 group.Add(indexedItem);
             else
@@ -136,7 +137,7 @@ namespace Toggl.Core.UI.Calendar
             var now = timeService.CurrentDateTime;
             var column = columns.FirstOrDefault(c =>
             {
-                var index = c.FindLastIndex(elem => elem.Item.EndTime(now, offsetFromNow) <= item.Item.StartTime.LocalDateTime);
+                var index = c.FindLastIndex(elem => endTime(elem.Item, now) <= item.Item.StartTime.LocalDateTime);
                 if (index < 0)
                 {
                     return false;
@@ -146,7 +147,7 @@ namespace Toggl.Core.UI.Calendar
                     positionToInsert = c.Count;
                     return true;
                 }
-                if (c[index + 1].Item.StartTime.LocalDateTime >= item.Item.EndTime(now, offsetFromNow))
+                if (c[index + 1].Item.StartTime.LocalDateTime >= endTime(item.Item, now))
                 {
                     positionToInsert += 1;
                     return true;
@@ -156,6 +157,14 @@ namespace Toggl.Core.UI.Calendar
 
             return (column, positionToInsert);
         }
+
+        private DateTimeOffset endTime(CalendarItem calendarItem, DateTimeOffset now)
+        {
+            var duration = calendarItem.Duration(now, offsetFromNow);
+            return duration <= minimumDurationForUIPurposes
+                ? calendarItem.StartTime.LocalDateTime + TimeSpan.FromMinutes(15)
+                : calendarItem.EndTime(now, offsetFromNow);     
+        } 
 
         private CalendarItemLayoutAttributes attributesForItem(
             CalendarItem calendarItem,

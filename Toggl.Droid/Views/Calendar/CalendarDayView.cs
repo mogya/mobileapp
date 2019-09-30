@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Android.Content;
@@ -28,6 +29,7 @@ namespace Toggl.Droid.Views.Calendar
         private Handler handler;
         private ITimeService timeService;
         private CalendarLayoutCalculator calendarLayoutCalculator;
+        private DateTime currentDate;
 
         private int scrollOffset;
         private bool isScrolling;
@@ -36,12 +38,17 @@ namespace Toggl.Droid.Views.Calendar
         private float availableWidth;
         private int hourHeight;
         private int maxHeight;
-        private RectF tapCheckRectF = new RectF();
+        private readonly RectF tapCheckRectF = new RectF();
+        
+        private Vibrator hapticFeedbackProvider;
+        private int vibrationDurationInMilliseconds = 5;
+        private int vibrationAmplitude = 7;
 
         private ImmutableList<CalendarItem> calendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItemRectAttributes> calendarItemLayoutAttributes = ImmutableList<CalendarItemRectAttributes>.Empty;
-        
+
         private readonly ISubject<CalendarItem> calendarItemTappedSubject = new Subject<CalendarItem>();
+
         public IObservable<CalendarItem> CalendarItemTappedObservable
             => calendarItemTappedSubject.AsObservable();
 
@@ -49,7 +56,7 @@ namespace Toggl.Droid.Views.Calendar
 
         public IObservable<DateTimeOffset> EmptySpansTouchedObservable
             => emptySpansTouchedObservable.AsObservable();
-        
+
         #region Constructors
 
         protected CalendarDayView(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
@@ -81,27 +88,37 @@ namespace Toggl.Droid.Views.Calendar
         private void init()
         {
             timeService = AndroidDependencyContainer.Instance.TimeService;
+            currentDate = timeService.CurrentDateTime.LocalDateTime.Date; 
             calendarLayoutCalculator = new CalendarLayoutCalculator(timeService);
-            gestureDetector = new GestureDetector(Context, new CalendarGestureListener(onTouchDown, scrollView, flingView, onSingleTapUp));
+            hapticFeedbackProvider = (Vibrator)Context.GetSystemService(Context.VibratorService);
+            var calendarGestureListener = new CalendarGestureListener(
+                onTouchDown,
+                onLongPress,
+                scrollView,
+                flingView,
+                onSingleTapUp);
+            gestureDetector = new GestureDetector(Context, calendarGestureListener);
             scroller = new OverScroller(Context);
             handler = new Handler(Looper.MainLooper);
             hourHeight = 56.DpToPixels(Context);
             maxHeight = hourHeight * 24;
-
+            
             initBackgroundBackingFields();
             initEventDrawingBackingFields();
+            initEventEditionBackingFields();
         }
 
         partial void initBackgroundBackingFields();
         partial void initEventDrawingBackingFields();
-        
+        partial void initEventEditionBackingFields();
+
         protected override void OnDraw(Canvas canvas)
         {
             base.OnDraw(canvas);
-            
+
             canvas.Save();
             canvas.Translate(0f, -scrollOffset);
-            
+
             canvas.ClipRect(0, scrollOffset, Width, Height + scrollOffset);
             drawHourLines(canvas);
             drawCalendarItems(canvas);
@@ -111,7 +128,7 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void drawHourLines(Canvas canvas);
         partial void drawCalendarItems(Canvas canvas);
-        
+
         protected override void OnLayout(bool changed, int left, int top, int right, int bottom)
         {
             base.OnLayout(changed, left, top, right, bottom);
@@ -158,33 +175,117 @@ namespace Toggl.Droid.Views.Calendar
             scroller.ForceFinished(true);
             flingWasCalled = false;
             handler.RemoveCallbacks(continueScroll);
+
+            onTouchDownWhileEditingItem(e1);
+            
             Invalidate();
+        }
+
+        private ImmutableList<DateTimeOffset> allItemsStartAndEndTime = ImmutableList<DateTimeOffset>.Empty;
+        
+        private void onLongPress(MotionEvent e1)
+        {
+            var touchX = e1.GetX();
+            var touchY = e1.GetY();
+            var calendarItemInfo = findCalendarItemFromPoint(touchX, touchY);
+            
+            //todo: do something onLongPress?
+        }
+        
+        private ImmutableList<DateTimeOffset> selectItemsStartAndEndTime()
+        {
+            var calendarItemsToSelect = calendarItems;
+            var startTimes = calendarItemsToSelect.Select(item => item.StartTime).Distinct();
+            var endTimes = calendarItemsToSelect.Where(item => item.EndTime.HasValue).Select(item => (DateTimeOffset)item.EndTime).Distinct();
+            return startTimes.Concat(endTimes).ToImmutableList();
         }
 
         private void onSingleTapUp(MotionEvent e1)
         {
-            var calendarItemsAvailableDuringTouch = calendarItems;
-            var itemsToSearch = calendarItemLayoutAttributes;
-            var touchX = e1.GetX();    
+            var touchX = e1.GetX();
             var touchY = e1.GetY();
+
+            var calendarItemInfo = findCalendarItemFromPoint(touchX, touchY);
+            var touchedEmptySpace = !calendarItemInfo.IsValid;
+
+            if (isEditingItem())
+            {
+                if (touchedEmptySpace)
+                {
+                    //todo: shake?
+                    return;
+                }
+                if (itemIsAlreadyBeingEdited(calendarItemInfo))
+                {
+                    calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem);
+                    return;
+                }
+
+                cancelCurrentEdition();
+                beginEdition(calendarItemInfo);
+                return;
+            }
+
+            if (touchedEmptySpace) return;
+            if (calendarItemInfo.CalendarItem.Source == CalendarItemSource.Calendar)
+            {
+                calendarItemTappedSubject.OnNext(calendarItemInfo.CalendarItem);
+                return;
+            }
+
+            beginEdition(calendarItemInfo);
+        }
+
+        private void beginEdition(CalendarItemEditInfo calendarItemInfo)
+        {
+            itemEditInEditMode = calendarItemInfo;
+            updateEditingStartEndLabels();
+            allItemsStartAndEndTime = selectItemsStartAndEndTime();
+            Invalidate();   
+        }
+
+        private void cancelCurrentEdition()
+        {
+            
+        }
+        
+        private bool itemIsAlreadyBeingEdited(CalendarItemEditInfo calendarItemInfo)
+            => itemEditInEditMode.CalendarItem.Id == calendarItemInfo.CalendarItem.Id;
+        
+        private bool isEditingItem() => itemEditInEditMode.IsValid;
+
+        private CalendarItemEditInfo findCalendarItemFromPoint(float x, float y)
+        {
+            var currentItemInEditMode = itemEditInEditMode;
+            var calendarItemsAvailableDuringSearch = calendarItems;
+            var itemsToSearch = calendarItemLayoutAttributes;
+
+            if (currentItemInEditMode.IsValid)
+            {
+                currentItemInEditMode.CalculateRect(tapCheckRectF);
+                if (tapCheckRectF.Contains(x, y + scrollOffset)) 
+                    return currentItemInEditMode;
+            }
             
             for (var i = 0; i < itemsToSearch.Count; i++)
             {
+                if (currentItemInEditMode.IsValid && currentItemInEditMode.OriginalIndex == i) 
+                    continue;
+                
                 var calendarItemAttr = itemsToSearch[i];
                 calendarItemAttr.CalculateRect(hourHeight, minHourHeight, tapCheckRectF);
-
-                if (!tapCheckRectF.Contains(touchX, touchY + scrollOffset)) continue;
-                calendarItemTappedSubject.OnNext(calendarItemsAvailableDuringTouch[i]);
-                return;
+                if (tapCheckRectF.Contains(x, y + scrollOffset))
+                    return new CalendarItemEditInfo(calendarItemsAvailableDuringSearch[i], itemsToSearch[i], i, hourHeight, minHourHeight, timeService.CurrentDateTime);
             }
-            
-            var today = timeService.CurrentDateTime.Date;
-            var touchAtOffset = today.AddHours((touchY + scrollOffset) / hourHeight);
-            emptySpansTouchedObservable.OnNext(touchAtOffset);
+
+            return CalendarItemEditInfo.None;
         }
 
         private void scrollView(MotionEvent e1, MotionEvent e2, float deltaX, float deltaY)
         {
+            if (handleDragInEditMode(e1, e2, deltaX, deltaY)) 
+                return;
+
             scrollOffset += (int) deltaY;
 
             if (scrollOffset < 0)
@@ -221,6 +322,7 @@ namespace Toggl.Droid.Views.Calendar
 
                 case MotionEventActions.Up:
                     gestureDetector.OnTouchEvent(e);
+                    updateLayoutIfNeededDuringEdition();
                     if (flingWasCalled)
                         return true;
                     if (!isScrolling)
@@ -244,19 +346,36 @@ namespace Toggl.Droid.Views.Calendar
             }
         }
 
+        void updateLayoutIfNeededDuringEdition()
+        {
+            var currentItemInEditMode = itemEditInEditMode;
+            if (!currentItemInEditMode.IsValid) return;
+
+            var newCalendarItem = currentItemInEditMode.CalendarItem;
+            if (currentItemInEditMode.OriginalIndex == runningTimeEntryIndex)
+            {
+                newCalendarItem = newCalendarItem.WithDuration(null);
+            }
+            var newItems = calendarItems.SetItem(currentItemInEditMode.OriginalIndex, newCalendarItem);
+            updateItemsAndRecalculateEventsAttrs(newItems);
+        }
+
         private class CalendarGestureListener : GestureDetector.SimpleOnGestureListener
         {
             private readonly Action<MotionEvent> onDown;
+            private readonly Action<MotionEvent> onLongPress;
             private readonly Action<MotionEvent, MotionEvent, float, float> onScroll;
             private readonly Action<MotionEvent, MotionEvent, float, float> onFling;
             private readonly Action<MotionEvent> onSingleTapUp;
 
             public CalendarGestureListener(Action<MotionEvent> onDown,
+                Action<MotionEvent> onLongPress,
                 Action<MotionEvent, MotionEvent, float, float> onScroll,
                 Action<MotionEvent, MotionEvent, float, float> onFling,
                 Action<MotionEvent> onSingleTapUp)
             {
                 this.onSingleTapUp = onSingleTapUp;
+                this.onLongPress = onLongPress;
                 this.onFling = onFling;
                 this.onScroll = onScroll;
                 this.onDown = onDown;
@@ -284,6 +403,11 @@ namespace Toggl.Droid.Views.Calendar
             {
                 onSingleTapUp(e);
                 return true;
+            }
+
+            public override void OnLongPress(MotionEvent e)
+            {
+                onLongPress(e);
             }
         }
     }

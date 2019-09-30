@@ -19,8 +19,6 @@ namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment : ReactiveTabFragment<CalendarViewModel>, IScrollableToTop
     {
-        private CalendarLayoutManager calendarLayoutManager;
-
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
@@ -34,15 +32,10 @@ namespace Toggl.Droid.Fragments
 
             var timeService = AndroidDependencyContainer.Instance.TimeService;
             var schedulerProvider = AndroidDependencyContainer.Instance.SchedulerProvider;
-
-            calendarLayoutManager = new CalendarLayoutManager();
-            calendarRecyclerView.SetLayoutManager(calendarLayoutManager);
+            
             var displayMetrics = new DisplayMetrics();
             Activity.WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
-            var calendarAdapter = new CalendarAdapter(view.Context, timeService, displayMetrics.WidthPixels);
-            calendarRecyclerView.SetTimeService(timeService);
-            calendarRecyclerView.SetAdapter(calendarAdapter);
-
+            
             timeService
                 .CurrentDateTimeObservable
                 .DistinctUntilChanged(offset => offset.Day)
@@ -50,14 +43,10 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(configureHeaderDate)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.HasCalendarsLinked.SelectUnit()
-                .Merge(ViewModel.CalendarItems.CollectionChange.SelectUnit())
-                .SelectMany(ViewModel.HasCalendarsLinked)
-                .Subscribe(hasCalendarsLinked =>
-                {
-                    calendarAdapter.UpdateItems(ViewModel.CalendarItems, hasCalendarsLinked);
-                    calendarRecyclerView.SetHasTwoColumns(hasCalendarsLinked);
-                })
+            calendarDayView.UpdateItems(ViewModel.CalendarItems);
+            
+            ViewModel.CalendarItems.CollectionChange
+                .Subscribe(_ => calendarDayView.UpdateItems(ViewModel.CalendarItems))
                 .DisposedBy(DisposeBag);
 
             ViewModel.HasCalendarsLinked
@@ -85,13 +74,16 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(ViewModel.LinkCalendars.Inputs)
                 .DisposedBy(DisposeBag);
 
-            calendarAdapter.CalendarItemTappedObservable
+            calendarDayView.CalendarItemTappedObservable
                 .Subscribe(ViewModel.OnItemTapped.Inputs)
                 .DisposedBy(DisposeBag);
 
-            calendarRecyclerView.EmptySpansTouchedObservable
-                .Where(_ => !calendarAdapter.NeedsToClearItemInEditMode())
+            calendarDayView.EmptySpansTouchedObservable
                 .Subscribe(ViewModel.CreateTimeEntryAtOffset.Inputs)
+                .DisposedBy(DisposeBag);
+
+            calendarDayView.EditCalendarItem
+                .Subscribe(ViewModel.OnUpdateTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
             ViewModel.ShouldShowOnboarding
@@ -101,7 +93,7 @@ namespace Toggl.Droid.Fragments
 
         public void ScrollToTop()
         {
-            calendarRecyclerView?.SmoothScrollToPosition(0);
+            //Todo: Scroll To Top
         }
 
         private void onboardingVisibilityChanged(bool visible)
@@ -112,12 +104,12 @@ namespace Toggl.Droid.Fragments
 
                 appBarLayout.Visibility = ViewStates.Gone;
                 onboardingView.Visibility = ViewStates.Visible;
-                calendarRecyclerView.Visibility = ViewStates.Gone;
+                calendarDayView.Visibility = ViewStates.Gone;
                 return;
             }
 
             appBarLayout.Visibility = ViewStates.Visible;
-            calendarRecyclerView.Visibility = ViewStates.Visible;
+            calendarDayView.Visibility = ViewStates.Visible;
 
             if (onboardingView == null)
                 return;

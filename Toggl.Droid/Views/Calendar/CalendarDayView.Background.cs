@@ -2,7 +2,6 @@ using System;
 using System.Collections.Immutable;
 using Android.Graphics;
 using Toggl.Shared;
-using Color = Android.Graphics.Color;
 using System.Globalization;
 using System.Linq;
 using Toggl.Droid.Extensions;

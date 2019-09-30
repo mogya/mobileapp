@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
@@ -69,10 +67,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
             CurrentlyVisiblePage = new BehaviorRelay<int>(0);
 
-            var preferences = dataSource.Preferences.Current;
-
-            var dateFormatObservable = preferences.Select(current => current.DateFormat);
-            CurrentlyShownDateString = CurrentlyVisiblePage
+            var dateFormatObservable = dataSource.Preferences.Current
+                .Select(current => current.DateFormat);
+            CurrentlyShownDateString = CurrentlyVisiblePage.AsObservable()
                 .Select(pageIndexToDate)
                 .DistinctUntilChanged()
                 .CombineLatest(

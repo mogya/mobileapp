@@ -73,7 +73,6 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             OnDurationSelected = rxActionFactory.FromAsync<(DateTimeOffset StartTime, TimeSpan Duration)>(
                 tuple => durationSelected(tuple.StartTime, tuple.Duration));
 
-
             var preferences = dataSource.Preferences.Current;
             TimeOfDayFormat = preferences
                 .Select(current => current.TimeOfDayFormat)

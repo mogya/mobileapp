@@ -54,7 +54,7 @@ namespace Toggl.iOS.ViewControllers.Calendar
             if (referenceTag == minAllowedPageIndex)
                 return null;
 
-            return viewControllerAtIndex(referenceTag -1);
+            return viewControllerAtIndex(referenceTag - 1);
         }
 
         public UIViewController GetNextViewController(UIPageViewController pageViewController, UIViewController referenceViewController)

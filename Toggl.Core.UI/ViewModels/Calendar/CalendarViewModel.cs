@@ -29,7 +29,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         public IObservable<string> CurrentlyShownDateString { get; }
 
-        public UIAction OpenSettings { get; }
+        public ViewAction OpenSettings { get; }
 
         public BehaviorRelay<int> CurrentlyVisiblePage { get; }
 

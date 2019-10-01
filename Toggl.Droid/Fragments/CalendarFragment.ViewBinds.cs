@@ -11,13 +11,7 @@ namespace Toggl.Droid.Fragments
         private TextView headerDateTextView;
         private TextView headerTimeEntriesDurationTextView;
         private CalendarDayView calendarDayView;
-        private ViewStub onboardingViewStub;
         private AppBarLayout appBarLayout;
-        private View onboardingView;
-        private TextView onboardingTitleView;
-        private TextView onboardingMessageView;
-        private Button getStartedButton;
-        private TextView skipButton;
         private Toolbar toolbar;
 
         protected override void InitializeViews(View view)
@@ -25,7 +19,6 @@ namespace Toggl.Droid.Fragments
             headerDateTextView = view.FindViewById<TextView>(Resource.Id.HeaderDateTextView);
             headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
             calendarDayView = view.FindViewById<CalendarDayView>(Resource.Id.calendarDayView);
-            onboardingViewStub = view.FindViewById<ViewStub>(Resource.Id.OnboardingViewStub);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
             toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
         }

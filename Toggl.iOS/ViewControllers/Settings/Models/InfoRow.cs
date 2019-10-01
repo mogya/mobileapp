@@ -5,7 +5,7 @@ namespace Toggl.iOS.ViewControllers.Settings.Models
     public class InfoRow : ISettingRow
     {
         public string Title { get; }
-        public UIAction Action { get; }
+        public ViewAction Action { get; }
 
         public string Detail { get; }
 

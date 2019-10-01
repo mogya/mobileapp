@@ -11,7 +11,7 @@ namespace Toggl.Core.UI.ViewModels.Settings.Siri
     {
         private readonly IOnboardingStorage onboardingStorage;
 
-        public UIAction DoNotShowAgain { get; }
+        public ViewAction DoNotShowAgain { get; }
 
         public PasteFromClipboardViewModel(
             IRxActionFactory rxActionFactory,

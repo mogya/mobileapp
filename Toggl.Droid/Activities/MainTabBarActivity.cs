@@ -221,9 +221,9 @@ namespace Toggl.Droid.Activities
                 return;
             }
 
-            if (fragment is IScrollableToTop scrollableToTop)
+            if (fragment is IScrollableToStart scrollableToTop)
             {
-                scrollableToTop.ScrollToTop();
+                scrollableToTop.ScrollToStart();
             }
         }
 

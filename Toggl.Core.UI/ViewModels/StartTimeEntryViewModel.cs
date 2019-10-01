@@ -83,12 +83,12 @@ namespace Toggl.Core.UI.ViewModels
         public IOnboardingStorage OnboardingStorage { get; }
 
         public OutputAction<IThreadSafeTimeEntry> Done { get; }
-        public UIAction DurationTapped { get; }
-        public UIAction ToggleBillable { get; }
-        public UIAction SetStartDate { get; }
-        public UIAction ChangeTime { get; }
-        public UIAction ToggleTagSuggestions { get; }
-        public UIAction ToggleProjectSuggestions { get; }
+        public ViewAction DurationTapped { get; }
+        public ViewAction ToggleBillable { get; }
+        public ViewAction SetStartDate { get; }
+        public ViewAction ChangeTime { get; }
+        public ViewAction ToggleTagSuggestions { get; }
+        public ViewAction ToggleProjectSuggestions { get; }
         public InputAction<AutocompleteSuggestion> SelectSuggestion { get; }
         public InputAction<TimeSpan> SetRunningTime { get; }
         public InputAction<ProjectSuggestion> ToggleTasks { get; }

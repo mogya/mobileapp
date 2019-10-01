@@ -29,12 +29,16 @@ namespace Toggl.Droid.Activities
 
         protected override void InitializeBindings()
         {
-            toggleCalendarsView.Rx().Tap()
-                .Subscribe(ViewModel.TogglCalendarIntegration.Inputs)
+            toggleCalendarsView.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
+                .DisposedBy(DisposeBag);
+
+            toggleCalendarsSwitch.Rx()
+                .BindAction(ViewModel.TogglCalendarIntegration)
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible
-                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver())
+                .Subscribe(toggleCalendarsSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.CalendarListVisible

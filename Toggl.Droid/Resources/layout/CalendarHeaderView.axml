@@ -1,162 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/AppBarLayout"
-    android:elevation="0dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
-        android:background="@color/background">
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="68dp"
+    android:layout_height="wrap_content"
+    android:elevation="0dp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/Toolbar"
+        style="@style/ToolbarStyle"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
-                android:id="@+id/Day"
-                android:textSize="15sp"
-                android:gravity="center"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:textColor="@color/primaryText"
-                android:background="@drawable/CalendarHeaderDayBackground"
-                tools:text="42"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/Weekday"
-                app:layout_constraintVertical_chainStyle="packed" />
-            <TextView
-                android:id="@+id/Weekday"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:textStyle="normal"
-                android:textColor="@color/primaryText"
-                tools:text="Mon"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                android:id="@+id/HeaderDateTextView"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/Day"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-        <FrameLayout
-            android:id="@+id/HeaderCalendarEventsView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+                android:layout_gravity="start|center_vertical"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:textColor="@color/primaryText"
+                android:fontFamily="sans-serif-medium"
+                tools:text="Tuesday, Jan 14" />
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/HeaderCalendarEventsLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textSize="15sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/primaryText"
-                    tools:text="Calendar events"
-                    app:layout_constraintVertical_chainStyle="packed"
-                    android:layout_marginBottom="4dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/HeaderCalendarEventsTextView" />
-                <TextView
-                    android:id="@+id/HeaderCalendarEventsTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="@color/primaryText"
-                    tools:text="5 events"
-                    app:layout_constraintTop_toBottomOf="@id/HeaderCalendarEventsLabel"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/HeaderCalendarEventsLabel"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@color/separator" />
-            </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/HeaderTimeEntriesDurationTextView"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="@color/secondaryText"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
+                tools:text="3:35:00" />
         </FrameLayout>
-        <FrameLayout
-            android:id="@+id/HeaderTimeEntriesView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical|bottom">
-                <TextView
-                    android:id="@+id/CalendarHeaderTimeEntriesLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textSize="15sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="@color/primaryText"
-                    tools:text="Time entries"
-                    android:layout_marginBottom="4dp"
-                    app:layout_constraintVertical_chainStyle="packed"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/HeaderTimeEntriesTextView"
-                    app:layout_constraintLeft_toLeftOf="parent" />
-                <TextView
-                    android:id="@+id/HeaderTimeEntriesTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="@color/primaryText"
-                    tools:text="3:35:00"
-                    app:layout_constraintTop_toBottomOf="@id/CalendarHeaderTimeEntriesLabel"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toTopOf="@id/CalendarHeaderTimeEntriesLabel"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:background="@color/separator" />
-            </android.support.constraint.ConstraintLayout>
-        </FrameLayout>
-        <Button
-            android:id="@+id/HeaderLinkCalendarsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center_vertical|right"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@android:color/white"
-            android:background="@drawable/RaisedButton"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:textAllCaps="false"
-            tools:text="Link calendars"
-            android:visibility="gone"/>
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

@@ -1,22 +1,15 @@
 using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
-using Toggl.Droid.Views;
 using Toggl.Droid.Views.Calendar;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {
-        private View headerCalendarEventsView;
-        private View headerTimeEntriesView;
-        private TextView headerDayTextView;
-        private TextView headerWeekdayTextView;
-        private TextView headerCalendarEventsTextView;
-        private TextView headerTimeEntriesTextView;
-        private TextView headerCalendarEventsLabel;
-        private TextView headerCalendarTimeEntriesLabel;
-        private Button headerLinkCalendarsButton;
+        private TextView headerDateTextView;
+        private TextView headerTimeEntriesDurationTextView;
         private CalendarDayView calendarDayView;
         private ViewStub onboardingViewStub;
         private AppBarLayout appBarLayout;
@@ -25,25 +18,24 @@ namespace Toggl.Droid.Fragments
         private TextView onboardingMessageView;
         private Button getStartedButton;
         private TextView skipButton;
+        private Toolbar toolbar;
 
         protected override void InitializeViews(View view)
         {
-            headerCalendarEventsView = view.FindViewById(Resource.Id.HeaderCalendarEventsView);
-            headerTimeEntriesView = view.FindViewById(Resource.Id.HeaderTimeEntriesView);
-            headerDayTextView = view.FindViewById<TextView>(Resource.Id.Day);
-            headerWeekdayTextView = view.FindViewById<TextView>(Resource.Id.Weekday);
-            headerCalendarEventsTextView = view.FindViewById<TextView>(Resource.Id.HeaderCalendarEventsTextView);
-            headerCalendarEventsLabel = view.FindViewById<TextView>(Resource.Id.HeaderCalendarEventsLabel);
-            headerCalendarTimeEntriesLabel = view.FindViewById<TextView>(Resource.Id.CalendarHeaderTimeEntriesLabel);
-            headerTimeEntriesTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesTextView);
-            headerLinkCalendarsButton = view.FindViewById<Button>(Resource.Id.HeaderLinkCalendarsButton);
+            headerDateTextView = view.FindViewById<TextView>(Resource.Id.HeaderDateTextView);
+            headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
             calendarDayView = view.FindViewById<CalendarDayView>(Resource.Id.calendarDayView);
             onboardingViewStub = view.FindViewById<ViewStub>(Resource.Id.OnboardingViewStub);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
-            
-            headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
-            headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
-            headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
+            toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
+        }
+
+        private void setupToolbar()
+        {
+            //todo: setup on settings toolbars revamp issue
+            toolbar.InflateMenu(Resource.Menu.CalendarFragmentMenu);
+            var saveMenuItem = toolbar.Menu.FindItem(Resource.Id.Settings);
+            saveMenuItem.SetTitle(Shared.Resources.Settings);
         }
     }
 }

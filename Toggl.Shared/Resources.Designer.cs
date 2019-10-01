@@ -1871,6 +1871,12 @@ namespace Toggl.Shared {
             }
         }
         
+        public static string CalendarToolbarDateFormat {
+            get {
+                return ResourceManager.GetString("CalendarToolbarDateFormat", resourceCulture);
+            }
+        }
+        
         public static string SiriShortcuts {
             get {
                 return ResourceManager.GetString("SiriShortcuts", resourceCulture);

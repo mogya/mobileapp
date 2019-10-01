@@ -33,5 +33,24 @@ namespace Toggl.iOS.Extensions
             self.LeadingAnchor.ConstraintEqualTo(view.LeadingAnchor).Active = true;
             self.TrailingAnchor.ConstraintEqualTo(view.TrailingAnchor).Active = true;
         }
+
+        public static UIView GetFirstResponder(this UIView self)
+        {
+            if (self.IsFirstResponder)
+            {
+                return self;
+            }
+
+            foreach (var subview in self.Subviews)
+            {
+                var firstResponder = subview.GetFirstResponder();
+                if (firstResponder != null)
+                {
+                    return firstResponder;
+                }
+            }
+
+            return null;
+        }
     }
 }

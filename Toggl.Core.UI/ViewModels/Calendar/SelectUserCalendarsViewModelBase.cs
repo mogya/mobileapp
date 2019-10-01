@@ -33,7 +33,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         public IObservable<ImmutableCalendarSectionModel> Calendars { get; }
 
-        public UIAction Save { get; private set; }
+        public ViewAction Save { get; private set; }
         public InputAction<SelectableUserCalendarViewModel> SelectCalendar { get; }
 
         protected bool ForceItemSelection { get; private set; }

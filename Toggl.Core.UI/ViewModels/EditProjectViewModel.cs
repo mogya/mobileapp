@@ -44,7 +44,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<string> ClientName { get; }
         public IObservable<string> WorkspaceName { get; }
         public IObservable<bool> CanCreatePublicProjects { get; }
-        public UIAction Save { get; }
+        public ViewAction ToggleIsPrivate { get; }
+        public ViewAction Save { get; }
         public OutputAction<Color> PickColor { get; }
         public OutputAction<IThreadSafeClient> PickClient { get; }
         public OutputAction<IThreadSafeWorkspace> PickWorkspace { get; }
@@ -123,6 +124,7 @@ namespace Toggl.Core.UI.ViewModels
                 .Merge(clientName.SelectUnit(), Name.SelectUnit());
 
             Save = rxActionFactory.FromObservable(done, saveEnabledObservable);
+            ToggleIsPrivate = rxActionFactory.FromAction(toggleIsPrivate);
 
             Error = Save.Errors
                 .Select(e => e.Message)
@@ -165,6 +167,11 @@ namespace Toggl.Core.UI.ViewModels
             Name.Accept(name);
 
             return base.Initialize(name);
+        }
+
+        private void toggleIsPrivate()
+        {
+            IsPrivate.Accept(!IsPrivate.Value);
         }
 
         private IObservable<IThreadSafeWorkspace> pickWorkspace()

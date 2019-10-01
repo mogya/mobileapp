@@ -255,7 +255,7 @@ namespace Toggl.iOS.ViewSources
         private void onCollectionChanges()
         {
             long? originalId = null;
-            if (IsEditing)
+            if (IsEditing && editingItemIndexPath != null)
             {
                 var editingIndex = (int)editingItemIndexPath.Item;
                 originalId = calendarItems[editingIndex].TimeEntryId;

@@ -23,8 +23,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IRxActionFactory rxActionFactory;
 
         public IObservable<bool> IsLoading { get; }
-        public UIAction CreateWorkspaceWithDefaultName { get; }
-        public UIAction TryAgain { get; }
+        public ViewAction CreateWorkspaceWithDefaultName { get; }
+        public ViewAction TryAgain { get; }
 
         public NoWorkspaceViewModel(
             ISyncManager syncManager,

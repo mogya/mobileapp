@@ -125,7 +125,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 );
             };
 
-        public static IDisposable BindAction(this IReactive<UIView> reactive, UIAction action)
+        public static IDisposable BindAction(this IReactive<UIView> reactive, ViewAction action)
         {
             return Observable.Using(
                     () => action.Enabled.Subscribe(e => { reactive.Base.UserInteractionEnabled = e; }),

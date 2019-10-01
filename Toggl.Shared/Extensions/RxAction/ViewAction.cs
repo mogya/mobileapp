@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Toggl.Shared.Extensions
 {
-    public sealed class UIAction : RxAction<Unit, Unit>
+    public sealed class ViewAction : RxAction<Unit, Unit>
     {
-        private UIAction(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf)
+        private ViewAction(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf)
             : base(_ => workFactory(), mainScheduler, enabledIf)
         {
         }
@@ -21,7 +21,7 @@ namespace Toggl.Shared.Extensions
         public IObservable<Unit> ExecuteWithCompletion()
             => ExecuteWithCompletion(Unit.Default);
 
-        public static UIAction FromAction(Action action, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static ViewAction FromAction(Action action, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
         {
             IObservable<Unit> workFactory()
                 => Observable.Create<Unit>(observer =>
@@ -31,24 +31,24 @@ namespace Toggl.Shared.Extensions
                     return Disposable.Empty;
                 });
 
-            return new UIAction(workFactory, mainScheduler, enabledIf);
+            return new ViewAction(workFactory, mainScheduler, enabledIf);
         }
 
-        public static UIAction FromAsync(Func<Task> asyncAction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+        public static ViewAction FromAsync(Func<Task> asyncAction, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
         {
             IObservable<Unit> workFactory()
                 => asyncAction().ToObservable();
 
-            return new UIAction(workFactory, mainScheduler, enabledIf);
+            return new ViewAction(workFactory, mainScheduler, enabledIf);
         }
 
-        public static UIAction FromObservable(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
-            => new UIAction(workFactory, mainScheduler, enabledIf);
+        public static ViewAction FromObservable(Func<IObservable<Unit>> workFactory, IScheduler mainScheduler, IObservable<bool> enabledIf = null)
+            => new ViewAction(workFactory, mainScheduler, enabledIf);
     }
 
     public static class RxActionExtensions
     {
-        public static void Execute(this UIAction action)
+        public static void Execute(this ViewAction action)
         {
             action.Execute(Unit.Default);
         }

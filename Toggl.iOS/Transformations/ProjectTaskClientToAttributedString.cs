@@ -4,6 +4,7 @@ using System.Text;
 using CoreGraphics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Suggestions;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Extensions;
 using Toggl.Shared;
@@ -46,6 +47,16 @@ namespace Toggl.iOS.Transformations
                 projectColor,
                 timeEntry.Project?.IsPlaceholder() ?? false,
                 timeEntry.Task?.IsPlaceholder() ?? false);
+        }
+
+        public NSAttributedString Convert(Suggestion suggestion)
+        {
+            var projectColor = new Color(suggestion.ProjectColor ?? string.Empty).ToNativeColor();
+            return Convert(
+                suggestion.ProjectName ?? "",
+                suggestion.TaskName ?? "",
+                suggestion.ClientName ?? "",
+                projectColor);
         }
 
         public NSAttributedString Convert(string project, string task, string client, UIColor color, bool isProjectPlaceholder = false, bool isTaskPlaceholder = false)

@@ -33,8 +33,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> NextIsEnabled { get; }
         public ISubject<string> Password { get; } = new BehaviorSubject<string>(string.Empty);
 
-        public UIAction Done { get; private set; }
-        public UIAction SignOut { get; private set; }
+        public ViewAction Done { get; private set; }
+        public ViewAction SignOut { get; private set; }
 
         public TokenResetViewModel(
             IUserAccessManager userAccessManager,

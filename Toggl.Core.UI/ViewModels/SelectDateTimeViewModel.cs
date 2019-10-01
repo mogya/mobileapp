@@ -20,7 +20,7 @@ namespace Toggl.Core.UI.ViewModels
         public bool Is24HoursFormat { get; private set; } = true;
         public BehaviorRelay<DateTimeOffset> CurrentDateTime { get; private set; }
 
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
 
         public SelectDateTimeViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)

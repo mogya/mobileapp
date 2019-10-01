@@ -28,6 +28,9 @@ namespace Toggl.Droid.Views.Calendar
 
         private int distanceFromItemTopAndFirstTouch;
         private int handleTouchExtraMargins;
+        private int autoScrollExtraDelta;
+        private int smoothAutoScrollDurationInMillis = 300;
+        private bool shouldTryToAutoScrollToEvent = false;
         
         private readonly ISubject<CalendarItem> editCalendarItemSubject = new Subject<CalendarItem>();
         public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSubject.AsObservable();
@@ -35,6 +38,7 @@ namespace Toggl.Droid.Views.Calendar
         partial void initEventEditionBackingFields()
         {
             handleTouchExtraMargins = 24.DpToPixels(Context);
+            autoScrollExtraDelta = 5.DpToPixels(Context);
         }
 
         private void commitEditedChanges()
@@ -157,7 +161,13 @@ namespace Toggl.Droid.Views.Calendar
             {
                 vibrate();
                 previousStartTime = newStartTime;
+                shouldTryToAutoScrollToEvent = true;
             }
+
+            if (touchY < scrollOffset)
+                autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
+            else
+                stopScroll();
         }
 
         private void changeEndTime(float touchY)
@@ -191,7 +201,13 @@ namespace Toggl.Droid.Views.Calendar
             {
                 vibrate();
                 previousEndTime = newEndTime;
+                shouldTryToAutoScrollToEvent = true;
             }
+
+            if (touchY > Height + scrollOffset)
+                autoScroll((int) (touchY - (Height + scrollOffset) + autoScrollExtraDelta));
+            else
+                stopScroll();
         }
 
         private void changeOffset(float touchY)
@@ -218,7 +234,37 @@ namespace Toggl.Droid.Views.Calendar
             {
                 vibrate();
                 previousStartTime = newStartTime;
+                shouldTryToAutoScrollToEvent = true;
             }
+
+            var duration = calendarItem.Duration(now);
+            var durationInPx = duration.TotalHours * hourHeight;
+            if (touchY < scrollOffset)
+                autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
+            else if (touchY + durationInPx > Height + scrollOffset)
+                autoScroll((int) (touchY + durationInPx - (Height + scrollOffset) + autoScrollExtraDelta));
+            else
+                stopScroll();
+        }
+
+        private void autoScroll(int deltaY, bool smoothly = false)
+        {
+            if (isScrolling) return;
+            
+            scroller.ForceFinished(true);
+            isScrolling = true;
+            if (smoothly)
+                scroller.StartScroll(0, scrollOffset, 0, deltaY);
+            else
+                scroller.StartScroll(0, scrollOffset, 0, deltaY, smoothAutoScrollDurationInMillis);
+            
+            handler.Post(continueScroll);
+        }
+
+        private void stopScroll()
+        {
+            scroller.ForceFinished(true);
+            isScrolling = false;   
         }
 
         private void updateItemInEditMode(DateTimeOffset startTime, TimeSpan duration)

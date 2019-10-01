@@ -181,58 +181,62 @@
             android:layout_height="0.5dp"
             android:layout_marginLeft="55dp"
             android:layout_width="match_parent" />
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/ToggleIsPrivateView"
             android:clickable="true"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/ChangeWorkspaceViewPrivateProjectImage"
                 android:src="@drawable/padlock"
                 android:layout_width="24dp"
-                android:layout_gravity="end"
                 android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_below="@+id/ChangeWorkspaceViewClientImage" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
             <TextView
                 android:id="@+id/ChangeWorkspaceViewPrivateProjectLabel"
                 android:lines="1"
                 android:textSize="15sp"
                 android:singleLine="true"
+                android:layout_marginLeft="16dp"
                 android:lineSpacingExtra="5sp"
                 tools:text="Private project"
                 android:textColor="@color/primaryText"
                 android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/ChangeWorkspaceViewPrivateProjectImage"
-                android:layout_toRightOf="@id/ChangeWorkspaceViewPrivateProjectImage" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/ChangeWorkspaceViewPrivateProjectImage" />
             <TextView
                 android:id="@+id/PrivateProjectHint"
                 android:textSize="12sp"
                 android:lineSpacingExtra="5sp"
                 android:textColor="@color/secondaryText"
-                tools:text="Private projects are only accessible\nto project members"
+                tools:text="Private projects are only accessible to project members"
                 android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
+                android:paddingBottom="8dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ChangeWorkspaceViewPrivateProjectLabel"
-                android:layout_alignStart="@+id/ChangeWorkspaceViewPrivateProjectLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/ChangeWorkspaceViewPrivateProjectLabel"
+                app:layout_constraintLeft_toLeftOf="@+id/ChangeWorkspaceViewPrivateProjectLabel"
+                app:layout_constraintRight_toLeftOf="@+id/IsPrivateSwitch"
+                 />
             <Switch
                 android:id="@+id/IsPrivateSwitch"
-                android:layout_marginRight="16dp"
-                android:clickable="false"
-                android:padding="4dp"
+                android:background="?attr/selectableItemBackground"
+                android:paddingLeft="8dp"
+                android:paddingRight="18dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/ChangeWorkspaceViewPrivateProjectImage"
-                android:layout_alignBottom="@id/ChangeWorkspaceViewPrivateProjectImage" />
-        </RelativeLayout>
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
         <View
             android:background="@color/separator"
             android:layout_height="0.5dp"

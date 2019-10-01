@@ -1,10 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Views;
+using Toggl.iOS.Cells.Common;
 using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.ViewSources.Common;
+using Toggl.iOS.ViewSources.Generic.TableView;
+using Toggl.Shared.Extensions.Reactive;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers.Common
@@ -17,7 +26,9 @@ namespace Toggl.iOS.ViewControllers.Common
         private int selectedIndex;
 
         private UITableView tableView;
-        private SelectorTableViewSource<T> source;
+        private SelectorTableViewSource source;
+        private CompositeDisposable disposeBag = new CompositeDisposable();
+
 
         public SelectorViewController(
             string title,
@@ -42,9 +53,11 @@ namespace Toggl.iOS.ViewControllers.Common
             tableView.TableFooterView = new UIView();
             View.AddSubview(tableView);
 
-            source = new SelectorTableViewSource<T>(tableView, options, selectedIndex, onItemSelected);
-
+            source = new SelectorTableViewSource(tableView, selectedIndex, onItemSelected);
             tableView.Source = source;
+
+            Observable.Return(options.Select(item => item.ItemName).ToImmutableList())
+                .Subscribe(tableView.Rx().ReloadItems(source));
         }
 
         public override void ViewWillDisappear(bool animated)

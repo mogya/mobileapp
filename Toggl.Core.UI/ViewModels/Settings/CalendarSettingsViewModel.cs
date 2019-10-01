@@ -28,8 +28,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public bool PermissionGranted { get; private set; }
         public IObservable<bool> CalendarListVisible { get; }
 
-        public UIAction RequestAccess { get; }
-        public UIAction TogglCalendarIntegration { get; }
+        public ViewAction RequestAccess { get; }
+        public ViewAction TogglCalendarIntegration { get; }
 
         public CalendarSettingsViewModel(
             IUserPreferences userPreferences,

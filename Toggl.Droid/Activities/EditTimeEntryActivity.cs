@@ -141,15 +141,15 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsBillable
-                .Subscribe(billableSwitch.Rx().CheckedObserver())
+                .Subscribe(billableSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             billableSwitch.Rx()
                 .BindAction(ViewModel.ToggleBillable)
                 .DisposedBy(DisposeBag);
 
-            billableButton.Rx().Tap()
-                .Subscribe(ViewModel.ToggleBillable.Inputs)
+            billableButton.Rx()
+                .BindAction(ViewModel.ToggleBillable)
                 .DisposedBy(DisposeBag);
 
             ViewModel.StartTime

@@ -7,9 +7,9 @@ namespace Toggl.Core.Services
 {
     public interface IRxActionFactory
     {
-        UIAction FromAction(Action action, IObservable<bool> enabledIf = null);
-        UIAction FromAsync(Func<Task> asyncAction, IObservable<bool> enabledIf = null);
-        UIAction FromObservable(Func<IObservable<Unit>> workFactory, IObservable<bool> enabledIf = null);
+        ViewAction FromAction(Action action, IObservable<bool> enabledIf = null);
+        ViewAction FromAsync(Func<Task> asyncAction, IObservable<bool> enabledIf = null);
+        ViewAction FromObservable(Func<IObservable<Unit>> workFactory, IObservable<bool> enabledIf = null);
 
         InputAction<TInput> FromAction<TInput>(Action<TInput> action);
         InputAction<TInput> FromAsync<TInput>(Func<TInput, Task> asyncAction, IObservable<bool> enabledIf = null);

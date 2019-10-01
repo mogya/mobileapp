@@ -490,6 +490,32 @@ private TemporaryFileTransformation GetIntegrationTestsConfigurationTransformati
     };
 }
 
+private TemporaryFileTransformation GetAndroidAppIconTransformation()
+{
+    const string path = "Toggl.Droid/Resources/mipmap-anydpi-v26/ic_launcher.xml";
+    const string drawableToReplace = "@color/launcherBackgroundDebug";
+    var drawable = "@color/launcherBackgroundDebug";
+    
+    if (target == "Build.Release.Android.AdHoc")
+    {
+        drawable = "@color/launcherBackgroundAdHoc";
+    }
+    else if (target == "Build.Release.Android.PlayStore")
+    {
+        drawable = "@color/launcherBackground";
+    }
+
+    var filePath = GetFiles(path).Single();
+    var file = TransformTextFile(filePath).ToString();
+
+    return new TemporaryFileTransformation
+    {
+        Path = path,
+        Original = file,
+        Temporary = file.Replace(drawableToReplace, drawable)
+    };
+}
+
 var transformations = new List<TemporaryFileTransformation>
 {
     GetIosInfoConfigurationTransformation(),
@@ -505,7 +531,8 @@ var transformations = new List<TemporaryFileTransformation>
     GetAndroidGoogleLoginTransformation(),
     GetAndroidSplashScreenTransformation(),
     GetAndroidTogglApplicationTransformation(),
-    GetAndroidManifestTransformation()
+    GetAndroidManifestTransformation(),
+    GetAndroidAppIconTransformation(),
 };
 
 private HashSet<string> targetsThatSkipTearDown = new HashSet<string>

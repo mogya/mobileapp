@@ -30,31 +30,31 @@
                 android:clickable="true"
                 android:layout_height="56dp"
                 android:layout_width="match_parent">
-              <TextView
-                  android:id="@+id/SettingsNameTextView"
-                  tools:text="heidi@toggl.com"
-                  android:textSize="15sp"
-                  android:lineSpacingExtra="5sp"
-                  android:textColor="@color/primaryText"
-                  android:layout_marginTop="8dp"
-                  android:layout_marginLeft="16dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
-              <View
-                  android:background="@color/separator"
-                  android:layout_height="0.5dp"
-                  android:layout_width="match_parent" />
-              <TextView
-                  android:id="@+id/UsernameLabel"
-                  android:textSize="12sp"
-                  android:lineSpacingExtra="4sp"
-                  android:textColor="@color/secondaryText"
-                  tools:text="Username"
-                  android:layout_gravity="bottom"
-                  android:layout_marginLeft="16dp"
-                  android:layout_marginBottom="8dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/SettingsNameTextView"
+                    tools:text="heidi@toggl.com"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="5sp"
+                    android:textColor="@color/primaryText"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:background="@color/separator"
+                    android:layout_height="0.5dp"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/UsernameLabel"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="4sp"
+                    android:textColor="@color/secondaryText"
+                    tools:text="Username"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </FrameLayout>
             <View
                 android:background="@color/separator"
@@ -64,27 +64,27 @@
                 android:clickable="true"
                 android:layout_height="56dp"
                 android:layout_width="match_parent">
-              <TextView
-                  android:id="@+id/SettingsEmailTextView"
-                  tools:text="Heidi"
-                  android:textSize="15sp"
-                  android:lineSpacingExtra="5sp"
-                  android:textColor="@color/primaryText"
-                  android:layout_marginTop="8dp"
-                  android:layout_marginLeft="16dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
-              <TextView
-                  android:id="@+id/EmailLabel"
-                  android:textSize="12sp"
-                  android:lineSpacingExtra="4sp"
-                  tools:text="Email"
-                  android:textColor="@color/secondaryText"
-                  android:layout_gravity="bottom"
-                  android:layout_marginLeft="16dp"
-                  android:layout_marginBottom="8dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/SettingsEmailTextView"
+                    tools:text="Heidi"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="5sp"
+                    android:textColor="@color/primaryText"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/EmailLabel"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="4sp"
+                    tools:text="Email"
+                    android:textColor="@color/secondaryText"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </FrameLayout>
             <View
                 android:background="@color/separator"
@@ -96,33 +96,33 @@
                 android:background="?attr/selectableItemBackground"
                 android:layout_height="56dp"
                 android:layout_width="match_parent">
-              <TextView
-                  android:id="@+id/DefaultWorkspaceName"
-                  tools:text="MM/DD/YYYY"
-                  android:textSize="15sp"
-                  android:lineSpacingExtra="5sp"
-                  android:textColor="@color/primaryText"
-                  android:layout_marginTop="8dp"
-                  android:layout_marginLeft="16dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
-              <TextView
-                  android:id="@+id/DefaultWorkspaceLabel"
-                  android:textSize="12sp"
-                  android:lineSpacingExtra="4sp"
-                  tools:text="Default Workspace"
-                  android:textColor="@color/secondaryText"
-                  android:layout_gravity="bottom"
-                  android:layout_marginLeft="16dp"
-                  android:layout_marginBottom="8dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" />
-              <ImageView
-                  android:src="@drawable/dropdown"
-                  android:layout_marginRight="16dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="right|center_vertical" />
+                <TextView
+                    android:id="@+id/DefaultWorkspaceName"
+                    tools:text="MM/DD/YYYY"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="5sp"
+                    android:textColor="@color/primaryText"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/DefaultWorkspaceLabel"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="4sp"
+                    tools:text="Default Workspace"
+                    android:textColor="@color/secondaryText"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:src="@drawable/dropdown"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical" />
             </FrameLayout>
             <View
                 android:background="@color/separator"
@@ -278,8 +278,9 @@
                     android:layout_width="wrap_content" />
                 <Switch
                     android:id="@+id/SettingsIs24HourModeSwitch"
-                    android:clickable="false"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingRight="18dp"
+                    android:paddingLeft="8dp"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
@@ -307,8 +308,9 @@
                     android:layout_width="wrap_content" />
                 <Switch
                     android:id="@+id/GroupTimeEntriesSwitch"
-                    android:clickable="false"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingRight="18dp"
+                    android:paddingLeft="8dp"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
@@ -317,8 +319,7 @@
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_width="match_parent" />
-
-          <View
+            <View
                 android:background="@color/separator"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="24dp"
@@ -342,8 +343,9 @@
                     android:layout_width="wrap_content" />
                 <Switch
                     android:id="@+id/SettingsAreSwipeActionsEnabledSwitch"
-                    android:clickable="false"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingRight="18dp"
+                    android:paddingLeft="8dp"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
@@ -377,12 +379,13 @@
                 <Switch
                     android:id="@+id/SettingsIsManualModeEnabledSwitch"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:paddingRight="18dp"
-                    android:clickable="false"
-                    app:layout_constraintBottom_toBottomOf="@+id/SettingsToggleManualModeLabel"
+                    android:paddingLeft="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    app:layout_constraintBottom_toBottomOf="@+id/SettingsToggleManualModeView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/SettingsToggleManualModeLabel" />
+                    app:layout_constraintTop_toTopOf="@+id/SettingsToggleManualModeView" />
                 <TextView
                     android:id="@+id/SettingsToggleManualModeExplanation"
                     tools:text="This option sets the default behavior for the start button. Regardless of the current option, long pressing the button will always activate the alternative mode."
@@ -391,10 +394,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginRight="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/SettingsIsManualModeEnabledSwitch"
                     app:layout_constraintStart_toStartOf="@+id/SettingsToggleManualModeLabel"
-                    app:layout_constraintTop_toBottomOf="@+id/SettingsIsManualModeEnabledSwitch" />
+                    app:layout_constraintTop_toBottomOf="@+id/SettingsToggleManualModeLabel" />
             </android.support.constraint.ConstraintLayout>
             <View
                 android:background="@color/separator"
@@ -494,8 +498,9 @@
                     android:layout_height="match_parent" />
                 <Switch
                     android:id="@+id/SettingsAreRunningTimerNotificationsEnabledSwitch"
-                    android:clickable="false"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingRight="18dp"
+                    android:paddingLeft="8dp"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
@@ -523,9 +528,10 @@
                     android:layout_height="match_parent" />
                 <Switch
                     android:id="@+id/SettingsAreStoppedTimerNotificationsEnabledSwitch"
-                    android:clickable="false"
+                    android:background="?attr/selectableItemBackground"
                     android:layout_gravity="right"
-                    android:layout_marginRight="18dp"
+                    android:paddingRight="18dp"
+                    android:paddingLeft="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
             </FrameLayout>
@@ -632,15 +638,14 @@
                 android:layout_width="match_parent" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-  <android.support.design.widget.AppBarLayout
-      android:id="@+id/AppBarLayout"
-      android:elevation="0dp"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-      <android.support.v7.widget.Toolbar
-          android:id="@+id/Toolbar"
-          style="@style/ToolbarStyle"
-          app:layout_scrollFlags="scroll|enterAlways"
-           />
-  </android.support.design.widget.AppBarLayout>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/AppBarLayout"
+        android:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/Toolbar"
+            style="@style/ToolbarStyle"
+            app:layout_scrollFlags="scroll|enterAlways" />
+    </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

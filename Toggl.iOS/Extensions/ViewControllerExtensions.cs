@@ -36,7 +36,7 @@ namespace Toggl.iOS.Extensions
 
                 var dismissAction = UIAlertAction.Create(dismissButtonText, UIAlertActionStyle.Cancel, _ =>
                 {
-                    observer.OnNext(true);
+                    observer.OnNext(false);
                     observer.OnCompleted();
                 });
 

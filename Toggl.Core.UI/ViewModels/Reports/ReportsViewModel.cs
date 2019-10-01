@@ -103,7 +103,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public IObservable<DateTimeOffset> EndDate { get; }
         public IObservable<bool> WorkspaceHasBillableFeatureEnabled { get; }
 
-        public UIAction SelectWorkspace { get; }
+        public ViewAction SelectWorkspace { get; }
 
         public ReportsViewModel(ITogglDataSource dataSource,
             ITimeService timeService,

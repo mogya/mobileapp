@@ -31,7 +31,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IImmutableList<SelectableTagBaseViewModel>> Tags { get; private set; }
         public IObservable<bool> IsEmpty { get; private set; }
         public BehaviorSubject<string> FilterText { get; } = new BehaviorSubject<string>(string.Empty);
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
 
         public InputAction<SelectableTagBaseViewModel> SelectTag { get; }
 

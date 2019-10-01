@@ -14,8 +14,8 @@ namespace Toggl.Core.UI.ViewModels
 
         private readonly string storeUrl;
 
-        public UIAction OpenWebsite { get; }
-        public UIAction UpdateApp { get; }
+        public ViewAction OpenWebsite { get; }
+        public ViewAction UpdateApp { get; }
 
         public OutdatedAppViewModel(IPlatformInfo platformInfo, IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)

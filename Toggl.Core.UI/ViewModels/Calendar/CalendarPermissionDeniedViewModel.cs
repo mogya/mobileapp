@@ -14,7 +14,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
-        public UIAction EnableAccess { get; }
+        public ViewAction EnableAccess { get; }
 
         public CalendarPermissionDeniedViewModel(INavigationService navigationService, IPermissionsChecker permissionsChecker, IRxActionFactory rxActionFactory)
             : base(navigationService)

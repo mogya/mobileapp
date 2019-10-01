@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
   
+  <!--App icon-->
+  <color name="launcherBackground">#FFE01B22</color>
+  <color name="launcherBackgroundAdHoc">#FFFFCE45</color>
+  <color name="launcherBackgroundDebug">#FF71719E</color>
+  
   <!--Theme related-->
   <color name="accent">#FF328FFF</color>
   <color name="fallbackStatusBar">#FF121212</color>
   <color name="outdatedStatusBar">#FFBDBDBD</color>
-  <color name="launcherBackground">#FFE01B22</color>
   <color name="textEditBackgroundTint">#FFE2E2E2</color>
 
   <!-- App wide-->
@@ -35,6 +39,7 @@
 
   <!--Calendar page-->
   <color name="calendarHeaderBackground">#FF959595</color>
+  <color name="currentHourColor">#323232</color>
 
   <!-- Start Time entry page-->
   <color name="billable">#FF328FFF</color>

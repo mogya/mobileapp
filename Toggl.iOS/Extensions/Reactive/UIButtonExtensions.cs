@@ -47,7 +47,7 @@ namespace Toggl.iOS.Extensions.Reactive
                 );
             };
 
-        public static IDisposable BindAction(this IReactive<UIButton> reactive, UIAction action,
+        public static IDisposable BindAction(this IReactive<UIButton> reactive, ViewAction action,
             ButtonEventType eventType = ButtonEventType.Tap) =>
             reactive.BindAction(action, _ => Unit.Default, eventType);
 

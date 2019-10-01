@@ -280,9 +280,8 @@ namespace Toggl.iOS.ViewControllers
         {
             frameBeforeShowingKeyboard = View.Frame;
 
-            var safeAreaOffset = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                  ? Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, UIApplication.SharedApplication.StatusBarFrame.Height)
-                  : 0;
+            var safeAreaOffset = Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top,
+                UIApplication.SharedApplication.StatusBarFrame.Height);
             var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - e.FrameEnd.Height);
 
             View.Frame = new CGRect(View.Frame.X, distanceFromTop, View.Frame.Width, View.Frame.Height);

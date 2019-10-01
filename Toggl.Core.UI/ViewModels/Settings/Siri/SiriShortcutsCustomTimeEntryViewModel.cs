@@ -44,9 +44,9 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public IObservable<bool> HasTags { get; }
         public IObservable<EditTimeEntryViewModel.ProjectClientTaskInfo> ProjectClientTask { get; }
 
-        public UIAction SelectTags { get; }
-        public UIAction SelectProject { get; }
-        public UIAction SelectClipboard { get; }
+        public ViewAction SelectTags { get; }
+        public ViewAction SelectProject { get; }
+        public ViewAction SelectClipboard { get; }
 
         public SiriShortcutsCustomTimeEntryViewModel(
             ITogglDataSource dataSource,

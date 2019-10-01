@@ -17,19 +17,19 @@ namespace Toggl.Core.Services
             this.schedulerProvider = schedulerProvider;
         }
 
-        public UIAction FromAction(Action action, IObservable<bool> enabledIf = null)
+        public ViewAction FromAction(Action action, IObservable<bool> enabledIf = null)
         {
-            return UIAction.FromAction(action, schedulerProvider.MainScheduler, enabledIf);
+            return ViewAction.FromAction(action, schedulerProvider.MainScheduler, enabledIf);
         }
 
-        public UIAction FromAsync(Func<Task> asyncAction, IObservable<bool> enabledIf = null)
+        public ViewAction FromAsync(Func<Task> asyncAction, IObservable<bool> enabledIf = null)
         {
-            return UIAction.FromAsync(asyncAction, schedulerProvider.MainScheduler, enabledIf);
+            return ViewAction.FromAsync(asyncAction, schedulerProvider.MainScheduler, enabledIf);
         }
 
-        public UIAction FromObservable(Func<IObservable<Unit>> workFactory, IObservable<bool> enabledIf = null)
+        public ViewAction FromObservable(Func<IObservable<Unit>> workFactory, IObservable<bool> enabledIf = null)
         {
-            return UIAction.FromObservable(workFactory, schedulerProvider.MainScheduler, enabledIf);
+            return ViewAction.FromObservable(workFactory, schedulerProvider.MainScheduler, enabledIf);
         }
 
         public InputAction<TInput> FromAction<TInput>(Action<TInput> action)

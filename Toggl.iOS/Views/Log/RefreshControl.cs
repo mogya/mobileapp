@@ -265,7 +265,6 @@ namespace Toggl.iOS.ViewSources
         {
             if (scrollView.Dragging) return;
 
-            scrollView.SetContentOffset(new CGPoint(0, -syncBarHeight), true);
             heightConstraint.Constant = syncBarHeight;
             UIView.Animate(Animation.Timings.EnterTiming, () =>
             {
@@ -278,7 +277,6 @@ namespace Toggl.iOS.ViewSources
             if (withDelay)
                 await Task.Delay(Animation.Timings.HideSyncStateViewDelay);
 
-            scrollView.SetContentOffset(CGPoint.Empty, true);
             heightConstraint.Constant = 0;
             UIView.Animate(Animation.Timings.EnterTiming, () =>
             {

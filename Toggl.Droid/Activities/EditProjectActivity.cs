@@ -106,13 +106,16 @@ namespace Toggl.Droid.Activities
                 .DisposedBy(DisposeBag);
 
             // Is Private
-            toggleIsPrivateView.Rx().Tap()
-                .Select(_ => !isPrivateSwitch.Checked)
-                .Subscribe(ViewModel.IsPrivate.Accept)
+            toggleIsPrivateView.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
+                .DisposedBy(DisposeBag);
+
+            isPrivateSwitch.Rx()
+                .BindAction(ViewModel.ToggleIsPrivate)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsPrivate
-                .Subscribe(isPrivateSwitch.Rx().CheckedObserver())
+                .Subscribe(isPrivateSwitch.Rx().CheckedObserver(ignoreUnchanged: true))
                 .DisposedBy(DisposeBag);
 
             ViewModel.CanCreatePublicProjects

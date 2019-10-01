@@ -36,7 +36,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<float> Saturation { get; }
         public IObservable<float> Value { get; }
 
-        public UIAction Save { get; }
+        public ViewAction Save { get; }
         public InputAction<float> SetHue { get; }
         public InputAction<float> SetSaturation { get; }
         public InputAction<float> SetValue { get; }

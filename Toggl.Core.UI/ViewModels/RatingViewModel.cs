@@ -40,7 +40,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<Unit> HideRatingView { get; }
 
-        public UIAction PerformMainAction { get; }
+        public ViewAction PerformMainAction { get; }
 
         public RatingViewModel(
             ITimeService timeService,

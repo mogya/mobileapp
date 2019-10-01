@@ -1036,6 +1036,9 @@ Use them to add keywords to your time entries.</value>
     <data name="EditingTwentyFourHoursFormat">
         <value>HH:mm</value>
     </data>
+    <data name="CalendarToolbarDateFormat">
+        <value>dddd, MMM d</value>
+    </data>
     <data name="SiriShortcuts" xml:space="preserve">
         <value>Siri Shortcuts</value>
     </data>

@@ -13,8 +13,8 @@ namespace Toggl.Core.UI.ViewModels
         private const string privacyPolicyUrl = "https://toggl.com/legal/privacy/";
         private const string termsOfServiceUrl = "https://toggl.com/legal/terms/";
 
-        public UIAction ViewTermsOfService { get; }
-        public UIAction ViewPrivacyPolicy { get; }
+        public ViewAction ViewTermsOfService { get; }
+        public ViewAction ViewPrivacyPolicy { get; }
 
         public TermsOfServiceViewModel(IRxActionFactory rxActionFactory, INavigationService navigationService)
             : base(navigationService)

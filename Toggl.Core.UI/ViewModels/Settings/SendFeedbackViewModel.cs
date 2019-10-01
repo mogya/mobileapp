@@ -22,8 +22,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly ISubject<Exception> currentErrorSubject = new BehaviorSubject<Exception>(null);
 
         // Actions
-        public UIAction DismissError { get; }
-        public UIAction Send { get; }
+        public ViewAction DismissError { get; }
+        public ViewAction Send { get; }
 
         // Inputs
         public ISubject<string> FeedbackText { get; } = new BehaviorSubject<string>(string.Empty);

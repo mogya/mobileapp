@@ -80,19 +80,6 @@ namespace Toggl.iOS.ViewSources
             ? rowHeightRegular
             : rowHeightCompact;
 
-        public override UITableViewRowAction[] EditActionsForRow(UITableView tableView, NSIndexPath indexPath)
-        {
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                return new UITableViewRowAction[] { };
-
-            if (!swipeActionsEnabled)
-            {
-                return new UITableViewRowAction[] { };
-            }
-
-            return new [] { createLegacySwipeDeleteAction() };
-        }
-
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = (TimeEntriesLogViewCell)tableView.DequeueReusableCell(TimeEntriesLogViewCell.Identifier);
@@ -153,42 +140,9 @@ namespace Toggl.iOS.ViewSources
             isDraggingSubject.OnNext(false);
         }
 
-        private UITableViewRowAction createLegacySwipeContinueAction()
-        {
-            var continueAction = UITableViewRowAction.Create(
-                UITableViewRowActionStyle.Normal,
-                Resources.Continue,
-                (action, indexPath) =>
-                {
-                    var item = ModelAt(indexPath);
-                    continueSwipeSubject.OnNext(item);
-                });
-
-            continueAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.ContinueSwipeActionBackground.ToNativeColor();
-            return continueAction;
-        }
-
-        private UITableViewRowAction createLegacySwipeDeleteAction()
-        {
-            var deleteAction = UITableViewRowAction.Create(
-                UITableViewRowActionStyle.Destructive,
-                Resources.Delete,
-                (action, indexPath) =>
-                {
-                    var item = ModelAt(indexPath);
-                    deleteSwipeSubject.OnNext(item);
-                });
-
-            deleteAction.BackgroundColor = Core.UI.Helper.Colors.TimeEntriesLog.DeleteSwipeActionBackground.ToNativeColor();
-            return deleteAction;
-        }
-
         private UISwipeActionsConfiguration createSwipeActionConfiguration(
             Func<LogItemViewModel, UIContextualAction> factory, NSIndexPath indexPath)
         {
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                return null;
-
             var item = ModelAt(indexPath);
             if (item == null)
                 return null;
@@ -228,9 +182,6 @@ namespace Toggl.iOS.ViewSources
 
         private UISwipeActionsConfiguration createDisabledActionConfiguration()
         {
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                return null;
-
             var swipeAction = UISwipeActionsConfiguration.FromActions(new UIContextualAction[]{});
             swipeAction.PerformsFirstActionWithFullSwipe = false;
             return swipeAction;

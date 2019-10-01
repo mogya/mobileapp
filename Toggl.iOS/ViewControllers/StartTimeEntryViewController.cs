@@ -67,7 +67,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 View.ClipsToBounds = true;
             }
@@ -77,7 +77,7 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillLayoutSubviews();
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 View.ClipsToBounds = true;
             }
@@ -251,7 +251,7 @@ namespace Toggl.iOS.ViewControllers
 
         private void prepareViews()
         {
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 PreferredContentSize = new CGSize(0, desiredIpadHeight);
             }

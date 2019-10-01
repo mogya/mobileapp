@@ -48,13 +48,6 @@ namespace Toggl.iOS.ViewControllers
             }
         }
 
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
-
-            TabBar.Translucent = UIDevice.CurrentDevice.CheckSystemVersion(11, 0);
-        }
-
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);

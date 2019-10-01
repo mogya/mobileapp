@@ -29,7 +29,7 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<string> ErrorMessage { get; }
         public IObservable<bool> PasswordResetSuccessful { get; }
 
-        public UIAction Reset { get; }
+        public ViewAction Reset { get; }
 
         public ForgotPasswordViewModel(
             ITimeService timeService,

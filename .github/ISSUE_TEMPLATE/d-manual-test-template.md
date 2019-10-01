@@ -42,9 +42,9 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Continue an entry
 - [ ] Delete an entry
 
-### Right to left language at random (Arabic, Aramaic, Azeri, Dhivehi/Maldivian, Hebrew, Kurdish (Sorani), Persian/Farsi, Urdu) Though not strictly RTL this could also apply to Chinese, Korean, Japanese and some other languages.
+## Right to left language at random (Arabic, Aramaic, Azeri, Dhivehi/Maldivian, Hebrew, Kurdish (Sorani), Persian/Farsi, Urdu) Though not strictly RTL this could also apply to Chinese, Korean, Japanese and some other languages.
 
-> ℹ Note: This were not working in iOS 1.22, so we might want to skip this tests until they are fixed.
+> ℹ Note: This were not working in iOS 12.2, so we might want to skip this tests until they are fixed.
 
 - [ ] Start a timer and enter a description (Is it appearing from the right direction)?
 - [ ] Start a timer and enter a description and create a project (Is it appearing from the right direction)?
@@ -143,9 +143,10 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Move the calendar entry from your calendar to another day (is this reflected?)
 
 ## Testing Siri Integration
-- [ ] Enable Siri Integration
-- [ ] Start a time entry
-- [ ] Stop a time entry
+- [ ] Test adding simple shortcuts from Siri Shortcuts section (like start, stop or show reports)
+- [ ] Test adding start custom entry shortcuts or/and custom report shortcut
+- [ ] Test importing and using Siri Workflows from Settings into the Shortcuts app
+- [ ] Test Siri with all those shortcuts and workflows ☝️
 
 ## Multiple Workspaces
 - [ ] Switch workspaces
@@ -157,7 +158,7 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Be removed from a workspace while offline
 - [ ] Be removed from a workspace with an active entry running
 
-### Testing Interactions/Sync between this app and others
+## Testing Interactions/Sync between this app and others
 - [ ] App correctly syncs on startup (log in, kill app, open app again)
 - [ ] Edit client on web whilst mobile online
 - [ ] Delete client on web whilst mobile online and tracking a task
@@ -167,7 +168,6 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Create new project on web whilst mobile offline
 - [ ] Tasks
 - [ ] Try creating new entries on web whilst mobile offline
-- [ ] Edit client on web whilst mobile offline
 - [ ] Try stopping timer on web while mobile offline
 - [ ] Delete project on web whilst mobile offline
 - [ ] Make changes to projects on web
@@ -189,36 +189,28 @@ about: A manual testing checklist that can be assigned to a release to track the
 
 - [ ] Check that steps are being displayed correctly for first entry
 - [ ] Check that steps to edit first entry are being displayed correctly
-- [ ] Check that hint to swipe continue entry is shown
-- [ ] Check that hint to swipe delete is shown
 
-### Testing Siri
-- [ ] Test adding simple shortcuts from Siri Shortcuts section (like start, stop or show reports)
-- [ ] Test adding start custom entry shortcuts or/and custom report shortcut
-- [ ] Test importing and using Siri Workflows from Settings into the Shortcuts app
-- [ ] Test Siri with all those shortcuts and workflows ☝️
-
-### Testing Handoff
+## Testing Handoff
 - [ ] Test Handoff to web from the timer page
 - [ ] Test Handoff to web from the settings page
 - [ ] Test Handoff to web from the reports page (check that it shows the same workspace and the same period)
 - [ ] Try changing the workspace in the mobile app. Is this handed off to web properly?
 - [ ] Try changing the selected period in the mobile app. Is this handed off to web properly?
 
-### Testing app restriction UI
+## Testing app restriction UI
 
-- [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About) 
+- [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About)
   - [ ] Token reset error
   - [ ] No workspace error
   - [ ] No default workspace error
   - [ ] Outdated client error
   - [ ] Outdated API error
-- [ ] Check that all the permanent error screens are showing correctly 
+- [ ] Check that all the permanent error screens are showing correctly
   - [ ] Permanent outdated client error
     - [ ] Make sure that after this choice, the app requires reinstall/update
   - [ ] Permanent outdated API error
     - [ ] Make sure that after this choice, the app requires reinstall/update
-    
+
     ### Test that the UI is appearing as intended and report any issues
 
 - [ ] All of the UI tests are passing

@@ -252,14 +252,14 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(TagsContainerView.Rx().AccessibilityLabel())
                 .DisposedBy(DisposeBag);
 
-            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+            View.ClipsToBounds |= TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular;
         }
 
         public override void ViewWillLayoutSubviews()
         {
             base.ViewWillLayoutSubviews();
 
-            View.ClipsToBounds |= UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad;
+            View.ClipsToBounds |= TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular;
         }
 
         private void prepareViews()
@@ -269,8 +269,7 @@ namespace Toggl.iOS.ViewControllers
             centerTextVertically(TagsTextView);
             TagsTextView.TextContainer.LineFragmentPadding = 0;
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                && UIDevice.CurrentDevice.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 var bottomSafeAreaInset = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
                 if (bottomSafeAreaInset >= ButtonsContainerBottomConstraint.Constant)
@@ -318,8 +317,8 @@ namespace Toggl.iOS.ViewControllers
             StopButton.UserInteractionEnabled = !isInaccessible;
 
             BillableSwitch.Enabled = !isInaccessible;
-            TagsContainerView.Hidden = isInaccessible;
-            TagsSeparator.Hidden = isInaccessible;
+            TagsTextView.UserInteractionEnabled = !isInaccessible;
+            AddTagsView.Hidden = isInaccessible;
 
             var textColor = isInaccessible
                 ? Colors.Common.Disabled.ToNativeColor()
@@ -357,34 +356,10 @@ namespace Toggl.iOS.ViewControllers
             double height;
             nfloat coveredByKeyboard = 0;
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
             {
                 height = nonScrollableContentHeight + ScrollViewContent.Bounds.Height;
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                {
-                    height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
-                }
-
-                if (keyboardHeight > 0)
-                {
-                    // this bit of code depends on the knowledge of the component tree:
-                    // - description label is inside of a container view which is placed in a stack view
-                    // - we want to know the vertical location of the container view in the whole view
-                    // - we actually want to know the Y coordinate of the bottom of the container and make
-                    //   sure we don't overaly it with the keyboard
-                    var container = DescriptionTextView.Superview;
-                    var absoluteLocation = View.ConvertPointFromView(container.Frame.Location, container.Superview.Superview);
-                    var minimumVisibleContentHeight = View.Frame.Height - absoluteLocation.Y - container.Frame.Height;
-
-                    coveredByKeyboard = keyboardHeight - minimumVisibleContentHeight;
-
-                    var safeAreaOffset = UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
-                        ? Math.Max(UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Top, UIApplication.SharedApplication.StatusBarFrame.Height)
-                        : 0;
-                    var distanceFromTop = Math.Max(safeAreaOffset, View.Frame.Y - coveredByKeyboard);
-
-                    height = UIScreen.MainScreen.Bounds.Height - distanceFromTop;
-                }
+                height += UIApplication.SharedApplication.KeyWindow.SafeAreaInsets.Bottom;
             }
             else
             {
@@ -407,7 +382,7 @@ namespace Toggl.iOS.ViewControllers
 
             ScrollView.ScrollEnabled = ScrollViewContent.Bounds.Height > ScrollView.Bounds.Height;
 
-            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+            if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
             {
                 if (ScrollView.ScrollEnabled && keyboardHeight > 0)
                 {

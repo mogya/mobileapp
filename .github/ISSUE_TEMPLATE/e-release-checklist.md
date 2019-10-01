@@ -30,7 +30,8 @@ about: A checklist before releasing to the AppStore and Play Store.
 ## Release phase
 
 - [ ] Create a new version on AppStore Connect or Google Play Console, include the reviewed changelog
-- [ ] Ask in the `#mobile-marketing` channel if any app metadata needs to be updated
+- [ ] Ask in the `#marketing-apps` channel if any app metadata needs to be updated
+- [ ] Make sure they translated the changelog into the languages that we support
 - [ ] Release to users with a phased rollout (send for review with automatic release to users selected in case of iOS)
 - [ ] Inform `@mobileteam` and `@support` in the `#mobile-support` channel that a phased rollout started
 

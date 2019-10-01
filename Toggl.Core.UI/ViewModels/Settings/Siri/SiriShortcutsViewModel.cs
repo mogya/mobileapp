@@ -19,8 +19,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
 
-        public UIAction NavigateToCustomReportShortcut { get; }
-        public UIAction NavigateToCustomTimeEntryShortcut { get; }
+        public ViewAction NavigateToCustomReportShortcut { get; }
+        public ViewAction NavigateToCustomTimeEntryShortcut { get; }
 
         public SiriShortcutsViewModel(
             IInteractorFactory interactorFactory,

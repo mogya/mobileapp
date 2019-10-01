@@ -91,15 +91,15 @@ namespace Toggl.Core.UI.ViewModels
 
         public IObservable<IThreadSafePreferences> Preferences { get; private set; }
 
-        public UIAction SelectProject { get; private set; }
-        public UIAction SelectTags { get; private set; }
-        public UIAction ToggleBillable { get; private set; }
+        public ViewAction SelectProject { get; private set; }
+        public ViewAction SelectTags { get; private set; }
+        public ViewAction ToggleBillable { get; private set; }
         public InputAction<EditViewTapSource> EditTimes { get; private set; }
-        public UIAction SelectStartDate { get; }
-        public UIAction StopTimeEntry { get; private set; }
-        public UIAction DismissSyncErrorMessage { get; private set; }
-        public UIAction Save { get; private set; }
-        public UIAction Delete { get; private set; }
+        public ViewAction SelectStartDate { get; }
+        public ViewAction StopTimeEntry { get; private set; }
+        public ViewAction DismissSyncErrorMessage { get; private set; }
+        public ViewAction Save { get; private set; }
+        public ViewAction Delete { get; private set; }
 
         public EditTimeEntryViewModel(
             ITimeService timeService,

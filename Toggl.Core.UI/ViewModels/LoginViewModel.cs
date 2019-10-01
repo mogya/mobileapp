@@ -59,8 +59,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> IsPasswordMasked { get; }
         public IObservable<bool> IsShowPasswordButtonVisible { get; }
 
-        public UIAction Signup { get; }
-        public UIAction ForgotPassword { get; }
+        public ViewAction Signup { get; }
+        public ViewAction ForgotPassword { get; }
 
         public LoginViewModel(
             IUserAccessManager userAccessManager,

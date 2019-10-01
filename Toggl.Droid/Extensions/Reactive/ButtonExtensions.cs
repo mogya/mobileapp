@@ -14,7 +14,7 @@ namespace Toggl.Droid.Extensions.Reactive
                 .FromEventPattern(e => reactive.Base.Click += e, e => reactive.Base.Click -= e)
                 .SelectUnit();
 
-        public static IDisposable BindAction(this IReactive<Button> reactive, UIAction action,
+        public static IDisposable BindAction(this IReactive<Button> reactive, ViewAction action,
             ButtonEventType eventType = ButtonEventType.Tap) =>
             reactive.BindAction(action, _ => Unit.Default, eventType);
 

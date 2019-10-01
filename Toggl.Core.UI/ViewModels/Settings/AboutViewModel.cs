@@ -10,9 +10,9 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class AboutViewModel : ViewModel
     {
-        public UIAction OpenPrivacyPolicyView { get; private set; }
-        public UIAction OpenTermsOfServiceView { get; private set; }
-        public UIAction OpenLicensesView { get; private set; }
+        public ViewAction OpenPrivacyPolicyView { get; private set; }
+        public ViewAction OpenTermsOfServiceView { get; private set; }
+        public ViewAction OpenLicensesView { get; private set; }
 
         public AboutViewModel(
             IRxActionFactory rxActionFactory,

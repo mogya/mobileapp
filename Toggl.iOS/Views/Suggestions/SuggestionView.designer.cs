@@ -13,9 +13,6 @@ namespace Toggl.iOS
 	partial class SuggestionView
 	{
 		[Outlet]
-		UIKit.UILabel ClientLabel { get; set; }
-
-		[Outlet]
 		Toggl.iOS.Views.FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
@@ -25,24 +22,13 @@ namespace Toggl.iOS
 		UIKit.UILabel NoDescriptionLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView ProjectDot { get; set; }
-
-		[Outlet]
 		Toggl.iOS.Views.FadeView ProjectFadeView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel ProjectLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView ProjectView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ClientLabel != null) {
-				ClientLabel.Dispose ();
-				ClientLabel = null;
-			}
-
 			if (DescriptionFadeView != null) {
 				DescriptionFadeView.Dispose ();
 				DescriptionFadeView = null;
@@ -53,9 +39,9 @@ namespace Toggl.iOS
 				DescriptionLabel = null;
 			}
 
-			if (ProjectDot != null) {
-				ProjectDot.Dispose ();
-				ProjectDot = null;
+			if (NoDescriptionLabel != null) {
+				NoDescriptionLabel.Dispose ();
+				NoDescriptionLabel = null;
 			}
 
 			if (ProjectFadeView != null) {
@@ -66,16 +52,6 @@ namespace Toggl.iOS
 			if (ProjectLabel != null) {
 				ProjectLabel.Dispose ();
 				ProjectLabel = null;
-			}
-
-			if (ProjectView != null) {
-				ProjectView.Dispose ();
-				ProjectView = null;
-			}
-
-			if (NoDescriptionLabel != null) {
-				NoDescriptionLabel.Dispose ();
-				NoDescriptionLabel = null;
 			}
 		}
 	}

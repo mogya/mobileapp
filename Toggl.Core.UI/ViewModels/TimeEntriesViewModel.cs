@@ -44,7 +44,7 @@ namespace Toggl.Core.UI.ViewModels
 
         public InputAction<long[]> DelayDeleteTimeEntries { get; }
         public InputAction<GroupId> ToggleGroupExpansion { get; }
-        public UIAction CancelDeleteTimeEntry { get; }
+        public ViewAction CancelDeleteTimeEntry { get; }
 
         public TimeEntriesViewModel(
             ITogglDataSource dataSource,

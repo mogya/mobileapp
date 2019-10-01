@@ -39,11 +39,11 @@ namespace Toggl.Core.UI.ViewModels
         private BehaviorSubject<DateTimeOffset> minimumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
         private BehaviorSubject<DateTimeOffset> maximumDateTime = new BehaviorSubject<DateTimeOffset>(default(DateTimeOffset));
 
-        public UIAction Save { get; }
-        public UIAction EditStartTime { get; }
-        public UIAction EditStopTime { get; }
-        public UIAction StopEditingTime { get; }
-        public UIAction StopTimeEntry { get; }
+        public ViewAction Save { get; }
+        public ViewAction EditStartTime { get; }
+        public ViewAction EditStopTime { get; }
+        public ViewAction StopEditingTime { get; }
+        public ViewAction StopTimeEntry { get; }
         public InputAction<DateTimeOffset> ChangeStartTime { get; }
         public InputAction<DateTimeOffset> ChangeStopTime { get; }
         public InputAction<DateTimeOffset> ChangeActiveTime { get; }

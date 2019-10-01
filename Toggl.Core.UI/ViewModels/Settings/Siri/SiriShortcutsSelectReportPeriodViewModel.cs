@@ -27,7 +27,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public BehaviorRelay<IThreadSafeWorkspace> SelectedWorkspace { get; } = new BehaviorRelay<IThreadSafeWorkspace>(null);
         public BehaviorRelay<ReportPeriod> SelectReportPeriod { get; } = new BehaviorRelay<ReportPeriod>(ReportPeriod.Today);
         public IObservable<IImmutableList<SelectableReportPeriodViewModel>> ReportPeriods { get; }
-        public UIAction PickWorkspace { get; }
+        public ViewAction PickWorkspace { get; }
 
         public IObservable<string> WorkspaceName { get; }
 

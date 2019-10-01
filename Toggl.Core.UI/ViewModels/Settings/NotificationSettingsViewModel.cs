@@ -19,8 +19,8 @@ namespace Toggl.Core.UI.ViewModels.Settings
         public IObservable<bool> PermissionGranted { get; }
         public IObservable<string> UpcomingEvents { get; }
 
-        public UIAction RequestAccess { get; }
-        public UIAction OpenUpcomingEvents { get; }
+        public ViewAction RequestAccess { get; }
+        public ViewAction OpenUpcomingEvents { get; }
 
         public NotificationSettingsViewModel(
             INavigationService navigationService,

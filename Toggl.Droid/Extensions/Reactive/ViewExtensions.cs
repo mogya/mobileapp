@@ -44,7 +44,7 @@ namespace Toggl.Droid.Extensions.Reactive
                 }
             };
 
-        public static IDisposable BindAction(this IReactive<View> reactive, UIAction action, ButtonEventType eventType = ButtonEventType.Tap)
+        public static IDisposable BindAction(this IReactive<View> reactive, ViewAction action, ButtonEventType eventType = ButtonEventType.Tap)
         {
             IObservable<Unit> eventObservable = Observable.Empty<Unit>();
             switch (eventType)

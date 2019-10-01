@@ -134,8 +134,7 @@ namespace Toggl.iOS.ViewControllers
             {
                 var siriSection = new SettingSection(Resources.Siri, new ISettingRow[]
                 {
-                    new NavigationRow(Resources.SiriShortcuts, ViewModel.OpenSiriShortcuts),
-                    new NavigationRow(Resources.SiriWorkflows, ViewModel.OpenSiriWorkflows),
+                    new NavigationRow(Resources.SiriShortcuts, ViewModel.OpenSiriShortcuts)
                 });
 
                 sections.Add(Observable.Return(siriSection));

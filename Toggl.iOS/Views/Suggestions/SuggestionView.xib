@@ -56,42 +56,19 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7x-fM-apL" customClass="FadeView">
                             <rect key="frame" x="156.5" y="0.0" width="148.5" height="42"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KRH-VE-lUm">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="ProjectTaskClientLabel" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebs-ES-eMx">
                                     <rect key="frame" x="0.0" y="0.0" width="148.5" height="42"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="253" verticalHuggingPriority="251" image="icProjectDot" translatesAutoresizingMaskIntoConstraints="NO" id="ztf-Qj-KY1">
-                                            <rect key="frame" x="0.0" y="18" width="6" height="6"/>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Marketing" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebs-ES-eMx">
-                                            <rect key="frame" x="8" y="12" width="68.5" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.2932400173611111" green="0.61116536458333337" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFj-I8-nFs">
-                                            <rect key="frame" x="80.5" y="12" width="37.5" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.36862745098039218" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstItem="ebs-ES-eMx" firstAttribute="centerY" secondItem="KRH-VE-lUm" secondAttribute="centerY" id="5EY-ka-Usf"/>
-                                        <constraint firstItem="ebs-ES-eMx" firstAttribute="leading" secondItem="ztf-Qj-KY1" secondAttribute="trailing" constant="2" id="Fs0-3G-aZh"/>
-                                        <constraint firstItem="PFj-I8-nFs" firstAttribute="leading" secondItem="ebs-ES-eMx" secondAttribute="trailing" constant="4" id="ORX-7G-DUZ"/>
-                                        <constraint firstItem="ztf-Qj-KY1" firstAttribute="leading" secondItem="KRH-VE-lUm" secondAttribute="leading" id="osF-DF-Fpa"/>
-                                        <constraint firstItem="PFj-I8-nFs" firstAttribute="centerY" secondItem="KRH-VE-lUm" secondAttribute="centerY" id="qc0-yy-bP1"/>
-                                        <constraint firstItem="ztf-Qj-KY1" firstAttribute="centerY" secondItem="KRH-VE-lUm" secondAttribute="centerY" id="zZ6-Gq-YCT"/>
-                                    </constraints>
-                                </view>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.2932400173611111" green="0.61116536458333337" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="KRH-VE-lUm" firstAttribute="leading" secondItem="W7x-fM-apL" secondAttribute="leading" id="70t-7Z-v0u"/>
-                                <constraint firstItem="KRH-VE-lUm" firstAttribute="top" secondItem="W7x-fM-apL" secondAttribute="top" id="YKz-fj-oS4"/>
-                                <constraint firstAttribute="trailing" secondItem="KRH-VE-lUm" secondAttribute="trailing" id="YNF-Qm-8QL"/>
-                                <constraint firstAttribute="bottom" secondItem="KRH-VE-lUm" secondAttribute="bottom" id="gJs-Ao-ihX"/>
+                                <constraint firstAttribute="trailing" secondItem="ebs-ES-eMx" secondAttribute="trailing" id="89t-1F-7UQ"/>
+                                <constraint firstItem="ebs-ES-eMx" firstAttribute="top" secondItem="W7x-fM-apL" secondAttribute="top" id="APv-Se-F8k"/>
+                                <constraint firstAttribute="bottom" secondItem="ebs-ES-eMx" secondAttribute="bottom" id="SIx-SS-cjt"/>
+                                <constraint firstItem="ebs-ES-eMx" firstAttribute="leading" secondItem="W7x-fM-apL" secondAttribute="leading" id="cZn-KV-P7u"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -111,20 +88,16 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="ClientLabel" destination="PFj-I8-nFs" id="ycp-kC-xir"/>
                 <outlet property="DescriptionFadeView" destination="AgO-D8-qST" id="65w-8O-8ba"/>
                 <outlet property="DescriptionLabel" destination="D7P-XK-5vZ" id="JbQ-Hd-eIn"/>
                 <outlet property="NoDescriptionLabel" destination="ap4-dq-369" id="jNO-F8-heR"/>
-                <outlet property="ProjectDot" destination="ztf-Qj-KY1" id="Ldz-o9-ewa"/>
                 <outlet property="ProjectFadeView" destination="W7x-fM-apL" id="dIY-CZ-Zmf"/>
                 <outlet property="ProjectLabel" destination="ebs-ES-eMx" id="NdZ-F3-vca"/>
-                <outlet property="ProjectView" destination="KRH-VE-lUm" id="MkA-Zf-RFX"/>
             </connections>
             <point key="canvasLocation" x="91.015625" y="153.515625"/>
         </view>
     </objects>
     <resources>
         <image name="icContinue" width="10" height="11"/>
-        <image name="icProjectDot" width="6" height="6"/>
     </resources>
 </document>

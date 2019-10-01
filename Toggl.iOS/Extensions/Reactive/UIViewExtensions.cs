@@ -8,6 +8,7 @@ using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Reactive;
 using Toggl.Shared.Extensions;
 using UIKit;
+using UIAction = Toggl.Shared.Extensions.UIAction;
 
 namespace Toggl.iOS.Extensions.Reactive
 {

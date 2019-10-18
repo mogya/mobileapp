@@ -18,8 +18,8 @@ namespace Toggl.iOS.Views.Calendar
         private readonly UIImageView iconView;
         private readonly UILabel actionNameLabel;
         private readonly UIView iconBackgroundView;
-        private readonly CompositeDisposable disposeBag;
         private readonly CalendarMenuAction calendarMenuAction;
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         public CalendarContextualMenuActionView(CalendarMenuAction calendarMenuAction)
         {

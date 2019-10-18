@@ -109,6 +109,10 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(_ => ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Execute(null))
                 .DisposedBy(DisposeBag);
 
+            ViewModel.ContextualMenuViewModel.TimeEntryPeriod
+                .Subscribe(ContextualMenuTimeEntryPeriodLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
+
             CalendarCollectionView.LayoutIfNeeded();
         }
 
@@ -125,7 +129,7 @@ namespace Toggl.iOS.ViewControllers
                 })
                 .Do(ContextualMenuStackView.AddArrangedSubview)
                 .Do(view => view.WidthAnchor.ConstraintEqualTo(actionWidth).Active = true);
-        }
+            }
 
         private void showContextualMenu()
         {

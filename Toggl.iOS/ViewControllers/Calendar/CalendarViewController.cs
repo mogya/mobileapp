@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Foundation;
 using CoreGraphics;
@@ -188,10 +188,18 @@ namespace Toggl.iOS.ViewControllers
 
         private CalendarDayViewController viewControllerAtIndex(nint index)
         {
-            var viewModel = ViewModel.DayViewModelAt((int)index);
-            var viewController = new CalendarDayViewController(viewModel);
-            viewController.View.Tag = index;
-            return viewController;
+            try
+            {
+                var viewModel = ViewModel.DayViewModelAt((int) index);
+                var viewController = new CalendarDayViewController(viewModel);
+                viewController.View.Tag = index;
+                return viewController;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
 
         [Export("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:")]

@@ -1,12 +1,21 @@
+using System.Reactive.Linq;
 using CoreGraphics;
 using Toggl.Core;
+using Toggl.Core.Calendar;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Presentation;
 using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using Toggl.Core.Analytics;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
+using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -41,9 +50,10 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            TitleLabel.Text = Resources.Welcome;
-            DescriptionLabel.Text = Resources.CalendarFeatureDescription;
-            GetStartedButton.SetTitle(Resources.GetStarted, UIControlState.Normal);
+            ContextualMenu.Layer.CornerRadius = 8;
+            ContextualMenu.Layer.ShadowColor = UIColor.Black.CGColor;
+            ContextualMenu.Layer.ShadowOpacity = 0.1f;
+            ContextualMenu.Layer.ShadowOffset = new CGSize(0, -2);
 
             dataSource = new CalendarCollectionViewSource(
                 timeService,
@@ -63,7 +73,8 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
             dataSource.ItemTapped
-                .Subscribe(ViewModel.OnItemTapped.Inputs)
+                .Select(item => (CalendarItem?)item)
+                .Subscribe(ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Inputs)
                 .DisposedBy(DisposeBag);
 
             editItemHelper.EditCalendarItem
@@ -78,7 +89,55 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ViewModel.OnDurationSelected.Inputs)
                 .DisposedBy(DisposeBag);
 
+            //Contextual menu
+            ViewModel.ContextualMenuViewModel.CurrentMenu
+                .Select(menu => menu.Actions)
+                .Subscribe(replaceContextualMenuActions)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.MenuVisible
+                .Where(isVisible => isVisible)
+                .Subscribe(_ => showContextualMenu())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.MenuVisible
+                .Where(isVisible => !isVisible)
+                .Subscribe(_ => dismissContextualMenu())
+                .DisposedBy(DisposeBag);
+
+            ContextualMenuCloseButton.Rx().Tap()
+                .Subscribe(_ => ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Execute(null))
+                .DisposedBy(DisposeBag);
+
             CalendarCollectionView.LayoutIfNeeded();
+        }
+
+        private void replaceContextualMenuActions(IImmutableList<CalendarMenuAction> actions)
+        {
+            if (actions == null || actions.Count == 0) return;
+
+            ContextualMenuStackView.ArrangedSubviews.ForEach(view => view.RemoveFromSuperview());
+
+            var actionWidth = ContextualMenuStackView.Frame.Width / actions.Count;
+            actions.Select(action => new CalendarContextualMenuActionView(action)
+                {
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                })
+                .Do(ContextualMenuStackView.AddArrangedSubview)
+                .Do(view => view.WidthAnchor.ConstraintEqualTo(actionWidth).Active = true);
+        }
+
+        private void showContextualMenu()
+        {
+            View.LayoutIfNeeded();
+            ContextualMenuBottonConstraint.Constant = 0;
+            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.Bounce, () => View.LayoutIfNeeded());
+        }
+
+        private void dismissContextualMenu()
+        {
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.Bounce, () => View.LayoutIfNeeded());
         }
 
         public override void ViewWillAppear(bool animated)
@@ -87,6 +146,8 @@ namespace Toggl.iOS.ViewControllers
 
             updateContentInsetForIpad();
             layout.InvalidateCurrentTimeLayout();
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            View.LayoutIfNeeded();
         }
 
         public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)

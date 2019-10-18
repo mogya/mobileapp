@@ -1284,6 +1284,39 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-adhoc.appiconset\icon_1024pt.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\x.imageset\x%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\stop.imageset\stop%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\continue.imageset\continue%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\discard.imageset\discard%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\copy.imageset\copy%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\save.imageset\save%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\edit.imageset\edit.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%402x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x.png" />
+    <ImageAsset Include="Resources\Images.xcassets\delete.imageset\delete%403x-1.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -1520,6 +1553,7 @@
     </Compile>
     <Compile Include="ViewSources\SelectTagsTableViewSource.cs" />
     <Compile Include="Views\Calendar\CalendarCollectionViewLayout.cs" />
+    <Compile Include="Views\Calendar\CalendarContextualMenuActionView.cs" />
     <Compile Include="Views\Client\ClientViewCell.cs" />
     <Compile Include="Views\Client\ClientViewCell.designer.cs">
       <DependentUpon>ClientViewCell.cs</DependentUpon>
@@ -2059,6 +2093,14 @@
     <Folder Include="Resources\Images.xcassets\thumbsdown.imageset\" />
     <Folder Include="Resources\Images.xcassets\thumbsup.imageset\" />
     <Folder Include="Resources\Images.xcassets\togglLogoBig.imageset\" />
+    <Folder Include="Resources\Images.xcassets\x.imageset\" />
+    <Folder Include="Resources\Images.xcassets\stop.imageset\" />
+    <Folder Include="Resources\Images.xcassets\continue.imageset\" />
+    <Folder Include="Resources\Images.xcassets\discard.imageset\" />
+    <Folder Include="Resources\Images.xcassets\copy.imageset\" />
+    <Folder Include="Resources\Images.xcassets\save.imageset\" />
+    <Folder Include="Resources\Images.xcassets\edit.imageset\" />
+    <Folder Include="Resources\Images.xcassets\delete.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="GoogleService-Info.plist" />

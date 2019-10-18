@@ -13,6 +13,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 
@@ -23,15 +24,17 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         private readonly ISubject<CalendarContextualMenu> currentMenuSubject;
         private readonly Dictionary<ContextualMenuType, CalendarContextualMenu> contextualMenus;
         private readonly ISubject<Unit> discardChangesSubject = new Subject<Unit>();
-        private readonly ISubject<bool> menuVisibilitySubject = new BehaviorSubject<bool>(false);
+        private readonly BehaviorSubject<bool> menuVisibilitySubject = new BehaviorSubject<bool>(false);
         private readonly ISubject<TimeEntryDisplayInfo> timeEntryInfoSubject = new Subject<TimeEntryDisplayInfo>();
         private readonly ISubject<string> timeEntryPeriodSubject = new Subject<string>();
+        private readonly ISubject<CalendarItem?> calendarItemInEditMode = new Subject<CalendarItem?>();
 
         private readonly IInteractorFactory interactorFactory;
         private readonly IAnalyticsService analyticsService;
         private readonly IRxActionFactory rxActionFactory;
         private readonly ITimeService timeService;
 
+        private CalendarItem? calendarItemThatOriginallyTriggeredTheMenu = null;
         private CalendarItem currentCalendarItem;
         private TimeEntryDisplayInfo currentTimeEntryDisplayInfo;
         private ContextualMenuType currentMenuType = ContextualMenuType.Closed;
@@ -53,6 +56,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         public IObservable<string> TimeEntryPeriod
             => timeEntryPeriodSubject.AsObservable();
 
+        public IObservable<CalendarItem?> CalendarItemInEditMode
+            => calendarItemInEditMode.AsObservable();
+
         public InputAction<CalendarItem?> OnCalendarItemUpdated { get; }
 
         public CalendarContextualMenuViewModel(
@@ -72,7 +78,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             this.rxActionFactory = rxActionFactory;
             this.timeService = timeService;
 
-            OnCalendarItemUpdated = rxActionFactory.FromAction<CalendarItem?>(handleCalendarItemInput);
+            OnCalendarItemUpdated = rxActionFactory.FromAsync<CalendarItem?>(handleCalendarItemInput);
 
             var closedMenu = new CalendarContextualMenu(ContextualMenuType.Closed, ImmutableList<CalendarMenuAction>.Empty, rxActionFactory.FromAction(CommonFunctions.DoNothing));
             contextualMenus = new Dictionary<ContextualMenuType, CalendarContextualMenu>
@@ -87,21 +93,77 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             currentMenuSubject = new BehaviorSubject<CalendarContextualMenu>(closedMenu);
         }
 
-        private void handleCalendarItemInput(CalendarItem? calendarItem)
+        private async Task handleCalendarItemInput(CalendarItem? calendarItem)
         {
             if (!calendarItem.HasValue)
             {
-                currentCalendarItem = default;
-                closeMenuWithCommittedChanges();
+                if (needsToConfirmDestructiveChangesBeforeClosingMenu())
+                {
+                    var willCloseMenu = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                    if (!willCloseMenu)
+                        return;
+                }
+                
+                closeMenuDismissingUncommittedChanges();
                 return;
             }
 
             var newCalendarItem = calendarItem.Value;
+            if (needsToConfirmDestructiveChangesBeforeUpdatingCurrentCalendarItem(newCalendarItem))
+            {
+                var willUpdateCurrentItem = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
+                if (!willUpdateCurrentItem) 
+                    return;
+            }
+            
+            updateCalendarItem(newCalendarItem);
+        }
+
+        private void updateCalendarItem(CalendarItem newCalendarItem)
+        {
+            if (!calendarItemThatOriginallyTriggeredTheMenu.HasValue || isADifferentCalendarItem(newCalendarItem))
+            {
+                calendarItemThatOriginallyTriggeredTheMenu = newCalendarItem;
+                calendarItemInEditMode.OnNext(newCalendarItem);
+            }
+            
             var newCalendarItemContextualMenuType = selectContextualMenuTypeFrom(newCalendarItem);
             handleMenuUpdate(newCalendarItemContextualMenuType);
             handleCalendarItemUpdate(newCalendarItem);
             currentCalendarItem = newCalendarItem;
         }
+
+        private bool needsToConfirmDestructiveChangesBeforeClosingMenu() 
+            => contextualMenuIsAlreadyOpen() && changesWereMadeToTheCurrentItem();
+
+        private bool needsToConfirmDestructiveChangesBeforeUpdatingCurrentCalendarItem(CalendarItem newCalendarItem)
+        {
+            return contextualMenuIsAlreadyOpen()
+                   && isADifferentCalendarItem(newCalendarItem)
+                   && changesWereMadeToTheCurrentItem();
+        }
+
+        private bool changesWereMadeToTheCurrentItem()
+        {
+            if (!calendarItemThatOriginallyTriggeredTheMenu.HasValue)
+                return false;
+
+            if (currentCalendarItem.Source == CalendarItemSource.Calendar)
+                return false;
+            
+            var originalCalendarItem = calendarItemThatOriginallyTriggeredTheMenu.Value;
+            return originalCalendarItem.StartTime != currentCalendarItem.StartTime
+                   || originalCalendarItem.Duration != currentCalendarItem.Duration;
+        }
+
+        private bool isADifferentCalendarItem(CalendarItem newCalendarItem)
+        {
+            return newCalendarItem.Source != currentCalendarItem.Source
+                   || (newCalendarItem.Source == CalendarItemSource.TimeEntry && newCalendarItem.TimeEntryId != currentCalendarItem.TimeEntryId)
+                   || (newCalendarItem.Source == CalendarItemSource.Calendar && newCalendarItem.CalendarId != currentCalendarItem.CalendarId);
+        }
+
+        private bool contextualMenuIsAlreadyOpen() => menuVisibilitySubject.Value;
 
         private void handleMenuUpdate(ContextualMenuType contextualMenuType)
         {
@@ -134,8 +196,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
 
         private string formatCurrentPeriod()
         {
-            var startTimeString = currentStartTimeOffset.ToString(Resources.EditingTwelveHoursFormat);
-            var endTime = currentStartTimeOffset + currentDuration;
+            var startTimeString = currentStartTimeOffset.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat);
+            var endTime = currentStartTimeOffset.ToLocalTime() + currentDuration;
             var endTimeString = endTime.HasValue
                 ? endTime.Value.ToString(Resources.EditingTwelveHoursFormat)
                 : Resources.Now;
@@ -145,6 +207,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
         
         private void closeMenuDismissingUncommittedChanges()
         {
+            currentCalendarItem = default;
+            calendarItemThatOriginallyTriggeredTheMenu = null;
+            currentMenuType = ContextualMenuType.Closed;
+            calendarItemInEditMode.OnNext(null);
             currentMenuSubject.OnNext(contextualMenus[ContextualMenuType.Closed]);
             discardChangesSubject.OnNext(Unit.Default);
             menuVisibilitySubject.OnNext(false);
@@ -152,6 +218,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
 
         private void closeMenuWithCommittedChanges()
         {
+            currentCalendarItem = default;
+            calendarItemThatOriginallyTriggeredTheMenu = null;
+            currentMenuType = ContextualMenuType.Closed;
+            calendarItemInEditMode.OnNext(null);
             currentMenuSubject.OnNext(contextualMenus[ContextualMenuType.Closed]);
             menuVisibilitySubject.OnNext(false);
         }
@@ -252,7 +322,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
                 Id = timeEntry.Id,
                 Description = timeEntry.Description,
                 StartTime = calendarItem.StartTime,
-                StopTime = calendarItem.EndTime,
+                StopTime = calendarItem.Duration.HasValue ? calendarItem.EndTime : timeEntry.StopTime(),
                 ProjectId = timeEntry.ProjectId,
                 TaskId = timeEntry.TaskId,
                 Billable = timeEntry.Billable,
@@ -380,11 +450,17 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             });
 
         private ViewAction trackThenDismiss(IAnalyticsEvent<CalendarContextualMenuActionType> analyticsEvent)
-            => rxActionFactory.FromAction(() =>
+            => rxActionFactory.FromAsync(() =>
             {
                 analyticsEvent.Track(CalendarContextualMenuActionType.Dismiss);
-                closeMenuDismissingUncommittedChanges();
+                return confirmThenCloseMenuDismissingUncommittedChanges();
             });
+
+        private async Task confirmThenCloseMenuDismissingUncommittedChanges()
+        {
+            if (!changesWereMadeToTheCurrentItem() || await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges))
+                closeMenuDismissingUncommittedChanges();
+        }
 
         private CalendarMenuAction createCalendarMenuActionFor(ContextualMenuType sourceMenuType, CalendarMenuActionKind calendarMenuActionKind, string title, ViewAction action) 
             => new CalendarMenuAction(sourceMenuType, calendarMenuActionKind, title, action);

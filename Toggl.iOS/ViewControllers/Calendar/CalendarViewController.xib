@@ -65,7 +65,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sTR-Lt-CVR" userLabel="Day View Container">
-                    <rect key="frame" x="0.0" y="154" width="414" height="742"/>
+                    <rect key="frame" x="0.0" y="154" width="414" height="708"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:11:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="le5-oK-3MI">
@@ -113,7 +113,7 @@
                 </constraint>
                 <constraint firstItem="sTR-Lt-CVR" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="snF-hT-D3v"/>
                 <constraint firstItem="wEf-qU-HdQ" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="uRK-xR-00N"/>
-                <constraint firstAttribute="bottom" secondItem="sTR-Lt-CVR" secondAttribute="bottom" id="wSU-13-All"/>
+                <constraint firstItem="9QM-qy-tJ0" firstAttribute="bottom" secondItem="sTR-Lt-CVR" secondAttribute="bottom" id="wSU-13-All"/>
                 <constraint firstAttribute="trailing" secondItem="sTR-Lt-CVR" secondAttribute="trailing" id="xOm-hU-0j5"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="9QM-qy-tJ0"/>

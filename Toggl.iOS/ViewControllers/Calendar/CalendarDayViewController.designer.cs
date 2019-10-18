@@ -16,26 +16,23 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UICollectionView CalendarCollectionView { get; set; }
 
 		[Outlet]
-		UIKit.UILabel CurrentDateLabel { get; set; }
+		UIKit.UIView ContextualMenu { get; set; }
 
 		[Outlet]
-		UIKit.UILabel DescriptionLabel { get; set; }
+		UIKit.NSLayoutConstraint ContextualMenuBottonConstraint { get; set; }
 
 		[Outlet]
-		UIKit.UIView ExtendedNavbarView { get; set; }
+		UIKit.UIButton ContextualMenuCloseButton { get; set; }
 
 		[Outlet]
-		UIKit.UIButton GetStartedButton { get; set; }
+		UIKit.UIStackView ContextualMenuStackView { get; set; }
 
 		[Outlet]
-		UIKit.UIView OnboardingView { get; set; }
+		UIKit.UILabel ContextualMenuTimeEntryDescriptionProjectTaskClientLabel { get; set; }
 
 		[Outlet]
-		UIKit.UILabel TimeTrackedTodayLabel { get; set; }
-
-		[Outlet]
-		UIKit.UILabel TitleLabel { get; set; }
-
+		UIKit.UILabel ContextualMenuTimeEntryPeriodLabel { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (CalendarCollectionView != null) {
@@ -43,39 +40,34 @@ namespace Toggl.iOS.ViewControllers
 				CalendarCollectionView = null;
 			}
 
-			if (DescriptionLabel != null) {
-				DescriptionLabel.Dispose ();
-				DescriptionLabel = null;
+			if (ContextualMenu != null) {
+				ContextualMenu.Dispose ();
+				ContextualMenu = null;
 			}
 
-			if (GetStartedButton != null) {
-				GetStartedButton.Dispose ();
-				GetStartedButton = null;
+			if (ContextualMenuCloseButton != null) {
+				ContextualMenuCloseButton.Dispose ();
+				ContextualMenuCloseButton = null;
 			}
 
-			if (OnboardingView != null) {
-				OnboardingView.Dispose ();
-				OnboardingView = null;
+			if (ContextualMenuStackView != null) {
+				ContextualMenuStackView.Dispose ();
+				ContextualMenuStackView = null;
 			}
 
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
+			if (ContextualMenuTimeEntryDescriptionProjectTaskClientLabel != null) {
+				ContextualMenuTimeEntryDescriptionProjectTaskClientLabel.Dispose ();
+				ContextualMenuTimeEntryDescriptionProjectTaskClientLabel = null;
 			}
 
-			if (ExtendedNavbarView != null) {
-				ExtendedNavbarView.Dispose ();
-				ExtendedNavbarView = null;
+			if (ContextualMenuTimeEntryPeriodLabel != null) {
+				ContextualMenuTimeEntryPeriodLabel.Dispose ();
+				ContextualMenuTimeEntryPeriodLabel = null;
 			}
 
-			if (TimeTrackedTodayLabel != null) {
-				TimeTrackedTodayLabel.Dispose ();
-				TimeTrackedTodayLabel = null;
-			}
-
-			if (CurrentDateLabel != null) {
-				CurrentDateLabel.Dispose ();
-				CurrentDateLabel = null;
+			if (ContextualMenuBottonConstraint != null) {
+				ContextualMenuBottonConstraint.Dispose ();
+				ContextualMenuBottonConstraint = null;
 			}
 		}
 	}

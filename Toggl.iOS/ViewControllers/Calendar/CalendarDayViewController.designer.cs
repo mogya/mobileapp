@@ -25,6 +25,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIButton ContextualMenuCloseButton { get; set; }
 
 		[Outlet]
+		Toggl.iOS.Views.FadeView ContextualMenuFadeView { get; set; }
+
+		[Outlet]
 		UIKit.UIStackView ContextualMenuStackView { get; set; }
 
 		[Outlet]
@@ -35,6 +38,11 @@ namespace Toggl.iOS.ViewControllers
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ContextualMenuFadeView != null) {
+				ContextualMenuFadeView.Dispose ();
+				ContextualMenuFadeView = null;
+			}
+
 			if (CalendarCollectionView != null) {
 				CalendarCollectionView.Dispose ();
 				CalendarCollectionView = null;
@@ -43,6 +51,11 @@ namespace Toggl.iOS.ViewControllers
 			if (ContextualMenu != null) {
 				ContextualMenu.Dispose ();
 				ContextualMenu = null;
+			}
+
+			if (ContextualMenuBottonConstraint != null) {
+				ContextualMenuBottonConstraint.Dispose ();
+				ContextualMenuBottonConstraint = null;
 			}
 
 			if (ContextualMenuCloseButton != null) {
@@ -63,11 +76,6 @@ namespace Toggl.iOS.ViewControllers
 			if (ContextualMenuTimeEntryPeriodLabel != null) {
 				ContextualMenuTimeEntryPeriodLabel.Dispose ();
 				ContextualMenuTimeEntryPeriodLabel = null;
-			}
-
-			if (ContextualMenuBottonConstraint != null) {
-				ContextualMenuBottonConstraint.Dispose ();
-				ContextualMenuBottonConstraint = null;
 			}
 		}
 	}

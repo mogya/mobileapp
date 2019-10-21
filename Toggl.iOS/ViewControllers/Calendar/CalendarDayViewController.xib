@@ -16,6 +16,7 @@
                 <outlet property="ContextualMenu" destination="BKY-i7-jiR" id="LC8-K2-wNB"/>
                 <outlet property="ContextualMenuBottonConstraint" destination="Oaa-5J-3cc" id="6MQ-F9-TQM"/>
                 <outlet property="ContextualMenuCloseButton" destination="Jfa-d6-cmf" id="ZNd-jV-SsX"/>
+                <outlet property="ContextualMenuFadeView" destination="dwL-50-0DH" id="DXA-Rf-Vhl"/>
                 <outlet property="ContextualMenuStackView" destination="PXs-lD-qRD" id="PK9-6F-Wdw"/>
                 <outlet property="ContextualMenuTimeEntryDescriptionProjectTaskClientLabel" destination="QPA-jq-TXE" id="q4K-pm-FCx"/>
                 <outlet property="ContextualMenuTimeEntryPeriodLabel" destination="zOT-r0-SaO" id="SYv-nj-hQ7"/>
@@ -104,29 +105,53 @@
                             <color key="textColor" red="0.70980392156862748" green="0.73725490196078436" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weekly meeting * Time management" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QPA-jq-TXE">
-                            <rect key="frame" x="16" y="30.333333333333371" width="343" height="17"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwL-50-0DH" userLabel="Fade View" customClass="FadeView">
+                            <rect key="frame" x="16" y="35" width="343" height="17"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQt-Me-XZ3" userLabel="Marquee View" customClass="MarqueeView">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="17"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weekly meeting * Time management" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QPA-jq-TXE">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="QPA-jq-TXE" firstAttribute="top" secondItem="zQt-Me-XZ3" secondAttribute="top" id="Dpt-J6-Dn0"/>
+                                        <constraint firstAttribute="trailing" secondItem="QPA-jq-TXE" secondAttribute="trailing" id="Vb5-4C-LcI"/>
+                                        <constraint firstAttribute="bottom" secondItem="QPA-jq-TXE" secondAttribute="bottom" id="p8D-lJ-6H9"/>
+                                        <constraint firstItem="QPA-jq-TXE" firstAttribute="leading" secondItem="zQt-Me-XZ3" secondAttribute="leading" id="uid-zC-Y6Y"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="zQt-Me-XZ3" secondAttribute="trailing" id="GX3-sJ-h11"/>
+                                <constraint firstItem="zQt-Me-XZ3" firstAttribute="leading" secondItem="dwL-50-0DH" secondAttribute="leading" id="dSK-Tm-PUz"/>
+                                <constraint firstAttribute="bottom" secondItem="zQt-Me-XZ3" secondAttribute="bottom" id="epq-bC-zN3"/>
+                                <constraint firstItem="zQt-Me-XZ3" firstAttribute="top" secondItem="dwL-50-0DH" secondAttribute="top" id="u2F-MA-xUl"/>
+                            </constraints>
+                        </view>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="PXs-lD-qRD">
-                            <rect key="frame" x="0.0" y="47.333333333333378" width="375" height="92.666666666666686"/>
+                            <rect key="frame" x="0.0" y="52" width="375" height="88"/>
                         </stackView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="dwL-50-0DH" firstAttribute="leading" secondItem="BKY-i7-jiR" secondAttribute="leading" constant="16" id="1ah-Bd-Nqj"/>
                         <constraint firstAttribute="bottom" secondItem="PXs-lD-qRD" secondAttribute="bottom" id="2cJ-UT-KEp"/>
                         <constraint firstItem="zOT-r0-SaO" firstAttribute="top" secondItem="BKY-i7-jiR" secondAttribute="top" constant="10" id="6uf-8K-MTj"/>
-                        <constraint firstItem="QPA-jq-TXE" firstAttribute="leading" secondItem="BKY-i7-jiR" secondAttribute="leading" constant="16" id="Prs-To-DJC"/>
                         <constraint firstItem="Jfa-d6-cmf" firstAttribute="leading" secondItem="BKY-i7-jiR" secondAttribute="leading" constant="5" id="V5r-Ei-lVe"/>
                         <constraint firstItem="PXs-lD-qRD" firstAttribute="leading" secondItem="BKY-i7-jiR" secondAttribute="leading" id="V73-V5-mrV"/>
-                        <constraint firstItem="QPA-jq-TXE" firstAttribute="top" secondItem="zOT-r0-SaO" secondAttribute="bottom" constant="6" id="VRF-s5-vKs"/>
-                        <constraint firstAttribute="trailing" secondItem="QPA-jq-TXE" secondAttribute="trailing" constant="16" id="fzD-NF-GFs"/>
+                        <constraint firstItem="PXs-lD-qRD" firstAttribute="top" secondItem="dwL-50-0DH" secondAttribute="bottom" id="fSq-AG-eQT"/>
                         <constraint firstItem="zOT-r0-SaO" firstAttribute="centerX" secondItem="BKY-i7-jiR" secondAttribute="centerX" id="hp6-i6-W1Z"/>
+                        <constraint firstItem="dwL-50-0DH" firstAttribute="top" secondItem="Jfa-d6-cmf" secondAttribute="bottom" constant="6" id="jPQ-YW-6db"/>
                         <constraint firstItem="Jfa-d6-cmf" firstAttribute="top" secondItem="BKY-i7-jiR" secondAttribute="top" constant="5" id="nAP-DD-zGs"/>
-                        <constraint firstItem="PXs-lD-qRD" firstAttribute="top" secondItem="QPA-jq-TXE" secondAttribute="bottom" id="tAl-xK-oJL"/>
                         <constraint firstAttribute="height" constant="140" id="tDZ-4H-Iiz"/>
+                        <constraint firstAttribute="trailing" secondItem="dwL-50-0DH" secondAttribute="trailing" constant="16" id="tXt-nY-YCH"/>
                         <constraint firstAttribute="trailing" secondItem="PXs-lD-qRD" secondAttribute="trailing" id="yoo-p2-Trd"/>
                     </constraints>
                 </view>

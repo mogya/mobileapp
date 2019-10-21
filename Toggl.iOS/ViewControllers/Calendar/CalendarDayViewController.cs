@@ -55,6 +55,9 @@ namespace Toggl.iOS.ViewControllers
             ContextualMenu.Layer.ShadowOpacity = 0.1f;
             ContextualMenu.Layer.ShadowOffset = new CGSize(0, -2);
 
+            ContextualMenuFadeView.FadeLeft = true;
+            ContextualMenuFadeView.FadeRight = true;
+
             dataSource = new CalendarCollectionViewSource(
                 timeService,
                 CalendarCollectionView,
@@ -111,6 +114,11 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.ContextualMenuViewModel.TimeEntryPeriod
                 .Subscribe(ContextualMenuTimeEntryPeriodLabel.Rx().Text())
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.TimeEntryInfo
+                .Select(timeEntryInfo => timeEntryInfo.ToAttributedString(ContextualMenuTimeEntryDescriptionProjectTaskClientLabel.Font.CapHeight))
+                .Subscribe(ContextualMenuTimeEntryDescriptionProjectTaskClientLabel.Rx().AttributedText())
                 .DisposedBy(DisposeBag);
 
             CalendarCollectionView.LayoutIfNeeded();

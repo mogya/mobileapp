@@ -1434,6 +1434,7 @@
     <Compile Include="Extensions\Reactive\UISliderExtensions.cs" />
     <Compile Include="Extensions\Reactive\WheelForegroundViewExtensions.cs" />
     <Compile Include="Extensions\SectionedIndexExtensions.cs" />
+    <Compile Include="Extensions\TimeEntryDisplayInfoExtensions.cs" />
     <Compile Include="Extensions\ViewControllerExtensions.cs" />
     <Compile Include="Helper\PermissionsHelper.cs" />
     <Compile Include="Presentation\IosPresenter.cs" />

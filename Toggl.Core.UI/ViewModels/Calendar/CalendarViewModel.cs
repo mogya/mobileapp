@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -32,6 +34,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly IInteractorFactory interactorFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
+
+        private readonly ISubject<Unit> realoadWeekView = new Subject<Unit>();
 
         public IObservable<string> CurrentlyShownDateString { get; }
 
@@ -86,7 +90,11 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .Select(days => days.ToImmutableList())
                 .AsDriver(schedulerProvider);
 
-            WeekViewHeaders = beginningOfWeekObservable
+            WeekViewHeaders = Observable
+                .CombineLatest(
+                    beginningOfWeekObservable,
+                    realoadWeekView.AsObservable(),
+                    (beginingOfWeek, _) => beginingOfWeek)
                 .Select(weekViewHeaders)
                 .Select(dayOfWeekHeaders => dayOfWeekHeaders.ToImmutableList())
                 .AsDriver(schedulerProvider);
@@ -98,6 +106,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .Select(date => DateTimeToFormattedString.Convert(date, dateFormat))
                 .AsDriver(schedulerProvider);
         }
+
+        public void RealoadWeekView()
+            => realoadWeekView.OnNext(Unit.Default);
 
         private IEnumerable<DayOfWeek> weekViewHeaders(BeginningOfWeek beginningOfWeek)
         {

@@ -133,8 +133,6 @@ namespace Toggl.iOS.ViewSources
 
         private void setCurrentPage(int page, bool animated)
         {
-            if (currentPage == page) return;
-
             var contentOffset = contentOffsetFor(page);
             collectionView.SetContentOffset(contentOffset, animated);
             currentPage = page;
@@ -142,9 +140,6 @@ namespace Toggl.iOS.ViewSources
 
         public void UpdateCurrentlySelectedDate(DateTime date)
         {
-            if (currentlySelectedDate == date)
-                return;
-
             currentlySelectedDate = date;
             collectionView.CollectionViewLayout.InvalidateLayout();
             collectionView.ReloadData();

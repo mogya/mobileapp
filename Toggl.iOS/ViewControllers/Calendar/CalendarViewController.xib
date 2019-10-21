@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -56,7 +54,7 @@
                         <constraint firstItem="k3f-vS-XEX" firstAttribute="leading" secondItem="1ni-Vd-ktT" secondAttribute="leading" id="EhX-oJ-1dW"/>
                         <constraint firstAttribute="height" constant="60" id="NZB-9U-27c"/>
                         <constraint firstAttribute="trailing" secondItem="bZp-QY-WMc" secondAttribute="trailing" id="XWE-lf-4kn"/>
-                        <constraint firstAttribute="width" constant="414" id="Y2s-6t-qem"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="834" id="Y2s-6t-qem"/>
                         <constraint firstAttribute="trailing" secondItem="k3f-vS-XEX" secondAttribute="trailing" id="ams-ZK-uuL"/>
                         <constraint firstItem="k3f-vS-XEX" firstAttribute="top" secondItem="1ni-Vd-ktT" secondAttribute="top" id="gXJ-Qz-2XV"/>
                         <constraint firstAttribute="bottom" secondItem="bZp-QY-WMc" secondAttribute="bottom" id="m32-vA-HB4"/>
@@ -106,6 +104,8 @@
                 <constraint firstItem="9QM-qy-tJ0" firstAttribute="trailing" secondItem="2ri-oj-8tD" secondAttribute="trailing" id="LCl-YB-dn2"/>
                 <constraint firstItem="2ri-oj-8tD" firstAttribute="leading" secondItem="9QM-qy-tJ0" secondAttribute="leading" id="Sab-tG-lv0"/>
                 <constraint firstItem="2ri-oj-8tD" firstAttribute="top" secondItem="1ni-Vd-ktT" secondAttribute="bottom" id="Zfe-9B-ryx"/>
+                <constraint firstAttribute="trailing" secondItem="1ni-Vd-ktT" secondAttribute="trailing" id="cEL-UC-oeX"/>
+                <constraint firstItem="1ni-Vd-ktT" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="dZ4-am-wSo"/>
                 <constraint firstItem="1ni-Vd-ktT" firstAttribute="centerX" secondItem="9QM-qy-tJ0" secondAttribute="centerX" id="n2n-Wk-QdP"/>
                 <constraint firstItem="wEf-qU-HdQ" firstAttribute="centerY" secondItem="le5-oK-3MI" secondAttribute="centerY" id="ooB-48-jYG"/>
                 <constraint firstItem="Yda-xM-gg0" firstAttribute="centerY" secondItem="wEf-qU-HdQ" secondAttribute="centerY" constant="-2.5" id="ovN-uw-JFU">

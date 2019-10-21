@@ -132,22 +132,13 @@ namespace Toggl.iOS.ViewControllers
             pageViewController.SetViewControllers(new[] {newViewController},  direction, true, null);
         }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-
-            var screenWidthInPortraitMode = UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.Portrait
-                ? UIScreen.MainScreen.Bounds.Width
-                : UIScreen.MainScreen.Bounds.Height;
-            var collectionViewWidthInPortraitMode = screenWidthInPortraitMode - 2 * 20;
-            WeekViewContainerWidthConstraint.Constant = collectionViewWidthInPortraitMode;
-        }
-
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
 
             updateWeekViewHeaderWidthConstraints();
+            weekViewCollectionViewSource.UpdateCurrentlySelectedDate(ViewModel.CurrentlyShownDate.Value);
+            ViewModel.RealoadWeekView();
         }
 
         public UIViewController GetPreviousViewController(UIPageViewController pageViewController, UIViewController referenceViewController)
@@ -242,7 +233,7 @@ namespace Toggl.iOS.ViewControllers
                 }
 
                 widthConstraint.Constant = targetWidth;
-                label.LayoutIfNeeded();
+                label.SetNeedsLayout();
             }
         }
 

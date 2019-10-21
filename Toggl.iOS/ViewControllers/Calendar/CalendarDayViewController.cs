@@ -1,3 +1,4 @@
+using System;
 using CoreGraphics;
 using Toggl.Core;
 using Toggl.Core.UI.ViewModels.Calendar;
@@ -14,7 +15,8 @@ namespace Toggl.iOS.ViewControllers
     {
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
-        private const int collectionViewHorizontalInset = 20;
+        private const float collectionViewDefaultInset = 20;
+        private const float maxWidth = 834;
 
         private readonly ITimeService timeService;
 
@@ -60,7 +62,6 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.SetCollectionViewLayout(layout, false);
             CalendarCollectionView.Delegate = dataSource;
             CalendarCollectionView.DataSource = dataSource;
-            CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
             dataSource.ItemTapped
                 .Subscribe(ViewModel.OnItemTapped.Inputs)
@@ -85,34 +86,34 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewWillAppear(animated);
 
-            updateContentInsetForIpad();
+            updateContentInset();
             layout.InvalidateCurrentTimeLayout();
         }
 
         public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
             base.ViewWillTransitionToSize(toSize, coordinator);
-            updateContentInsetForIpad();
+
+            updateContentInset();
         }
 
-        private void updateContentInsetForIpad()
+        public override void ViewDidLayoutSubviews()
         {
-            if (TraitCollection.UserInterfaceIdiom != UIUserInterfaceIdiom.Pad) return;
+            base.ViewDidLayoutSubviews();
 
-            var deviceOrientation = UIDevice.CurrentDevice.Orientation;
-            if (deviceOrientation == UIDeviceOrientation.LandscapeLeft
-                || deviceOrientation == UIDeviceOrientation.LandscapeRight)
+            updateContentInset();
+        }
+
+        private void updateContentInset()
+        {
+            if (CalendarCollectionView.Frame.Width <= maxWidth)
             {
-                //In landscape mode the collection view content should be the same width as in portrait mode
-                var screenWidthInPortraitMode = UIScreen.MainScreen.Bounds.Height;
-                var collectionViewWidthInPortraitMode = screenWidthInPortraitMode - 2 * collectionViewHorizontalInset;
-                var horizontalContentInset = (UIScreen.MainScreen.Bounds.Width - collectionViewWidthInPortraitMode) / 2;
-                CalendarCollectionView.ContentInset = new UIEdgeInsets(0, horizontalContentInset, 0, horizontalContentInset);
+                CalendarCollectionView.ContentInset = new UIEdgeInsets(collectionViewDefaultInset, collectionViewDefaultInset, collectionViewDefaultInset * 2, collectionViewDefaultInset);
+                return;
             }
-            else
-            {
-                CalendarCollectionView.ContentInset = new UIEdgeInsets(0, collectionViewHorizontalInset, 0, collectionViewHorizontalInset);
-            }
+
+            var padding = (CalendarCollectionView.Frame.Width - maxWidth) / 2;
+            CalendarCollectionView.ContentInset = new UIEdgeInsets(collectionViewDefaultInset, padding, collectionViewDefaultInset * 2, padding);
         }
 
         public void ScrollToTop()

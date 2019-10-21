@@ -35,7 +35,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
 
-        private readonly ISubject<Unit> realoadWeekView = new Subject<Unit>();
+        private readonly ISubject<Unit> realoadWeekView = new BehaviorSubject<Unit>(Unit.Default);
 
         public IObservable<string> CurrentlyShownDateString { get; }
 

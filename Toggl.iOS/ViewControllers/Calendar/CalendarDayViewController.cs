@@ -130,14 +130,12 @@ namespace Toggl.iOS.ViewControllers
 
             ContextualMenuStackView.ArrangedSubviews.ForEach(view => view.RemoveFromSuperview());
 
-            var actionWidth = ContextualMenuStackView.Frame.Width / actions.Count;
             actions.Select(action => new CalendarContextualMenuActionView(action)
                 {
                     TranslatesAutoresizingMaskIntoConstraints = false
                 })
-                .Do(ContextualMenuStackView.AddArrangedSubview)
-                .Do(view => view.WidthAnchor.ConstraintEqualTo(actionWidth).Active = true);
-            }
+                .Do(ContextualMenuStackView.AddArrangedSubview);
+        }
 
         private void showContextualMenu()
         {

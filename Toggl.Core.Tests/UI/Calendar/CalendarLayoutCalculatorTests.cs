@@ -69,7 +69,7 @@ namespace Toggl.Core.Tests.Calendar
                 .And.Contain((attributes) =>
                     attributes.StartTime == calendarItems[2].StartTime && attributes.TotalColumns == 1);
         }
-        
+
         [Fact, LogIfTooSlow]
         public void WhenTwoItemsShouldOverlapBecauseOfMinimumDurationForUIPurposes()
         {
@@ -239,6 +239,133 @@ namespace Toggl.Core.Tests.Calendar
                     attributes.StartTime == calendarItems[1].StartTime && attributes.TotalColumns == 3 && attributes.ColumnIndex == 0)
                 .And.Contain((attributes) =>
                     attributes.StartTime == calendarItems[2].StartTime && attributes.TotalColumns == 3 && attributes.ColumnIndex == 1);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void GapsAreCalculatedFromTheBeginingOfTheDay()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem("1", CalendarItemSource.TimeEntry,
+                    new DateTimeOffset(2019, 11, 21, 1, 30, 0, ((DateTimeOffset)DateTimeOffset.Now.LocalDateTime.Date).Offset), TimeSpan.FromMinutes(60), "Item 1",
+                    CalendarIconKind.None)
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+
+            var dayStart = (DateTimeOffset)calendarItems[0].StartTime.LocalDateTime.Date;
+
+            layoutAttributes.Should().HaveCount(1)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == dayStart &&
+                    attributes.Duration == TimeSpan.FromMinutes(90) &&
+                    attributes.TotalColumns == 1 &&
+                    attributes.ColumnIndex == 0);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void GapsAreCalculatedFromTheEndOfTheDay()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem(
+                    "1",
+                    CalendarItemSource.TimeEntry,
+                    new DateTimeOffset(2019, 11, 21, 21, 30, 0, DateTimeOffset.Now.Offset),
+                    TimeSpan.FromMinutes(60),
+                    "Item 1",
+                    CalendarIconKind.None)
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+
+            var date = calendarItems[0].StartTime;
+            var gapStart = date + TimeSpan.FromMinutes(60);
+
+            layoutAttributes.Should().HaveCount(1)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == gapStart &&
+                    Math.Abs(attributes.Duration.TotalMinutes - 90.0) < 0.1 &&
+                    attributes.TotalColumns == 1 &&
+                    attributes.ColumnIndex == 0);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void GapsAreCalculatedBetweenCalendarItems()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 1, 30, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 3, 30, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+
+            var date = calendarItems[0].StartTime;
+            var gapStart = date + TimeSpan.FromMinutes(30);
+
+            layoutAttributes.Should().HaveCount(2)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == gapStart &&
+                    Math.Abs(attributes.Duration.TotalMinutes - 90.0) < 0.1 &&
+                    attributes.TotalColumns == 1 &&
+                    attributes.ColumnIndex == 0);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void GapsAreCalculatedBetweenCalendarItemsThatAreInTwoOrMoreColumns()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 1, 30, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+                new CalendarItem("2", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 1, 35, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(20), "Item 2", CalendarIconKind.None),
+                new CalendarItem("3", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 3, 30, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 3", CalendarIconKind.None),
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+
+            var date = calendarItems[0].StartTime;
+            var gapStart = date + TimeSpan.FromMinutes(30);
+
+            layoutAttributes.Should().HaveCount(2)
+                .And.Contain((attributes) =>
+                    attributes.StartTime == gapStart &&
+                    Math.Abs(attributes.Duration.TotalMinutes - 90.0) < 0.1 &&
+                    attributes.TotalColumns == 1 &&
+                    attributes.ColumnIndex == 0);
+        }
+
+        [Fact, LogIfTooSlow]
+        public void GapsLongerThanTwoHoursAreNotCalculatedBetweenCalendarItemsOrEdges()
+        {
+            var calendarItems = new[]
+            {
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 2, 1, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 15, 00, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+                new CalendarItem("1", CalendarItemSource.TimeEntry, new DateTimeOffset(2019, 11, 21, 21, 29, 0, DateTimeOffset.Now.Offset), TimeSpan.FromMinutes(30), "Item 1", CalendarIconKind.None),
+            };
+
+            var timeService = Substitute.For<ITimeService>();
+            var calculator = new CalendarLayoutCalculator(timeService);
+
+            var layoutAttributes = calculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+
+            var date = calendarItems[0].StartTime;
+            var gapStart = date + TimeSpan.FromMinutes(30);
+
+            layoutAttributes.Should().BeEmpty();
         }
     }
 }

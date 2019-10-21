@@ -36,7 +36,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 return new CalendarItem("1",
                     CalendarItemSource.TimeEntry,
                     startTime ?? DateTimeOffset.Now,
-                    duration: isRunning ? nullTimespan : (duration ?? TimeSpan.FromMinutes(30)),
+                    isRunning ? nullTimespan : (duration ?? TimeSpan.FromMinutes(30)),
                     "",
                     CalendarIconKind.None,
                     timeEntryId: timeEntryId);
@@ -495,7 +495,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var saveAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Save);
                 var runningTimeEntryId = 10L;
                 var newStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
-                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId, newStartTime);
+                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(true, runningTimeEntryId, newStartTime);
                 var originalStartTime = new DateTimeOffset(2019, 10, 10, 11, 10, 10, TimeSpan.Zero);
                 var mockWorkspace = new MockWorkspace(1);
                 var timeEntryMock = new MockTimeEntry(runningTimeEntryId, mockWorkspace, originalStartTime);
@@ -600,7 +600,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var stoppedTimeEntryId = 10L;
                 var newStartTime = new DateTimeOffset(2019, 10, 10, 10, 10, 10, TimeSpan.Zero);
                 var newEndTime = new DateTimeOffset(2019, 10, 10, 10, 30, 10, TimeSpan.Zero);
-                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId, newStartTime, newEndTime - newStartTime);
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(false, stoppedTimeEntryId, newStartTime, newEndTime - newStartTime);
                 var originalStartTime = new DateTimeOffset(2019, 10, 10, 11, 10, 10, TimeSpan.Zero);
                 var originalEndTime = new DateTimeOffset(2019, 10, 10, 11, 30, 10, TimeSpan.Zero);
                 var mockWorkspace = new MockWorkspace(1);

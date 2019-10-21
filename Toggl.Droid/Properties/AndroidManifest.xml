@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="987654321"
-    android:versionName="2.4"
+    android:versionName="2.4.1"
     package="com.toggl.giskard.debug"
     android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />

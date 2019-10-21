@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
-using Toggl.Core.Exceptions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -19,8 +18,6 @@ namespace Toggl.Core.DataSources
 {
     internal sealed class TimeEntriesDataSource : ObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry>, ITimeEntriesSource
     {
-        private long? currentlyRunningTimeEntryId;
-        private readonly ITimeService timeService;
         private readonly IAnalyticsService analyticsService;
         private readonly IRepository<IDatabaseTimeEntry> repository;
 
@@ -53,26 +50,20 @@ namespace Toggl.Core.DataSources
             Ensure.Argument.IsNotNull(repository, nameof(repository));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
 
-            this.timeService = timeService;
             this.repository = repository;
             this.analyticsService = analyticsService;
 
             RivalsResolver = new TimeEntryRivalsResolver(timeService);
 
             CurrentlyRunningTimeEntry =
-                getCurrentlyRunningTimeEntry()
-                    .StartWith()
-                    .Merge(Created.Where(te => te.IsRunning()))
-                    .Merge(Updated.Where(update => update.Id == currentlyRunningTimeEntryId).Select(update => update.Entity))
-                    .Merge(Deleted.Where(id => id == currentlyRunningTimeEntryId).Select(_ => null as IThreadSafeTimeEntry))
-                    .Select(runningTimeEntry)
+                ItemsChanged
+                    .StartWith(Unit.Default)
+                    .SelectMany(_ => getCurrentlyRunningTimeEntry())
                     .ConnectedReplay();
 
             IsEmpty =
-                Observable.Return(default(IThreadSafeTimeEntry))
-                    .StartWith()
-                    .Merge(Updated.Select(tuple => tuple.Entity))
-                    .Merge(Created)
+                ItemsChanged
+                    .StartWith(Unit.Default)
                     .SelectMany(_ => GetAll(te => te.IsDeleted == false))
                     .Select(timeEntries => timeEntries.None());
 
@@ -88,19 +79,14 @@ namespace Toggl.Core.DataSources
             => repository.UpdateWithConflictResolution(entity.Id, entity, alwaysCreate, RivalsResolver)
                 .ToThreadSafeResult(Convert)
                 .Flatten()
-                .Do(HandleConflictResolutionResult)
                 .OfType<CreateResult<IThreadSafeTimeEntry>>()
                 .FirstAsync()
+                .Do(ReportChange)
                 .Select(result => result.Entity);
 
         public void OnTimeEntryStopped(IThreadSafeTimeEntry timeEntry)
         {
             timeEntryStoppedSubject.OnNext(timeEntry);
-        }
-
-        public void OnTimeEntrySoftDeleted(IThreadSafeTimeEntry timeEntry)
-        {
-            DeletedSubject.OnNext(timeEntry.Id);
         }
 
         public void OnTimeEntryStarted(IThreadSafeTimeEntry timeEntry, TimeEntryStartOrigin origin)
@@ -127,13 +113,6 @@ namespace Toggl.Core.DataSources
 
         protected override ConflictResolutionMode ResolveConflicts(IDatabaseTimeEntry first, IDatabaseTimeEntry second)
             => Resolver.ForTimeEntries.Resolve(first, second);
-
-        private IThreadSafeTimeEntry runningTimeEntry(IThreadSafeTimeEntry timeEntry)
-        {
-            timeEntry = timeEntry != null && timeEntry.IsRunning() ? timeEntry : null;
-            currentlyRunningTimeEntryId = timeEntry?.Id;
-            return timeEntry;
-        }
 
         private IObservable<IThreadSafeTimeEntry> getCurrentlyRunningTimeEntry()
             => stopMultipleRunningTimeEntries()

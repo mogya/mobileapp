@@ -33,9 +33,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
 
             public WhenThereIsNoRunningTimeEntry()
             {
-                DataSource.TimeEntries.Created.Returns(timeEntryChange.Select(_ => new MockTimeEntry()));
-                DataSource.TimeEntries.Updated.Returns(Observable.Never<EntityUpdate<IThreadSafeTimeEntry>>());
-                DataSource.TimeEntries.Deleted.Returns(Observable.Never<long>());
+                DataSource.TimeEntries.ItemsChanged.Returns(timeEntryChange);
                 TimeService.MidnightObservable.Returns(midnight.Select(_ => now));
                 TimeService.SignificantTimeChangeObservable.Returns(significantTimeChange);
                 TimeService.CurrentDateTime.Returns(now);
@@ -162,7 +160,6 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
         public sealed class WhenThereIsARunningTimeEntry : BaseInteractorTests
         {
             private readonly ISubject<DateTimeOffset> currentDateTimeSubject = new Subject<DateTimeOffset>();
-            private readonly ISubject<Unit> timeEntriesUpdated = new Subject<Unit>();
             private readonly ITimeService timeService = Substitute.For<ITimeService>();
 
             public WhenThereIsARunningTimeEntry()
@@ -174,15 +171,13 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
                 currentDateTimeSubject.Subscribe(currentTime => timeService.CurrentDateTime.Returns(currentTime));
 
                 var timeEntriesSource = Substitute.For<ITimeEntriesSource>();
-                timeEntriesSource.Created.Returns(Observable.Never<IThreadSafeTimeEntry>());
-                timeEntriesSource.Updated.Returns(timeEntriesUpdated.Select(_ => default(EntityUpdate<IThreadSafeTimeEntry>)));
-                timeEntriesSource.Deleted.Returns(Observable.Never<long>());
+                timeEntriesSource.ItemsChanged.Returns(Observable.Never<Unit>());
 
                 DataSource.TimeEntries.Returns(timeEntriesSource);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task ReturnsATickingObservable()
+            public void ReturnsATickingObservable()
             {
                 DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>(), Arg.Any<bool>())
                     .Returns(wherePredicateApplies(new[]
@@ -225,8 +220,10 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
                         createMock(duration: 3)
                     };
                 var observer = Substitute.For<IObserver<TimeSpan>>();
+                var update = new Subject<Unit>();
+                DataSource.TimeEntries.ItemsChanged.Returns(update);
 
-                updateRunningTimeEntryAfterThreeSeconds(timeEntries, stoppedTimeEntries, observer);
+                updateRunningTimeEntryAfterThreeSeconds(timeEntries, stoppedTimeEntries, update, observer);
 
                 observer.Received(4).OnNext(Arg.Any<TimeSpan>());
                 Received.InOrder(() =>
@@ -254,8 +251,10 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
                         createMock(duration: null, deleted: true)
                     };
                 var observer = Substitute.For<IObserver<TimeSpan>>();
+                var update = new Subject<Unit>();
+                DataSource.TimeEntries.ItemsChanged.Returns(update);
 
-                updateRunningTimeEntryAfterThreeSeconds(timeEntries, withDeletedRunningTimeEntry, observer);
+                updateRunningTimeEntryAfterThreeSeconds(timeEntries, withDeletedRunningTimeEntry, update, observer);
 
                 observer.Received(5).OnNext(Arg.Any<TimeSpan>());
                 Received.InOrder(() =>
@@ -269,8 +268,9 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             }
 
             private void updateRunningTimeEntryAfterThreeSeconds(
-                IEnumerable<IThreadSafeTimeEntry> timeEntries,
-                IEnumerable<IThreadSafeTimeEntry> updatedTimeEntries,
+                IList<IThreadSafeTimeEntry> timeEntries,
+                IList<IThreadSafeTimeEntry> updatedTimeEntries,
+                ISubject<Unit> update,
                 IObserver<TimeSpan> observer)
             {
                 var interactor = new ObserveTimeTrackedTodayInteractor(timeService, DataSource.TimeEntries);
@@ -285,7 +285,8 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
 
                 DataSource.TimeEntries.GetAll(Arg.Any<Func<IDatabaseTimeEntry, bool>>(), Arg.Any<bool>())
                     .Returns(wherePredicateApplies(updatedTimeEntries));
-                timeEntriesUpdated.OnNext(Unit.Default);
+
+                update.OnNext(Unit.Default);
 
                 currentDateTimeSubject.OnNext(now.AddSeconds(4));
                 currentDateTimeSubject.OnNext(now.AddSeconds(5));

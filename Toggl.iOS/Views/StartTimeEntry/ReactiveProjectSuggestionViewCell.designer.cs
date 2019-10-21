@@ -16,9 +16,6 @@ namespace Toggl.iOS.Views.StartTimeEntry
 		UIKit.UILabel AmountOfTasksLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIView BottomSeparatorView { get; set; }
-
-		[Outlet]
 		UIKit.UILabel ClientNameLabel { get; set; }
 
 		[Outlet]
@@ -42,19 +39,11 @@ namespace Toggl.iOS.Views.StartTimeEntry
 		[Outlet]
 		UIKit.UIButton ToggleTasksButton { get; set; }
 
-		[Outlet]
-		UIKit.UIView TopSeparatorView { get; set; }
-
 		void ReleaseDesignerOutlets ()
 		{
 			if (AmountOfTasksLabel != null) {
 				AmountOfTasksLabel.Dispose ();
 				AmountOfTasksLabel = null;
-			}
-
-			if (BottomSeparatorView != null) {
-				BottomSeparatorView.Dispose ();
-				BottomSeparatorView = null;
 			}
 
 			if (ClientNameLabel != null) {
@@ -96,11 +85,6 @@ namespace Toggl.iOS.Views.StartTimeEntry
 				ToggleTasksButton.Dispose ();
 				ToggleTasksButton = null;
 			}
-
-			if (TopSeparatorView != null) {
-				TopSeparatorView.Dispose ();
-				TopSeparatorView = null;
-			}
-		}
+        }
 	}
 }

@@ -8,11 +8,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using System.Xml;
-using FsCheck.Xunit;
 using Microsoft.Reactive.Testing;
-using NSubstitute.Exceptions;
-using NSubstitute.ReturnsExtensions;
+using Toggl.Core.Calendar;
+using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.TestExtensions;
@@ -21,7 +19,6 @@ using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
-using Toggl.Shared.Extensions.Reactive;
 using Xunit;
 
 namespace Toggl.Core.Tests.UI.ViewModels

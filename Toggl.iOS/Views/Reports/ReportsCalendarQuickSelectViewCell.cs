@@ -43,12 +43,12 @@ namespace Toggl.iOS.Views.Reports
             TitleLabel.Text = Item.Title;
 
             ContentView.BackgroundColor = Item.IsSelected(currentDateRange)
-                ? Colors.ReportsCalendar.QuickSelect.SelectedBackground.ToNativeColor()
-                : Colors.ReportsCalendar.QuickSelect.UnselectedBackground.ToNativeColor();
+                ? ColorAssets.CustomGray
+                : ColorAssets.CustomGray5;
 
             TitleLabel.TextColor = Item.IsSelected(currentDateRange)
-                ? Colors.ReportsCalendar.QuickSelect.SelectedTitle.ToNativeColor()
-                : Colors.ReportsCalendar.QuickSelect.UnselectedTitle.ToNativeColor();
+                ? ColorAssets.InverseText
+                : ColorAssets.Text2;
         }
     }
 }

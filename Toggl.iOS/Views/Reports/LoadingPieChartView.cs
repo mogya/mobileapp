@@ -17,8 +17,8 @@ namespace Toggl.iOS.Views.Reports
         private static readonly nfloat startAngle = -0.5f * pi;
         private const double fps = 60.0;
 
-        private readonly CGColor lightColor = Colors.Reports.Loading.LightColor.ToNativeColor().CGColor;
-        private readonly CGColor darkColor = Colors.Reports.Loading.DarkColor.ToNativeColor().CGColor;
+        private readonly CGColor lightColor = ColorAssets.CustomGray2.CGColor;
+        private readonly CGColor darkColor = ColorAssets.CustomGray4.CGColor;
 
         private CGPoint start;
         private nfloat radius;

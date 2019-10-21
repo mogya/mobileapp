@@ -16,73 +16,40 @@ namespace Toggl.Core.DataSources
         where TDatabase : IDatabaseSyncable
         where TThreadsafe : IThreadSafeModel, IIdentifiable, TDatabase
     {
-        public IObservable<TThreadsafe> Created { get; }
+        private readonly Subject<Unit> itemsChangedSubject = new Subject<Unit>();
 
-        public IObservable<EntityUpdate<TThreadsafe>> Updated { get; }
-
-        public IObservable<long> Deleted { get; }
-
-        protected Subject<long> DeletedSubject { get; } = new Subject<long>();
-
-        protected Subject<TThreadsafe> CreatedSubject { get; } = new Subject<TThreadsafe>();
-
-        protected Subject<EntityUpdate<TThreadsafe>> UpdatedSubject { get; } = new Subject<EntityUpdate<TThreadsafe>>();
+        public IObservable<Unit> ItemsChanged { get; }
 
         protected ObservableDataSource(IRepository<TDatabase> repository)
             : base(repository)
         {
-            Created = CreatedSubject.AsObservable();
-            Updated = UpdatedSubject.AsObservable();
-            Deleted = DeletedSubject.AsObservable();
+            ItemsChanged = itemsChangedSubject.AsObservable();
         }
 
         public override IObservable<TThreadsafe> Create(TThreadsafe entity)
-            => base.Create(entity)
-                .Do(CreatedSubject.OnNext);
+            => base.Create(entity).Do(ReportChange);
 
         public override IObservable<TThreadsafe> Update(TThreadsafe entity)
-            => base.Update(entity)
-                .Do(updatedEntity => UpdatedSubject.OnNext(new EntityUpdate<TThreadsafe>(updatedEntity.Id, updatedEntity)));
+            => base.Update(entity).Do(ReportChange);
 
         public override IObservable<TThreadsafe> ChangeId(long currentId, long newId)
-            => base.ChangeId(currentId, newId)
-                .Do(updatedEntity => UpdatedSubject.OnNext(new EntityUpdate<TThreadsafe>(currentId, updatedEntity)));
+            => base.ChangeId(currentId, newId).Do(ReportChange);
 
         public override IObservable<Unit> Delete(long id)
-            => base.Delete(id)
-                .Do(_ => DeletedSubject.OnNext(id));
+            => base.Delete(id).Do(ReportChange);
 
-        public override IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> OverwriteIfOriginalDidNotChange(
-            TThreadsafe original, TThreadsafe entity)
-            => base.OverwriteIfOriginalDidNotChange(original, entity)
-                .Do(results => results.Do(HandleConflictResolutionResult));
+        public override IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> OverwriteIfOriginalDidNotChange(TThreadsafe original, TThreadsafe entity)
+            => base.OverwriteIfOriginalDidNotChange(original, entity).Do(ReportChange);
 
         public override IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> BatchUpdate(IEnumerable<TThreadsafe> entities)
-            => base.BatchUpdate(entities)
-                .Do(updatedEntities => updatedEntities
-                    .ForEach(HandleConflictResolutionResult));
+            => base.BatchUpdate(entities).Do(ReportChange);
 
         public override IObservable<IEnumerable<IConflictResolutionResult<TThreadsafe>>> DeleteAll(IEnumerable<TThreadsafe> entities)
-            => base.DeleteAll(entities)
-                .Do(updatedEntities => updatedEntities
-                    .ForEach(HandleConflictResolutionResult));
+            => base.DeleteAll(entities).Do(ReportChange);
 
-        protected void HandleConflictResolutionResult(IConflictResolutionResult<TThreadsafe> result)
+        protected void ReportChange()
         {
-            switch (result)
-            {
-                case DeleteResult<TThreadsafe> d:
-                    DeletedSubject.OnNext(d.Id);
-                    return;
-
-                case CreateResult<TThreadsafe> c:
-                    CreatedSubject.OnNext(c.Entity);
-                    return;
-
-                case UpdateResult<TThreadsafe> u:
-                    UpdatedSubject.OnNext(new EntityUpdate<TThreadsafe>(u.OriginalId, u.Entity));
-                    return;
-            }
+            itemsChangedSubject.OnNext(Unit.Default);
         }
     }
 }

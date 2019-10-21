@@ -75,9 +75,9 @@ namespace Toggl.iOS.ViewControllers
 
                     var attributedString = new NSMutableAttributedString(
                         yearMonthString,
-                        new UIStringAttributes { ForegroundColor = Colors.Black.ToNativeColor() });
+                        new UIStringAttributes { ForegroundColor = ColorAssets.Text });
                     attributedString.AddAttributes(
-                        new UIStringAttributes { ForegroundColor = Colors.ReportsCalendar.YearColor.ToNativeColor() },
+                        new UIStringAttributes { ForegroundColor = ColorAssets.Text2 },
                         range);
 
                     return attributedString;

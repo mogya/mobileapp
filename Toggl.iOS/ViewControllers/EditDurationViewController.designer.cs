@@ -6,7 +6,6 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
-using Toggl.iOS.Views.EditDuration;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -17,19 +16,19 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIButton CloseButton { get; set; }
 
 		[Outlet]
-		UIKit.UIStackView ControlsStackView { get; set; }
-
-		[Outlet]
 		UIKit.UIDatePicker DatePicker { get; set; }
 
 		[Outlet]
 		UIKit.UIView DatePickerContainer { get; set; }
 
 		[Outlet]
-		DurationField DurationInput { get; set; }
+		Toggl.iOS.Views.EditDuration.DurationField DurationInput { get; set; }
 
 		[Outlet]
 		UIKit.UILabel EndDateLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView endIcon { get; set; }
 
 		[Outlet]
 		UIKit.UILabel EndLabel { get; set; }
@@ -53,6 +52,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UILabel StartDateLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView startIcon { get; set; }
+
+		[Outlet]
 		UIKit.UILabel StartLabel { get; set; }
 
 		[Outlet]
@@ -65,18 +67,13 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UILabel TitleLabel { get; set; }
 
 		[Outlet]
-		WheelForegroundView WheelView { get; set; }
-
+		Toggl.iOS.Views.EditDuration.WheelForegroundView WheelView { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (CloseButton != null) {
 				CloseButton.Dispose ();
 				CloseButton = null;
-			}
-
-			if (ControlsStackView != null) {
-				ControlsStackView.Dispose ();
-				ControlsStackView = null;
 			}
 
 			if (DatePicker != null) {
@@ -97,6 +94,11 @@ namespace Toggl.iOS.ViewControllers
 			if (EndDateLabel != null) {
 				EndDateLabel.Dispose ();
 				EndDateLabel = null;
+			}
+
+			if (EndLabel != null) {
+				EndLabel.Dispose ();
+				EndLabel = null;
 			}
 
 			if (EndTimeLabel != null) {
@@ -129,6 +131,11 @@ namespace Toggl.iOS.ViewControllers
 				StartDateLabel = null;
 			}
 
+			if (StartLabel != null) {
+				StartLabel.Dispose ();
+				StartLabel = null;
+			}
+
 			if (StartTimeLabel != null) {
 				StartTimeLabel.Dispose ();
 				StartTimeLabel = null;
@@ -139,24 +146,24 @@ namespace Toggl.iOS.ViewControllers
 				StartView = null;
 			}
 
+			if (TitleLabel != null) {
+				TitleLabel.Dispose ();
+				TitleLabel = null;
+			}
+
 			if (WheelView != null) {
 				WheelView.Dispose ();
 				WheelView = null;
 			}
 
-			if (StartLabel != null) {
-				StartLabel.Dispose ();
-				StartLabel = null;
+			if (startIcon != null) {
+				startIcon.Dispose ();
+				startIcon = null;
 			}
 
-			if (EndLabel != null) {
-				EndLabel.Dispose ();
-				EndLabel = null;
-			}
-
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
+			if (endIcon != null) {
+				endIcon.Dispose ();
+				endIcon = null;
 			}
 		}
 	}

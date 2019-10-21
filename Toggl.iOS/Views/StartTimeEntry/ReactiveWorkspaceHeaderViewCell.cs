@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using System;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.StartTimeEntry
@@ -8,12 +9,6 @@ namespace Toggl.iOS.Views.StartTimeEntry
     {
         public static readonly NSString Key = new NSString(nameof(ReactiveWorkspaceHeaderViewCell));
         public static readonly UINib Nib;
-
-        public bool TopSeparatorHidden
-        {
-            get => TopSeparator.Hidden;
-            set => TopSeparator.Hidden = value;
-        }
 
         private string workspaceName = "";
         public string WorkspaceName
@@ -29,6 +24,13 @@ namespace Toggl.iOS.Views.StartTimeEntry
         static ReactiveWorkspaceHeaderViewCell()
         {
             Nib = UINib.FromName(nameof(ReactiveWorkspaceHeaderViewCell), NSBundle.MainBundle);
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            ContentView.InsertSeparator();
         }
 
         protected ReactiveWorkspaceHeaderViewCell(IntPtr handle) : base(handle)

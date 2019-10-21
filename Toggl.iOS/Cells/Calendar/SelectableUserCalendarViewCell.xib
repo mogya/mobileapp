@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="288" height="48"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="288" height="47.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="288" height="48"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HEz-hN-CjK" customClass="FadeView">
@@ -28,7 +27,6 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="b2i-0A-7ji" firstAttribute="centerY" secondItem="HEz-hN-CjK" secondAttribute="centerY" id="1wu-SS-EFj"/>
                             <constraint firstItem="b2i-0A-7ji" firstAttribute="top" secondItem="HEz-hN-CjK" secondAttribute="top" id="Lz0-9V-eDr"/>
@@ -40,30 +38,27 @@
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWp-Sq-DKj">
                         <rect key="frame" x="223" y="8.5" width="51" height="31"/>
                     </switch>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IvN-nY-GBE" userLabel="Separator">
-                        <rect key="frame" x="0.0" y="46.5" width="288" height="1"/>
-                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="Hwf-g4-rnF"/>
-                        </constraints>
-                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="xWp-Sq-DKj" firstAttribute="leading" secondItem="HEz-hN-CjK" secondAttribute="trailing" constant="10" id="1Wx-i6-LOL"/>
-                    <constraint firstAttribute="trailing" secondItem="IvN-nY-GBE" secondAttribute="trailing" id="856-Tc-lMT"/>
                     <constraint firstItem="xWp-Sq-DKj" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="ED6-A7-7wi"/>
                     <constraint firstItem="HEz-hN-CjK" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="10" id="Vui-3t-jZi"/>
-                    <constraint firstAttribute="bottom" secondItem="IvN-nY-GBE" secondAttribute="bottom" id="lNt-hD-yJP"/>
                     <constraint firstAttribute="trailing" secondItem="xWp-Sq-DKj" secondAttribute="trailing" constant="16" id="uAX-7S-dts"/>
                     <constraint firstItem="HEz-hN-CjK" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="ugy-2Q-ML0"/>
-                    <constraint firstItem="IvN-nY-GBE" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="zff-zh-N5R"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="CellBackground"/>
             <connections>
                 <outlet property="CalendarNameLabel" destination="b2i-0A-7ji" id="bwY-xI-9bb"/>
                 <outlet property="FadeView" destination="HEz-hN-CjK" id="JQx-Q6-8xw"/>
                 <outlet property="IsSelectedSwitch" destination="xWp-Sq-DKj" id="AaU-pc-yjA"/>
             </connections>
+            <point key="canvasLocation" x="133" y="155"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <namedColor name="CellBackground">
+            <color red="0.10980392247438431" green="0.10980392247438431" blue="0.11764705926179886" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

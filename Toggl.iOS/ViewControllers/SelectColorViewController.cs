@@ -31,6 +31,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
             TitleLabel.Text = Resources.ProjectColor;
             SaveButton.SetTitle(Resources.Save, UIControlState.Normal);
 

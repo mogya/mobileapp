@@ -45,6 +45,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
                 Colors.EditTimeEntry.ClientText.ToNativeColor());
@@ -281,12 +283,18 @@ namespace Toggl.iOS.ViewControllers
             DescriptionTextView.PlaceholderText = Resources.AddDescription;
 
             TimeEntryTimes.Hidden = ViewModel.IsEditingGroup;
-            TimeEntryTimesSeparator.Hidden = ViewModel.IsEditingGroup;
             GroupDuration.Hidden = !ViewModel.IsEditingGroup;
             DurationView.Hidden = ViewModel.IsEditingGroup;
             StartDateView.Hidden = ViewModel.IsEditingGroup;
-            DurationSeparator.Hidden = ViewModel.IsEditingGroup;
-            StartDateSeparator.Hidden = ViewModel.IsEditingGroup;
+
+            DescriptionView.InsertSeparator();
+            SelectProject.InsertSeparator();
+            TagsContainerView.InsertSeparator();
+            TimeEntryTimes.InsertSeparator();
+            DurationView.InsertSeparator();
+            StartDateView.InsertSeparator();
+            BillableView.InsertSeparator();
+            StartTimeView.InsertSeparator(UIRectEdge.Right);
         }
 
         private void localizeLabels()
@@ -322,8 +330,8 @@ namespace Toggl.iOS.ViewControllers
             AddTagsView.Hidden = isInaccessible;
 
             var textColor = isInaccessible
-                ? Colors.Common.Disabled.ToNativeColor()
-                : Colors.Common.TextColor.ToNativeColor();
+                ? ColorAssets.Text3
+                : ColorAssets.Text;
 
             DescriptionTextView.TextColor = textColor;
 

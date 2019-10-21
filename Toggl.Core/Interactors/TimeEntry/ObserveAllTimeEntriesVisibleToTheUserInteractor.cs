@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Storage.Models;
@@ -28,8 +27,8 @@ namespace Toggl.Core.Interactors
 
         public IObservable<IEnumerable<IThreadSafeTimeEntry>> Execute()
             => Observable.Merge(
-                    timeEntries.ItemsChanged(),
-                    workspaces.ItemsChanged())
+                    timeEntries.ItemsChanged,
+                    workspaces.ItemsChanged)
                 .StartWith(Unit.Default)
                 .SelectMany(_ => getTimeEntries())
                 .DistinctUntilChanged();

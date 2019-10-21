@@ -1,7 +1,6 @@
 using System;
 using System.Reactive;
 using Toggl.Core.DataSources;
-using Toggl.Core.Extensions;
 using Toggl.Shared;
 
 namespace Toggl.Core.Interactors
@@ -18,6 +17,6 @@ namespace Toggl.Core.Interactors
         }
 
         public IObservable<Unit> Execute()
-            => dataSource.TimeEntries.ItemsChanged();
+            => dataSource.TimeEntries.ItemsChanged;
     }
 }

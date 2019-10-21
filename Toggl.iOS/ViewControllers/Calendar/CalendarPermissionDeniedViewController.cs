@@ -36,7 +36,7 @@ namespace Toggl.iOS.ViewControllers.Calendar
 
             var attributedString = new NSMutableAttributedString(
                 enableAccessString,
-                new UIStringAttributes { ForegroundColor = UIColor.Black });
+                new UIStringAttributes { ForegroundColor = ColorAssets.Text });
             attributedString.AddAttributes(
                 new UIStringAttributes { ForegroundColor = Colors.Calendar.EnableCalendarAction.ToNativeColor() },
                 range);

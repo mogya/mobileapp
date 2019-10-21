@@ -44,5 +44,9 @@ namespace Toggl.Droid.Views
         }
 
         public override bool CanScrollVertically() => false;
+
+        // see the comment in UnpredictiveLinearLayoutManager for rationale
+        public override bool SupportsPredictiveItemAnimations() => false;
+
     }
 }

@@ -14,7 +14,7 @@ namespace Toggl.iOS.Views.EditDuration
         {
             durationText = durationText ?? "";
             var prefixLength = DurationHelper.LengthOfDurationPrefix(durationText);
-            var result = new NSMutableAttributedString(durationText, font: font.GetMonospacedDigitFont(), foregroundColor: UIColor.Black);
+            var result = new NSMutableAttributedString(durationText, font: font.GetMonospacedDigitFont(), foregroundColor: ColorAssets.Text);
             result.AddAttribute(UIStringAttributeKey.ForegroundColor, placeHolderColor, new NSRange(0, prefixLength));
             return result;
         }

@@ -31,6 +31,8 @@ namespace Toggl.iOS.Views.EntityCreation
             base.AwakeFromNib();
 
             cachedAddIcon = "".PrependWithAddIcon(TextLabel.Font.CapHeight);
+
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

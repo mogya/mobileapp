@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources.Interfaces;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Storage.Models;
 
@@ -20,7 +19,7 @@ namespace Toggl.Core.Interactors
 
         public IObservable<IEnumerable<IThreadSafeTimeEntry>> Execute()
         {
-            return dataSource.ItemsChanged()
+            return dataSource.ItemsChanged
                 .StartWith(Unit.Default)
                 .SelectMany(_ => new GetAllTimeEntriesVisibleToTheUserInteractor(dataSource).Execute());
         }

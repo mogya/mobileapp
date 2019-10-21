@@ -13,6 +13,9 @@ namespace Toggl.iOS
 	partial class SuggestionView
 	{
 		[Outlet]
+		UIKit.UIImageView ArrowImage { get; set; }
+
+		[Outlet]
 		Toggl.iOS.Views.FadeView DescriptionFadeView { get; set; }
 
 		[Outlet]
@@ -29,6 +32,11 @@ namespace Toggl.iOS
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ArrowImage != null) {
+				ArrowImage.Dispose ();
+				ArrowImage = null;
+			}
+
 			if (DescriptionFadeView != null) {
 				DescriptionFadeView.Dispose ();
 				DescriptionFadeView = null;

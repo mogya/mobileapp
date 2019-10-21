@@ -11,7 +11,7 @@ namespace Toggl.iOS.Views.Reports
             Text = $"{dayInitial}\n{shortDate}";
             TextAlignment = UITextAlignment.Center;
             Lines = 2;
-            TextColor = Colors.Reports.BarChart.Legend.ToNativeColor();
+            TextColor = ColorAssets.Text3;
             Font = UIFont.SystemFontOfSize(12);
             AdjustsFontSizeToFitWidth = true;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Cells.Common
@@ -34,6 +35,7 @@ namespace Toggl.iOS.Cells.Common
         {
             NameLabel.Text = Item;
             CheckMark.Hidden = !OptionSelected;
+            BackgroundColor = ColorAssets.CellBackground;
         }
     }
 }

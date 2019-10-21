@@ -8,7 +8,7 @@ namespace Toggl.iOS.Autocomplete
 {
     public sealed class TagTextAttachment : TokenTextAttachment
     {
-        private static readonly UIColor borderColor = Colors.StartTimeEntry.TokenBorder.ToNativeColor();
+        private static readonly UIColor borderColor = ColorAssets.Text4;
 
         public TagTextAttachment(string tagName, UIColor color, UIFont font)
         {

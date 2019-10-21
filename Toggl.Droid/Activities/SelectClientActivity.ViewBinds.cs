@@ -1,6 +1,7 @@
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.LayoutManagers;
 
 namespace Toggl.Droid.Activities
 {
@@ -17,7 +18,7 @@ namespace Toggl.Droid.Activities
             selectClientRecyclerView = FindViewById<RecyclerView>(Resource.Id.SelectClientRecyclerView);
 
             filterEditText.Hint = Shared.Resources.AddClient;
-            selectClientRecyclerView.SetLayoutManager(new LinearLayoutManager(this)
+            selectClientRecyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(this)
             {
                 ItemPrefetchEnabled = true,
                 InitialPrefetchItemCount = 4

@@ -91,7 +91,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .AppResumedFromBackground
                 .SelectUnit();
 
-            Observable.Merge(dataSource.TimeEntries.ItemsChanged(), selectedCalendarsChanged, appResumedFromBackground)
+            Observable.Merge(dataSource.TimeEntries.ItemsChanged, selectedCalendarsChanged, appResumedFromBackground)
                 .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .SelectMany(_ => reloadData())
                 .ObserveOn(schedulerProvider.MainScheduler)

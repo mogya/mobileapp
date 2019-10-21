@@ -7,6 +7,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using CoreAnimation;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
@@ -91,6 +92,9 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            var separator = NavigationController.NavigationBar.InsertSeparator();
+            separator.BackgroundColor = ColorAssets.OpaqueSeparator;
+
             WelcomeBackLabel.Text = Resources.LogEmptyStateTitle;
             WelcomeBackDescriptionLabel.Text = Resources.LogEmptyStateText;
             CreatedFirstTimeEntryLabel.Text = Resources.YouHaveCreatedYourFirstTimeEntry;
@@ -114,6 +118,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(disposeBag);
 
             TimeEntriesLogTableView.Source = tableViewSource;
+            TimeEntriesLogTableView.BackgroundColor = ColorAssets.TableBackground;
 
             ViewModel.TimeEntries
                 .Subscribe(TimeEntriesLogTableView.Rx().AnimateSections<MainLogSection, DaySummaryViewModel, LogItemViewModel, IMainLogKey>(tableViewSource))
@@ -225,7 +230,7 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             var capHeight = CurrentTimeEntryProjectTaskClientLabel.Font.CapHeight;
-            var clientColor = Colors.Main.CurrentTimeEntryClientColor.ToNativeColor();
+            var clientColor = ColorAssets.Text3;
             ViewModel.CurrentRunningTimeEntry
                 .Select(te => te?.ToFormattedTimeEntryString(capHeight, clientColor, shouldColorProject: true))
                 .Subscribe(CurrentTimeEntryProjectTaskClientLabel.Rx().AttributedText())
@@ -485,8 +490,12 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLayoutSubviews();
 
-            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(-TimeEntriesLogViewSource.SpaceBetweenSections, 0,
-                StartTimeEntryButton.Frame.Height, 0);
+            TimeEntriesLogTableView.ContentInset = new UIEdgeInsets(
+                top: -TimeEntriesLogViewSource.SpaceBetweenSections,
+                left: 0,
+                bottom: (nfloat)System.Math.Max(CurrentTimeEntryCard.Frame.Height, StartTimeEntryButton.Frame.Height),
+                right: 0);
+
             TimeEntriesLogTableView.BringSubviewToFront(TimeEntriesLogTableView.TableHeaderView);
 
             if (TimeEntriesLogTableView.TableHeaderView != null)
@@ -566,7 +575,9 @@ namespace Toggl.iOS.ViewControllers
             AutomaticallyAdjustsScrollViewInsets = false;
 
             //Card border
+            CurrentTimeEntryCard.Opaque = false;
             CurrentTimeEntryCard.Layer.CornerRadius = 8;
+            CurrentTimeEntryCard.Layer.MaskedCorners = (CACornerMask)3;
             CurrentTimeEntryCard.Layer.ShadowColor = UIColor.Black.CGColor;
             CurrentTimeEntryCard.Layer.ShadowOffset = new CGSize(0, -2);
             CurrentTimeEntryCard.Layer.ShadowOpacity = 0.1f;
@@ -614,8 +625,6 @@ namespace Toggl.iOS.ViewControllers
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
 
-            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = true;
-
             AnimationExtensions.Animate(Timings.EnterTiming, showCardDelay, Curves.EaseOut,
                 () => StartTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
                 () =>
@@ -635,8 +644,6 @@ namespace Toggl.iOS.ViewControllers
         {
             cardAnimationCancellation?.Cancel();
             cardAnimationCancellation = new CancellationTokenSource();
-
-            TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Active = false;
 
             AnimationExtensions.Animate(Timings.LeaveTimingFaster, Curves.EaseIn,
                 () => StopTimeEntryButton.Transform = CGAffineTransform.MakeScale(0.01f, 0.01f),
@@ -678,7 +685,7 @@ namespace Toggl.iOS.ViewControllers
 
             spiderHinge.Layer.CornerRadius = spiderHingeCornerRadius;
             spiderHinge.TranslatesAutoresizingMaskIntoConstraints = false;
-            spiderHinge.BackgroundColor = Colors.Main.SpiderHinge.ToNativeColor();
+            spiderHinge.BackgroundColor = ColorAssets.Spider;
             spiderContainerView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderBroView.TranslatesAutoresizingMaskIntoConstraints = false;
             spiderContainerView.BackgroundColor = UIColor.Clear;

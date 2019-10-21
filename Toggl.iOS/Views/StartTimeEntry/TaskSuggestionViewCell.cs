@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views
@@ -25,6 +26,8 @@ namespace Toggl.iOS.Views
         {
             base.AwakeFromNib();
 
+            this.InsertSeparator();
+            ContentView.BackgroundColor = ColorAssets.CustomGray6;
             FadeView.FadeRight = true;
         }
 

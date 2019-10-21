@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="49P-Ko-VVc">
@@ -43,11 +42,10 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LD4-x8-1Yy">
                                 <rect key="frame" x="53" y="0.0" width="40" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.36862745098039218" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" name="CustomGray"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="voG-ay-6Vx" firstAttribute="centerY" secondItem="QhD-hJ-VOY" secondAttribute="centerY" id="Q3N-oq-1Wo"/>
                             <constraint firstAttribute="height" constant="18" id="TlY-Y9-35p"/>
@@ -69,18 +67,11 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="49%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bkl-is-Byu">
                         <rect key="frame" x="188.5" y="13.5" width="29.5" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="0.36862745098039218" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" name="CustomGray"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MpZ-1D-dTJ" userLabel="Bottom Separator">
-                        <rect key="frame" x="0.0" y="43" width="320" height="1"/>
-                        <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="ZrJ-1h-uyF"/>
-                        </constraints>
-                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3a-WE-b76">
-                        <rect key="frame" x="319" y="0.0" width="1" height="43.5"/>
+                        <rect key="frame" x="319" y="0.0" width="1" height="44"/>
                         <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="TAp-CP-MCb"/>
@@ -88,7 +79,7 @@
                         <variation key="widthClass=compact" hidden="YES"/>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUk-2g-xY1">
-                        <rect key="frame" x="0.0" y="0.0" width="1" height="43.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1" height="44"/>
                         <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="fOI-3p-jWy"/>
@@ -110,14 +101,12 @@
                     <constraint firstItem="QhD-hJ-VOY" firstAttribute="leading" secondItem="49P-Ko-VVc" secondAttribute="trailing" constant="6" id="tAl-qf-GOK"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="CellBackground"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="pSS-L9-KKB" secondAttribute="trailing" constant="16" id="B5r-gb-Ke9"/>
-                <constraint firstItem="MpZ-1D-dTJ" firstAttribute="leading" secondItem="cxk-wN-pdQ" secondAttribute="leading" id="azi-mi-iFE"/>
                 <constraint firstItem="pSS-L9-KKB" firstAttribute="centerY" secondItem="cxk-wN-pdQ" secondAttribute="centerY" id="dfl-Bq-mQ4"/>
                 <constraint firstItem="49P-Ko-VVc" firstAttribute="centerY" secondItem="cxk-wN-pdQ" secondAttribute="centerY" id="fZW-of-C17"/>
-                <constraint firstAttribute="trailing" secondItem="MpZ-1D-dTJ" secondAttribute="trailing" id="h8Z-dT-Acg"/>
                 <constraint firstItem="49P-Ko-VVc" firstAttribute="leading" secondItem="cxk-wN-pdQ" secondAttribute="leading" constant="16" id="uHB-QV-2Wj"/>
-                <constraint firstItem="MpZ-1D-dTJ" firstAttribute="bottom" secondItem="cxk-wN-pdQ" secondAttribute="bottom" id="vwg-Rz-KAI"/>
             </constraints>
             <connections>
                 <outlet property="CircleView" destination="49P-Ko-VVc" id="7q5-Y8-9QL"/>
@@ -127,6 +116,15 @@
                 <outlet property="ProjectLabel" destination="voG-ay-6Vx" id="A0z-eP-GZ5"/>
                 <outlet property="TotalTimeLabel" destination="pSS-L9-KKB" id="wqW-pi-7G8"/>
             </connections>
+            <point key="canvasLocation" x="133" y="155"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <namedColor name="CellBackground">
+            <color red="0.10980392247438431" green="0.10980392247438431" blue="0.11764705926179886" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="CustomGray">
+            <color red="0.55686277151107788" green="0.55686277151107788" blue="0.57647061347961426" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

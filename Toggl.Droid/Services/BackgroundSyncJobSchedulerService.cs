@@ -2,6 +2,7 @@
 using Android.App.Job;
 using System;
 using System.Reactive.Linq;
+using Toggl.Droid.Helper;
 using static Toggl.Shared.Extensions.CommonFunctions;
 
 namespace Toggl.Droid.Services
@@ -17,6 +18,14 @@ namespace Toggl.Droid.Services
 
         public override bool OnStartJob(JobParameters @params)
         {
+            // Background sync for Android 10 is temporary disabled due to a crash on Android 10 that is hard to reproduce
+            // Calling JobFinished and returning early here stops the background job from running
+            if (QApis.AreAvailable)
+            {
+                JobFinished(@params, false);
+                return false;
+            }
+
             AndroidDependencyContainer.EnsureInitialized(ApplicationContext);
             var dependencyContainer = AndroidDependencyContainer.Instance;
             if (!dependencyContainer.UserAccessManager.CheckIfLoggedIn())

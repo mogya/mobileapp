@@ -36,6 +36,7 @@ namespace Toggl.iOS.Views.Reports
             base.AwakeFromNib();
 
             FadeView.FadeRight = true;
+            ContentView.InsertSeparator();
         }
 
         public void SetIsLast(bool last)
@@ -78,7 +79,7 @@ namespace Toggl.iOS.Views.Reports
 
                 borderLayer.FillColor = UIColor.Clear.CGColor;
                 borderLayer.LineWidth = 1;
-                borderLayer.StrokeColor = UIColor.GroupTableViewBackgroundColor.CGColor;
+                borderLayer.StrokeColor = ColorAssets.Separator.CGColor;
                 borderLayer.Path = UIBezierPath.FromRoundedRect(new CGRect(0, -1, Bounds.Width, Bounds.Height + 1), cornersToRound, new CGSize(cornerRadius + 1, cornerRadius + 1)).CGPath;
                 Layer.AddSublayer(borderLayer);
             }

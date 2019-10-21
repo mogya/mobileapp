@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,7 +31,7 @@
                         <constraint firstAttribute="height" constant="17" id="pH2-RH-y4q"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="Text"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fvg-dp-el4">
@@ -57,7 +56,7 @@
                 </button>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="oPC-Yw-XVk">
                     <rect key="frame" x="0.0" y="59" width="288" height="148"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="148" id="KD5-e3-U2k"/>
                     </constraints>
@@ -70,7 +69,7 @@
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a4O-k3-XAQ" customClass="HueSaturationPickerView">
                     <rect key="frame" x="14" y="227" width="260" height="80"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="h6E-4G-YQw"/>
                         <constraint firstAttribute="width" constant="260" id="n4w-fx-cIo"/>
@@ -83,6 +82,7 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ny2-Jd-yif" customClass="ValueSliderView">
                     <rect key="frame" x="14" y="317" width="260" height="18"/>
+                    <color key="backgroundColor" name="Background"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="HSp-yw-plZ"/>
                     </constraints>
@@ -91,7 +91,7 @@
                     <rect key="frame" x="12" y="317" width="264" height="19"/>
                 </slider>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="Background"/>
             <constraints>
                 <constraint firstItem="8iM-ju-8R3" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="1dp-r0-3O7"/>
                 <constraint firstItem="9ax-lx-WQ3" firstAttribute="top" secondItem="Ny2-Jd-yif" secondAttribute="top" id="1ft-8P-et3"/>
@@ -122,5 +122,11 @@
     </objects>
     <resources>
         <image name="icClose" width="10" height="10"/>
+        <namedColor name="Background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

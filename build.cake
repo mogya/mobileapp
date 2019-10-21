@@ -1,6 +1,9 @@
 #tool "nuget:?package=xunit.runner.console&version=2.2.0"
 #tool "nuget:?package=NUnit.Runners&version=2.6.3"
 
+using System.Text.RegularExpressions;
+using System;
+
 public class TemporaryFileTransformation
 {
     public string Path { get; set; }
@@ -91,6 +94,43 @@ private string GetCommitCount()
     }, out redirectedOutput);
 
     return redirectedOutput.Last();
+}
+
+private string GetVersionNumberFromTag()
+{
+    var platform = "";
+    if (target == "Build.Release.iOS.AppStore") 
+    {
+        platform = "ios";
+    } 
+    else if (target == "Build.Release.Android.PlayStore") 
+    {
+        platform = "android";
+    } 
+    else 
+    {
+        throw new InvalidOperationException($"Unable to get version number from this type of build target: {target}");
+    }
+    
+    StartProcess("git", new ProcessSettings
+    {
+        Arguments = "tag --list '" + platform + "-*'",
+        RedirectStandardOutput = true
+    }, out var redirectedOutput);
+
+    var tagName = redirectedOutput.Last();
+         
+    var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})(\.(?<build>\d{1,2}))?(-(?<rev>\d{1,2}))?");
+    if (!p.Success) 
+    {
+        throw new InvalidOperationException($"Unsupported release tag format: {tagName}");
+    } 
+    var major = Int32.Parse(p.Groups["major"].Value) * 1000000;
+    var minor = Int32.Parse(p.Groups["minor"].Value) *   10000;
+    var build = string.IsNullOrEmpty(p.Groups["build"].Value) ? 0 : Int32.Parse(p.Groups["build"].Value) * 100;
+    var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? 0 : Int32.Parse(p.Groups["rev"].Value);
+
+    return (major + minor + build + rev).ToString();
 }
 
 private TemporaryFileTransformation GetAndroidProjectConfigurationTransformation()
@@ -225,7 +265,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
     const string appNameToReplace = "Toggl for Devs";
     const string iconSetToReplace = "Assets.xcassets/AppIcon-debug.appiconset";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
     var reversedClientId = EnvironmentVariable("TOGGL_REVERSED_CLIENT_ID");
 
     var bundleId = bundleIdToReplace;
@@ -243,6 +283,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         bundleId = "com.toggl.daneel";
         appName = "Toggl";
         iconSet = "Assets.xcassets/AppIcon.appiconset";
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -253,7 +294,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         Path = path,
         Original = file,
         Temporary = file.Replace("{TOGGL_REVERSED_CLIENT_ID}", reversedClientId)
-                        .Replace("IOS_BUNDLE_VERSION", commitCount)
+                        .Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
                         .Replace(iconSetToReplace, iconSet)
@@ -266,7 +307,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriExtension";
     const string appNameToReplace = "Siri Extension Development";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -280,6 +321,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -289,7 +331,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
     };
@@ -301,7 +343,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     const string bundleIdToReplace = "com.toggl.daneel.debug.SiriUIExtension";
     const string appNameToReplace = "Toggl.Daneel.SiriExtension.UI";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -315,6 +357,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     {
         bundleId = "com.toggl.daneel.SiriUIExtension";
         appName = "Siri UI Extension";
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -324,7 +367,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
     };
@@ -395,7 +438,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     const string versionNumberToReplace = "987654321";
     const string appNameToReplace = "Toggl for Devs";
 
-    var commitCount = GetCommitCount();
+    var versionNumber = GetCommitCount();
     var packageName = packageNameToReplace;
     var appName = appNameToReplace;
 
@@ -408,6 +451,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     {
         packageName = "com.toggl.giskard";
         appName = "Toggl";
+        versionNumber = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -417,7 +461,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace(versionNumberToReplace, commitCount)
+        Temporary = file.Replace(versionNumberToReplace, versionNumber)
                         .Replace(packageNameToReplace, packageName)
                         .Replace(appNameToReplace, appName)
     };

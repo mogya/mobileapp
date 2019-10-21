@@ -6,7 +6,6 @@
 //
 using Foundation;
 using System.CodeDom.Compiler;
-using Toggl.iOS.Views;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -36,6 +35,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView BillableView { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint ButtonsContainerBottomConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView CategorizeWithProjectsBubbleView { get; set; }
 
 		[Outlet]
@@ -48,16 +50,10 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIButton ConfirmButton { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint ConfirmButtonBottomConstraint { get; set; }
-
-		[Outlet]
 		UIKit.UIButton DeleteButton { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint ButtonsContainerBottomConstraint { get; set; }
-
-		[Outlet]
-		TextViewWithPlaceholder DescriptionTextView { get; set; }
+		Toggl.iOS.Views.TextViewWithPlaceholder DescriptionTextView { get; set; }
 
 		[Outlet]
 		UIKit.UIView DescriptionView { get; set; }
@@ -67,9 +63,6 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel DurationLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView DurationSeparator { get; set; }
 
 		[Outlet]
 		UIKit.UIView DurationView { get; set; }
@@ -116,9 +109,6 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UILabel StartDateLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIView StartDateSeparator { get; set; }
-
-		[Outlet]
 		UIKit.UIView StartDateView { get; set; }
 
 		[Outlet]
@@ -137,20 +127,14 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView TagsContainerView { get; set; }
 
 		[Outlet]
-		UIKit.UIView TagsSeparator { get; set; }
-
-		[Outlet]
 		UIKit.UITextView TagsTextView { get; set; }
 
 		[Outlet]
 		UIKit.UIStackView TimeEntryTimes { get; set; }
 
 		[Outlet]
-		UIKit.UIStackView TimeEntryTimesSeparator { get; set; }
-
-		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (AddProjectAndTaskView != null) {
@@ -208,11 +192,6 @@ namespace Toggl.iOS.ViewControllers
 				ConfirmButton = null;
 			}
 
-			if (ConfirmButtonBottomConstraint != null) {
-				ConfirmButtonBottomConstraint.Dispose ();
-				ConfirmButtonBottomConstraint = null;
-			}
-
 			if (DeleteButton != null) {
 				DeleteButton.Dispose ();
 				DeleteButton = null;
@@ -228,6 +207,11 @@ namespace Toggl.iOS.ViewControllers
 				DescriptionTextView = null;
 			}
 
+			if (DescriptionView != null) {
+				DescriptionView.Dispose ();
+				DescriptionView = null;
+			}
+
 			if (DurationDescriptionLabel != null) {
 				DurationDescriptionLabel.Dispose ();
 				DurationDescriptionLabel = null;
@@ -236,16 +220,6 @@ namespace Toggl.iOS.ViewControllers
 			if (DurationLabel != null) {
 				DurationLabel.Dispose ();
 				DurationLabel = null;
-			}
-
-			if (DurationSeparator != null) {
-				DurationSeparator.Dispose ();
-				DurationSeparator = null;
-			}
-
-			if (StartDateSeparator != null) {
-				StartDateSeparator.Dispose ();
-				StartDateSeparator = null;
 			}
 
 			if (DurationView != null) {
@@ -303,6 +277,11 @@ namespace Toggl.iOS.ViewControllers
 				ScrollViewContent = null;
 			}
 
+			if (SelectProject != null) {
+				SelectProject.Dispose ();
+				SelectProject = null;
+			}
+
 			if (StartDateDescriptionLabel != null) {
 				StartDateDescriptionLabel.Dispose ();
 				StartDateDescriptionLabel = null;
@@ -343,11 +322,6 @@ namespace Toggl.iOS.ViewControllers
 				TagsContainerView = null;
 			}
 
-			if (TagsSeparator != null) {
-				TagsSeparator.Dispose ();
-				TagsSeparator = null;
-			}
-
 			if (TagsTextView != null) {
 				TagsTextView.Dispose ();
 				TagsTextView = null;
@@ -358,24 +332,9 @@ namespace Toggl.iOS.ViewControllers
 				TimeEntryTimes = null;
 			}
 
-			if (TimeEntryTimesSeparator != null) {
-				TimeEntryTimesSeparator.Dispose ();
-				TimeEntryTimesSeparator = null;
-			}
-
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
-			}
-
-			if (DescriptionView != null) {
-				DescriptionView.Dispose ();
-				DescriptionView = null;
-			}
-
-			if (SelectProject != null) {
-				SelectProject.Dispose ();
-				SelectProject = null;
 			}
 		}
 	}

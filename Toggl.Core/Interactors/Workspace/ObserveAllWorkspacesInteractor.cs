@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 
@@ -21,7 +20,7 @@ namespace Toggl.Core.Interactors
         }
 
         public IObservable<IEnumerable<IThreadSafeWorkspace>> Execute()
-            => dataSource.Workspaces.ItemsChanged()
+            => dataSource.Workspaces.ItemsChanged
                 .StartWith(Unit.Default)
                 .SelectMany(_ => dataSource.Workspaces.GetAll())
                 .DistinctUntilChanged();

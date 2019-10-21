@@ -16,8 +16,6 @@ namespace Toggl.iOS.ViewSources
         private const int rowHeight = 48;
         private const int headerHeight = 48;
 
-        public UIColor SectionHeaderBackgroundColor { get; set; } = UIColor.White;
-
         public SelectUserCalendarsTableViewSource(UITableView tableView)
             : base(ImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>.Empty)
         {
@@ -49,7 +47,6 @@ namespace Toggl.iOS.ViewSources
         {
             var header = tableView.DequeueReusableHeaderFooterView(UserCalendarListHeaderViewCell.Identifier) as UserCalendarListHeaderViewCell;
             header.Item = HeaderOf(section);
-            header.ContentView.BackgroundColor = SectionHeaderBackgroundColor;
             return header;
         }
     }

@@ -1,3 +1,4 @@
+using AVFoundation;
 using CoreGraphics;
 using System;
 using UIKit;
@@ -17,7 +18,7 @@ namespace Toggl.iOS.Views.EditDuration.Shapes.Caps
         private static readonly nfloat iconHeight = 10f / 128f;
 
         public StartCap(Func<nfloat, nfloat> scale)
-            : base(icon, scale, iconHeight, iconWidth)
+            : base(icon, scale, iconHeight, iconWidth, ShadowDirection.Right)
         {
             // the triangle icon needs to be offset a bit to the right because when it is centered normally, it feels
             // off and it doesn't match the design

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,16 +13,9 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l4z-9W-L5M">
-                        <rect key="frame" x="0.0" y="42.5" width="320" height="1"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="OlP-NI-6Eu"/>
-                        </constraints>
-                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1MH-Sb-V25">
                         <rect key="frame" x="16" y="13" width="37.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -39,8 +30,6 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="l4z-9W-L5M" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="UbB-1a-4wE"/>
-                    <constraint firstAttribute="bottom" secondItem="l4z-9W-L5M" secondAttribute="bottom" id="afK-fM-ZzR"/>
                     <constraint firstItem="1MH-Sb-V25" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="cQU-eQ-swa"/>
                     <constraint firstItem="gMD-W9-OkJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1MH-Sb-V25" secondAttribute="trailing" constant="10" id="cYq-JJ-lUB"/>
                     <constraint firstItem="gMD-W9-OkJ" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="fA8-XG-Ghk"/>
@@ -48,11 +37,7 @@
                     <constraint firstItem="1MH-Sb-V25" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="16" id="vke-Qh-kLF"/>
                 </constraints>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="l4z-9W-L5M" secondAttribute="trailing" id="Ncn-IV-q5U"/>
-            </constraints>
             <connections>
-                <outlet property="BottomSeparator" destination="l4z-9W-L5M" id="jOi-ib-Amh"/>
                 <outlet property="DetailLabel" destination="gMD-W9-OkJ" id="cJp-iz-iPy"/>
                 <outlet property="RightConstraint" destination="ubk-qm-aGd" id="6Ez-en-oa3"/>
                 <outlet property="TitleLabel" destination="1MH-Sb-V25" id="mXD-dg-5LA"/>

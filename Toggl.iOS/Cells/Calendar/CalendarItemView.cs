@@ -116,10 +116,10 @@ namespace Toggl.iOS.Cells.Calendar
             CATransaction.DisableActions = true;
 
             var color = itemColor();
-            backgroundLayer.BackgroundColor = UIColor.White.CGColor;
+            backgroundLayer.BackgroundColor = ColorAssets.TableBackground.CGColor;
             patternLayer.BackgroundColor = patternColor(Item.Source, color).CGColor;
             tintLayer.BackgroundColor = tintColor(color).CGColor;
-            BackgroundColor = UIColor.White;
+            BackgroundColor = ColorAssets.TableBackground;
             DescriptionLabel.Text = Item.Description;
             DescriptionLabel.TextColor = textColor(color);
 

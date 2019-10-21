@@ -28,11 +28,14 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UITableView ProjectsTableView { get; set; }
 
 		[Outlet]
+		UIKit.UIView SearchView { get; set; }
+
+		[Outlet]
 		UIKit.UITextField TextField { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (BottomConstraint != null) {
@@ -68,6 +71,11 @@ namespace Toggl.iOS.ViewControllers
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
+			}
+
+			if (SearchView != null) {
+				SearchView.Dispose ();
+				SearchView = null;
 			}
 		}
 	}

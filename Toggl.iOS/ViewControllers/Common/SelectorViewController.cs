@@ -47,10 +47,13 @@ namespace Toggl.iOS.ViewControllers.Common
             base.ViewDidLoad();
 
             Title = title;
-            
+
+            View.BackgroundColor = ColorAssets.TableBackground;
+
             tableView = new UITableView(View.Bounds);
-            tableView.BackgroundColor = Colors.Settings.Background.ToNativeColor();
+            tableView.BackgroundColor = ColorAssets.TableBackground;
             tableView.TableFooterView = new UIView();
+            tableView.SeparatorColor = ColorAssets.Separator;
             View.AddSubview(tableView);
 
             source = new SelectorTableViewSource(tableView, selectedIndex, onItemSelected);

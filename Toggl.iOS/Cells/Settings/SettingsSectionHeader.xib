@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,33 +13,22 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.666666666666664"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj9-z9-1Ja">
-                        <rect key="frame" x="0.0" y="42.666666666666664" width="320" height="1"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="gJa-q7-xR1"/>
-                        </constraints>
-                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vCg-X8-3sG">
-                        <rect key="frame" x="16.000000000000004" y="21.333333333333332" width="32.333333333333343" height="14.333333333333332"/>
+                        <rect key="frame" x="16.000000000000004" y="21.666666666666668" width="32.333333333333343" height="14.333333333333332"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="qj9-z9-1Ja" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="ZM8-jj-wcw"/>
                     <constraint firstItem="vCg-X8-3sG" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="16" id="d2Y-pH-OQZ"/>
-                    <constraint firstAttribute="trailing" secondItem="qj9-z9-1Ja" secondAttribute="trailing" id="oq3-E0-SlE"/>
                     <constraint firstAttribute="bottom" secondItem="vCg-X8-3sG" secondAttribute="bottom" constant="8" id="s2a-0i-uCI"/>
-                    <constraint firstAttribute="bottom" secondItem="qj9-z9-1Ja" secondAttribute="bottom" id="tZE-16-b9W"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="BottomSeparator" destination="qj9-z9-1Ja" id="bE6-35-dgK"/>
                 <outlet property="TitleLabel" destination="vCg-X8-3sG" id="ZxS-PP-zk3"/>
             </connections>
             <point key="canvasLocation" x="129.59999999999999" y="153.69458128078819"/>

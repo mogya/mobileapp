@@ -2,6 +2,7 @@ using Android.Support.V7.Widget;
 using Android.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.ViewHolders.Country;
 
 namespace Toggl.Droid.Activities
@@ -22,7 +23,7 @@ namespace Toggl.Droid.Activities
             recyclerView = FindViewById<RecyclerView>(Resource.Id.RecyclerView);
 
             filterEditText.Hint = Shared.Resources.SelectCountry;
-            recyclerView.SetLayoutManager(new LinearLayoutManager(this)
+            recyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(this)
             {
                 ItemPrefetchEnabled = true,
                 InitialPrefetchItemCount = 4

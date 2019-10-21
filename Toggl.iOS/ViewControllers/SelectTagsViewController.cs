@@ -22,6 +22,10 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
+            SearchView.InsertSeparator();
+
             TitleLabel.Text = Resources.Tags;
             TextField.Placeholder = Resources.AddFilterTags;
             EmptyStateLabel.Text = Resources.EmptyTagText;

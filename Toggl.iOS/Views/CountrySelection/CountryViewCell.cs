@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.CountrySelection
@@ -19,6 +20,12 @@ namespace Toggl.iOS.Views.CountrySelection
         public CountryViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

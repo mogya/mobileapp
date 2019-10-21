@@ -28,8 +28,7 @@ namespace Toggl.iOS.Views
         {
             base.AwakeFromNib();
 
-            SelectedImageView.Image = SelectedImageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            SelectedImageView.TintColor = UIColor.White;
+            SelectedImageView.SetTemplateColor(UIColor.White);
         }
 
         protected override void UpdateView()

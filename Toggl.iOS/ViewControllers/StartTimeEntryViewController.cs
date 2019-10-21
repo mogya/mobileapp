@@ -87,6 +87,10 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
+            BottomOptionsSheet.InsertSeparator(UIRectEdge.Top);
+
             AddProjectBubbleLabel.Text = Resources.AddProjectBubbleText;
 
             prepareViews();

@@ -34,6 +34,9 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            startIcon.SetTemplateColor(ColorAssets.Text3);
+            endIcon.SetTemplateColor(ColorAssets.Text3);
+
             PreferredContentSize = new CGSize(0, cardHeight);
 
             StartLabel.Text = Resources.Start;
@@ -97,7 +100,7 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.IsEditingStartTime
                 .Select(editingStartTime => editingStartTime
                     ? Colors.EditDuration.EditedTime.ToNativeColor()
-                    : Colors.EditDuration.NotEditedTime.ToNativeColor()
+                    : ColorAssets.Text
                 )
                 .Subscribe(color =>
                 {
@@ -109,7 +112,7 @@ namespace Toggl.iOS.ViewControllers
             ViewModel.IsEditingStopTime
                 .Select(editingStartTime => editingStartTime
                     ? Colors.EditDuration.EditedTime.ToNativeColor()
-                    : Colors.EditDuration.NotEditedTime.ToNativeColor()
+                    : ColorAssets.Text
                 )
                 .Subscribe(color =>
                 {

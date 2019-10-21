@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views
@@ -19,6 +20,12 @@ namespace Toggl.iOS.Views
         public TagSuggestionViewCell(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
+        }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+            this.InsertSeparator();
         }
 
         protected override void UpdateView()

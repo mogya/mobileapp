@@ -77,6 +77,8 @@ namespace Toggl.iOS
                 ProjectLabel.Font.CapHeight,
                 Colors.TimeEntriesLog.ClientColor.ToNativeColor()
             );
+
+            ArrowImage.SetTemplateColor(ColorAssets.Text4);
         }
 
         public override void LayoutSubviews()

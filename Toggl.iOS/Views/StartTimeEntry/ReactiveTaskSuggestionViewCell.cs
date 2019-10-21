@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.StartTimeEntry
@@ -24,6 +25,8 @@ namespace Toggl.iOS.Views.StartTimeEntry
         public override void AwakeFromNib()
         {
             FadeView.FadeRight = true;
+
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

@@ -9,6 +9,7 @@ using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Toggl.Core.Analytics;
@@ -141,13 +142,13 @@ namespace Toggl.iOS.ViewControllers
         {
             View.LayoutIfNeeded();
             ContextualMenuBottonConstraint.Constant = 0;
-            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.Bounce, () => View.LayoutIfNeeded());
+            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
         }
 
         private void dismissContextualMenu()
         {
             ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
-            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.Bounce, () => View.LayoutIfNeeded());
+            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
         }
 
         public override void ViewWillAppear(bool animated)

@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Disposables;
+using CoreGraphics;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -20,6 +21,8 @@ namespace Toggl.iOS.Views.Calendar
         private readonly UIView iconBackgroundView;
         private readonly CalendarMenuAction calendarMenuAction;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+
+public override CGSize IntrinsicContentSize => new CGSize(60, 90);
 
         public CalendarContextualMenuActionView(CalendarMenuAction calendarMenuAction)
         {

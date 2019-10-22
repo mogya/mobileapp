@@ -12,11 +12,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared;
+using Toggl.Shared.Extensions.Reactive;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -38,10 +41,16 @@ namespace Toggl.iOS.ViewControllers
 
         public float ScrollOffset => (float)CalendarCollectionView.ContentOffset.Y;
 
-        public CalendarDayViewController(CalendarDayViewModel viewModel)
+        private readonly BehaviorRelay<bool> contextualMenuVisible;
+
+        public CalendarDayViewController(CalendarDayViewModel viewModel, BehaviorRelay<bool> contextualMenuVisible)
             : base(viewModel, nameof(CalendarDayViewController))
         {
+            Ensure.Argument.IsNotNull(ViewModel, nameof(ViewModel));
+            Ensure.Argument.IsNotNull(contextualMenuVisible, nameof(contextualMenuVisible));
+
             timeService = IosDependencyContainer.Instance.TimeService;
+            this.contextualMenuVisible = contextualMenuVisible;
         }
 
         public void SetScrollOffset(float scrollOffset)
@@ -156,6 +165,7 @@ namespace Toggl.iOS.ViewControllers
         {
             if (!contextualMenuInitialised) return;
 
+            contextualMenuVisible?.Accept(true);
             View.LayoutIfNeeded();
             ContextualMenuBottonConstraint.Constant = 0;
             AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
@@ -166,7 +176,11 @@ namespace Toggl.iOS.ViewControllers
             if (!contextualMenuInitialised) return;
 
             ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
-            AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
+            AnimationExtensions.Animate(
+                Animation.Timings.EnterTiming,
+                Animation.Curves.EaseOut,
+                () => View.LayoutIfNeeded(),
+                () => contextualMenuVisible?.Accept(false));
         }
 
         public override void ViewWillAppear(bool animated)

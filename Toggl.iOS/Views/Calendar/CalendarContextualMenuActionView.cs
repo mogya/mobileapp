@@ -12,7 +12,7 @@ namespace Toggl.iOS.Views.Calendar
 {
     public class CalendarContextualMenuActionView : UIButton
     {
-        private const int bottomPadding = 10;
+        private const int topPadding = 19;
         private const int iconBackgroundWidth = 40;
         private const int spaceBetweenActionNameLabelAndIconBackground = 8;
 
@@ -22,7 +22,7 @@ namespace Toggl.iOS.Views.Calendar
         private readonly CalendarMenuAction calendarMenuAction;
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
-public override CGSize IntrinsicContentSize => new CGSize(60, 90);
+        public override CGSize IntrinsicContentSize => new CGSize(120, 90);
 
         public CalendarContextualMenuActionView(CalendarMenuAction calendarMenuAction)
         {
@@ -57,21 +57,18 @@ public override CGSize IntrinsicContentSize => new CGSize(60, 90);
             AddSubview(actionNameLabel);
             iconBackgroundView.AddSubview(iconView);
 
-            actionNameLabel.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
-            actionNameLabel.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
-            actionNameLabel.BottomAnchor.ConstraintEqualTo(BottomAnchor, -bottomPadding).Active = true;
-
             iconBackgroundView.Layer.CornerRadius = iconBackgroundWidth / 2;
+            iconBackgroundView.TopAnchor.ConstraintEqualTo(TopAnchor, topPadding).Active = true;
             iconBackgroundView.WidthAnchor.ConstraintEqualTo(iconBackgroundWidth).Active = true;
             iconBackgroundView.HeightAnchor.ConstraintEqualTo(iconBackgroundView.WidthAnchor).Active = true;
             iconBackgroundView.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
-            iconBackgroundView.BottomAnchor
-                    .ConstraintEqualTo(actionNameLabel.TopAnchor, -spaceBetweenActionNameLabelAndIconBackground)
-                    .Active =
-                true;
 
             iconView.CenterXAnchor.ConstraintEqualTo(iconBackgroundView.CenterXAnchor).Active = true;
             iconView.CenterYAnchor.ConstraintEqualTo(iconBackgroundView.CenterYAnchor).Active = true;
+
+            actionNameLabel.TopAnchor.ConstraintEqualTo(iconBackgroundView.BottomAnchor, spaceBetweenActionNameLabelAndIconBackground).Active = true;
+            actionNameLabel.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+            actionNameLabel.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
 
             this.Rx()
                 .BindAction(calendarMenuAction.MenuItemAction)

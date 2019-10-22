@@ -28,6 +28,8 @@ namespace Toggl.iOS.ViewControllers
 
         private readonly ITimeService timeService;
 
+        private bool contextualMenuInitialised;
+
         private CalendarCollectionViewLayout layout;
         private CalendarCollectionViewSource dataSource;
         private CalendarCollectionViewEditItemHelper editItemHelper;
@@ -55,6 +57,8 @@ namespace Toggl.iOS.ViewControllers
             ContextualMenu.Layer.ShadowColor = UIColor.Black.CGColor;
             ContextualMenu.Layer.ShadowOpacity = 0.1f;
             ContextualMenu.Layer.ShadowOffset = new CGSize(0, -2);
+
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
 
             ContextualMenuFadeView.FadeLeft = true;
             ContextualMenuFadeView.FadeRight = true;
@@ -125,6 +129,16 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.LayoutIfNeeded();
         }
 
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+
+            if (contextualMenuInitialised) return;
+            contextualMenuInitialised = true;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            View.LayoutIfNeeded();
+        }
+
         private void replaceContextualMenuActions(IImmutableList<CalendarMenuAction> actions)
         {
             if (actions == null || actions.Count == 0) return;
@@ -140,6 +154,8 @@ namespace Toggl.iOS.ViewControllers
 
         private void showContextualMenu()
         {
+            if (!contextualMenuInitialised) return;
+
             View.LayoutIfNeeded();
             ContextualMenuBottonConstraint.Constant = 0;
             AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
@@ -147,6 +163,8 @@ namespace Toggl.iOS.ViewControllers
 
         private void dismissContextualMenu()
         {
+            if (!contextualMenuInitialised) return;
+
             ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
             AnimationExtensions.Animate(Animation.Timings.EnterTiming, Animation.Curves.EaseOut, () => View.LayoutIfNeeded());
         }
@@ -157,8 +175,6 @@ namespace Toggl.iOS.ViewControllers
 
             updateContentInsetForIpad();
             layout.InvalidateCurrentTimeLayout();
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
-            View.LayoutIfNeeded();
         }
 
         public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)

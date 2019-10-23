@@ -40,6 +40,14 @@
   <!--Calendar page-->
   <color name="calendarHeaderBackground">#FF959595</color>
   <color name="currentHourColor">#FF328FFF</color>
+  <color name="contextualMenuDiscardIconOverlay">#3dE1E3E2</color>
+  <color name="contextualMenuEditIconOverlay">#3d0595d7</color>
+  <color name="contextualMenuSaveIconOverlay">#51dca509</color>
+  <color name="contextualMenuCopyIconOverlay">#3dad5de0</color>
+  <color name="contextualMenuStartIconOverlay">#3d4cd964</color>
+  <color name="contextualMenuStopIconOverlay">#3de02020</color>
+  <color name="contextualMenuDeleteIconOverlay">#3de02020</color>
+  <color name="contextualMenuContinueIconOverlay">#3d4cd964</color>
 
   <!-- Start Time entry page-->
   <color name="billable">#FF328FFF</color>

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,17 +12,10 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="cxk-wN-pdQ" customClass="SettingsSyncCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.666666666666664"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7gS-iZ-t0O">
-                        <rect key="frame" x="0.0" y="43" width="320" height="1"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="Tez-Xj-55b"/>
-                        </constraints>
-                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jSx-Ey-7T7">
                         <rect key="frame" x="119.33333333333334" y="18" width="81.333333333333343" height="17.666666666666671"/>
                         <subviews>
@@ -62,16 +53,12 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="7gS-iZ-t0O" secondAttribute="bottom" constant="-0.3333333333333357" id="3f5-GU-P9Y"/>
-                    <constraint firstItem="7gS-iZ-t0O" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="6FH-5s-xVc"/>
-                    <constraint firstAttribute="trailing" secondItem="7gS-iZ-t0O" secondAttribute="trailing" id="6b9-C0-b3F"/>
                     <constraint firstItem="jSx-Ey-7T7" firstAttribute="centerX" secondItem="YTl-1W-gDM" secondAttribute="centerX" id="8Sp-t8-rO0"/>
                     <constraint firstItem="jSx-Ey-7T7" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="18" id="9BN-Hp-3eE"/>
                     <constraint firstAttribute="bottom" secondItem="jSx-Ey-7T7" secondAttribute="bottom" constant="8" id="Xgg-CT-JIC"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="BottomSeparator" destination="7gS-iZ-t0O" id="Xqg-q9-Kw9"/>
                 <outlet property="LoadingIcon" destination="8wV-X9-xgt" id="3L6-7J-8KQ"/>
                 <outlet property="StatusLabel" destination="uiP-fE-nUu" id="dHV-Sj-xe0"/>
                 <outlet property="SyncedIcon" destination="HD8-cB-EVv" id="5r2-eK-v4b"/>

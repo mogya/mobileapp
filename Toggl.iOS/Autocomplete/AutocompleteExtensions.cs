@@ -62,7 +62,7 @@ namespace Toggl.iOS.Autocomplete
         public static TokenTextAttachment GetTagToken(this string tag)
             => new TagTextAttachment(
                 tag.TruncatedAt(maxTextLength),
-                Colors.StartTimeEntry.TokenText.ToNativeColor(),
+                ColorAssets.Text2,
                 tokenFont);
 
         public static IEnumerable<ISpan> AsSpans(this NSAttributedString text, int cursorPosition)

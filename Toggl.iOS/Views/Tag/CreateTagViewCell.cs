@@ -2,6 +2,7 @@
 using System;
 using Toggl.Core.UI.ViewModels;
 using Toggl.iOS.Cells;
+using Toggl.iOS.Extensions;
 using Toggl.Shared;
 using UIKit;
 
@@ -25,6 +26,7 @@ namespace Toggl.iOS.Views.Tag
         {
             base.AwakeFromNib();
             NameLabel.Text = string.Empty;
+            ContentView.InsertSeparator();
         }
 
         protected override void UpdateView()

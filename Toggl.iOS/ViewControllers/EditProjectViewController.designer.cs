@@ -13,10 +13,10 @@ namespace Toggl.iOS.ViewControllers
 	partial class EditProjectViewController
 	{
 		[Outlet]
-		UIKit.UIView BottomSeparator { get; set; }
+		UIKit.UILabel ClientLabel { get; set; }
 
 		[Outlet]
-		UIKit.UILabel ClientLabel { get; set; }
+		UIKit.UIView ClientView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton CloseButton { get; set; }
@@ -37,6 +37,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UITextField NameTextField { get; set; }
 
 		[Outlet]
+		UIKit.UIView NameView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel PrivateProjectLabel { get; set; }
 
 		[Outlet]
@@ -52,21 +55,16 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIView ProjectNameUsedErrorView { get; set; }
 
 		[Outlet]
-		UIKit.UILabel TemplateLabel { get; set; }
-
-		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
 
 		[Outlet]
 		UIKit.UILabel WorkspaceLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView WorkspaceView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (BottomSeparator != null) {
-				BottomSeparator.Dispose ();
-				BottomSeparator = null;
-			}
-
 			if (ClientLabel != null) {
 				ClientLabel.Dispose ();
 				ClientLabel = null;
@@ -127,11 +125,6 @@ namespace Toggl.iOS.ViewControllers
 				ProjectNameUsedErrorView = null;
 			}
 
-			if (TemplateLabel != null) {
-				TemplateLabel.Dispose ();
-				TemplateLabel = null;
-			}
-
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
@@ -140,6 +133,21 @@ namespace Toggl.iOS.ViewControllers
 			if (WorkspaceLabel != null) {
 				WorkspaceLabel.Dispose ();
 				WorkspaceLabel = null;
+			}
+
+			if (NameView != null) {
+				NameView.Dispose ();
+				NameView = null;
+			}
+
+			if (WorkspaceView != null) {
+				WorkspaceView.Dispose ();
+				WorkspaceView = null;
+			}
+
+			if (ClientView != null) {
+				ClientView.Dispose ();
+				ClientView = null;
 			}
 		}
 	}

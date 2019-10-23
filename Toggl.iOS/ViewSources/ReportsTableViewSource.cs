@@ -23,6 +23,7 @@ namespace Toggl.iOS.ViewSources
         private const int summaryHeightRegular = 308;
         private const int summaryHeightCompact = 768;
         private const int topAndBottomPaddingRegular = 12;
+        private const int bottomWorkspaceSelectionButtonInset = 76;
 
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ReportsViewModel viewModel;
@@ -41,12 +42,17 @@ namespace Toggl.iOS.ViewSources
                 ? summaryHeightRegular
                 : summaryHeightCompact;
 
-        private nfloat topAndBottomPadding
+        private nfloat topPadding
             => tableView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                 ? topAndBottomPaddingRegular
                 : 0;
 
+        private nfloat bottomPadding
+            => topPadding + (showWorkspaceButton ? bottomWorkspaceSelectionButtonInset : 0);
+
         private UIView headerViewSpacer = new UIView();
+
+        private bool showWorkspaceButton = false;
 
         public ReportsTableViewSource(UITableView tableView, ReportsViewModel viewModel)
         {
@@ -55,13 +61,13 @@ namespace Toggl.iOS.ViewSources
 
             headerViewSpacer.Frame = new CGRect(0, 0, tableView.Bounds.Width, headerHeight);
             tableView.TableHeaderView = headerViewSpacer;
-            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topAndBottomPadding, 0, topAndBottomPadding, 0);
+            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topPadding, 0, bottomPadding, 0);
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.RowHeight = rowHeight;
             tableView.SectionHeaderHeight = headerHeight;
             tableView.RegisterNibForCellReuse(ReportsLegendViewCell.Nib, ReportsLegendViewCell.Identifier);
             tableView.RegisterNibForHeaderFooterViewReuse(ReportsHeaderView.Nib, ReportsHeaderView.Identifier);
-            tableView.BackgroundColor = Colors.Reports.Background.ToNativeColor();
+            tableView.BackgroundColor = ColorAssets.TableBackground;
 
             this.viewModel.WorkspacesObservable
                 .Select(workspaces => workspaces.Count)
@@ -74,8 +80,14 @@ namespace Toggl.iOS.ViewSources
 
         public void UpdateContentInset()
         {
-            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topAndBottomPadding, 0, topAndBottomPadding, 0);
+            tableView.ContentInset = new UIEdgeInsets(-headerHeight + topPadding, 0, bottomPadding, 0);
             headerViewSpacer.Frame = new CGRect(0, 0, tableView.Bounds.Width, headerHeight);
+        }
+
+        public void UpdateContentInset(bool workspacesButtonIsShown)
+        {
+            showWorkspaceButton = workspacesButtonIsShown;
+            UpdateContentInset();
         }
 
         private void updateWorkspaceCount(int workspaceCount)

@@ -18,10 +18,10 @@
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.0" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.4.0-beta.1.build3958" />
-    <PackageReference Include="FluentAssertions" Version="5.3.2" />
+    <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="FsCheck.Xunit" Version="2.10.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
-    <PackageReference Include="Microsoft.Reactive.Testing" Version="4.1.2" />
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="4.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Shared\Toggl.Shared.csproj" />

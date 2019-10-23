@@ -47,4 +47,25 @@
         <item name="android:textColor">@color/secondaryText</item>
         <item name="android:textSize">12sp</item>
     </style>
+    
+    <style name="CalendarWeekStripeDayTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">20dp</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/secondaryText</item>
+    </style>
+
+    <style name="CalendarWeekStripeLabelTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">20dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/secondaryText</item>
+    </style>
 </resources>

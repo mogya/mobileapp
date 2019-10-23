@@ -21,7 +21,7 @@ namespace Toggl.iOS.Views.EditDuration.Shapes.Caps
         }
 
         public EndCap(Func<nfloat, nfloat> scale)
-            : base(icon, scale, iconHeight, iconWidth)
+            : base(icon, scale, iconHeight, iconWidth, ShadowDirection.Left)
         {
         }
     }

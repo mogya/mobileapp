@@ -16,7 +16,7 @@ namespace Toggl.iOS.Views
         private const int chainLength = 8;
         private const double chainWidth = 2;
         private const float spiderResistance = 0.85f;
-        private readonly CGColor ropeColor = Colors.Main.SpiderNetColor.ToNativeColor().CGColor;
+        private readonly CGColor ropeColor = ColorAssets.Spider.CGColor;
 
         private double spiderRadius;
 

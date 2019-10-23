@@ -13,18 +13,10 @@ namespace Toggl.iOS.Views.StartTimeEntry
 	partial class ReactiveWorkspaceHeaderViewCell
 	{
 		[Outlet]
-		UIKit.UIView TopSeparator { get; set; }
-
-		[Outlet]
 		UIKit.UILabel WorkspaceNameLabel { get; set; }
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (TopSeparator != null) {
-				TopSeparator.Dispose ();
-				TopSeparator = null;
-			}
-
 			if (WorkspaceNameLabel != null) {
 				WorkspaceNameLabel.Dispose ();
 				WorkspaceNameLabel = null;

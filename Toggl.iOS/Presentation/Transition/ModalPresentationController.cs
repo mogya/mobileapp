@@ -45,7 +45,7 @@ namespace Toggl.iOS.Presentation.Transition
 
         private readonly UIView dimmingView = new UIView
         {
-            BackgroundColor = Core.UI.Helper.Colors.ModalDialog.BackgroundOverlay.ToNativeColor(),
+            BackgroundColor = ColorAssets.CustomGray4,
             Alpha = 0
         };
 

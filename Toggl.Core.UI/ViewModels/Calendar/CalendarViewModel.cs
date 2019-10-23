@@ -37,9 +37,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         public BehaviorRelay<DateTime> CurrentlyShownDate { get; }
 
-        public IObservable<IImmutableList<CalendarWeeklyViewDayViewModel>> WeekViewDays { get; }
+        public IObservable<ImmutableList<CalendarWeeklyViewDayViewModel>> WeekViewDays { get; }
 
-        public IObservable<IImmutableList<DayOfWeek>> WeekViewHeaders { get; }
+        public IObservable<ImmutableList<DayOfWeek>> WeekViewHeaders { get; }
 
         public ViewAction OpenSettings { get; }
 

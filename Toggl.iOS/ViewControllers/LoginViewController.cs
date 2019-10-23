@@ -1,6 +1,5 @@
 ﻿using Foundation;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
@@ -10,8 +9,6 @@ using Toggl.iOS.Extensions.Reactive;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
-using static Toggl.iOS.Extensions.LoginSignupViewExtensions;
-using static Toggl.iOS.Extensions.ViewExtensions;
 
 namespace Toggl.iOS.ViewControllers
 {
@@ -158,8 +155,8 @@ namespace Toggl.iOS.ViewControllers
                 => hasError ? UIColor.White : UIColor.Black;
 
             UIColor loginButtonTitleColor(bool enabled) => enabled
-                ? Core.UI.Helper.Colors.Login.EnabledButtonColor.ToNativeColor()
-                : Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor();
+                ? UIColor.White
+                : UIColor.White.ColorWithAlpha((nfloat) 0.5);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -241,7 +238,7 @@ namespace Toggl.iOS.ViewControllers
             NavigationController.NavigationBarHidden = true;
 
             LoginButton.SetTitleColor(
-                Core.UI.Helper.Colors.Login.DisabledButtonColor.ToNativeColor(),
+                UIColor.White.ColorWithAlpha((nfloat)0.5),
                 UIControlState.Disabled
             );
 
@@ -284,7 +281,7 @@ namespace Toggl.iOS.ViewControllers
         private void prepareForgotPasswordButton()
         {
             var boldFont = UIFont.SystemFontOfSize(12, UIFontWeight.Medium);
-            var color = Core.UI.Helper.Colors.Login.ForgotPassword.ToNativeColor();
+            var color = ColorAssets.Text1;
             var text = new NSMutableAttributedString(
                 Resources.LoginForgotPassword, foregroundColor: color);
             var boldText = new NSAttributedString(

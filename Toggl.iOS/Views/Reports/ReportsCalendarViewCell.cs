@@ -42,38 +42,55 @@ namespace Toggl.iOS.Views
             TodayBackgroundView.CornerRadius = cornerRadius;
             TodayBackgroundView.RoundLeft = true;
             TodayBackgroundView.RoundRight = true;
-            TodayBackgroundView.BackgroundColor = Colors.ReportsCalendar.Today.ToNativeColor();
+            TodayBackgroundView.BackgroundColor = ColorAssets.CustomGray2;
         }
 
-        private readonly UIColor otherMonthColor = Colors.ReportsCalendar.CellTextColorOutOfCurrentMonth.ToNativeColor();
-        private readonly UIColor thisMonthColor = Colors.ReportsCalendar.CellTextColorInCurrentMonth.ToNativeColor();
-        private readonly UIColor selectedColor = Colors.ReportsCalendar.CellTextColorSelected.ToNativeColor();
+        private readonly UIColor otherMonthColor = ColorAssets.Text4;
+        private readonly UIColor thisMonthColor = ColorAssets.Text2;
+        private readonly UIColor selectedColor = ColorAssets.InverseText;
+        private readonly UIColor todayColor = ColorAssets.InverseText;
 
         protected override void UpdateView()
         {
             Text.Text = Item.Day.ToString();
+            Text.TextColor = selectTextColor();
 
-            if (Item.IsSelected(dateRange))
-            {
-                Text.TextColor = selectedColor;
-            }
-            else
-            {
-                Text.TextColor = Item.IsInCurrentMonth ? thisMonthColor : otherMonthColor;
-            }
-
-            BackgroundView.BackgroundColor = Item.IsSelected(dateRange)
-                ? Colors.ReportsCalendar.SelectedDayBackgoundColor.ToNativeColor()
-                : Colors.Common.Transparent.ToNativeColor();
+            BackgroundView.BackgroundColor =
+                Item.IsSelected(dateRange)
+                    ? ColorAssets.CustomGray
+                    : Colors.Common.Transparent.ToNativeColor();
 
             BackgroundView.RoundLeft = Item.IsStartOfSelectedPeriod(dateRange);
             BackgroundView.RoundRight = Item.IsEndOfSelectedPeriod(dateRange);
+
             TodayBackgroundView.Hidden = !Item.IsToday;
         }
 
         public void UpdateDateRange(ReportsDateRangeParameter dateRange)
         {
             this.dateRange = dateRange;
+        }
+
+        private UIColor selectTextColor()
+        {
+            if (Item.IsToday)
+            {
+                return Item.IsSelected(dateRange)
+                    ? selectedColor
+                    : todayColor;
+            }
+
+            if (Item.IsSelected(dateRange))
+            {
+                return selectedColor;
+            }
+
+            if (Item.IsInCurrentMonth)
+            {
+                return thisMonthColor;
+            }
+
+            return otherMonthColor;
         }
     }
 }

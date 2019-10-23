@@ -37,6 +37,8 @@ namespace Toggl.iOS.Views
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectLabel.Font.CapHeight,
                 Colors.Suggestions.ClientColor.ToNativeColor());
+
+            this.InsertSeparator();
         }
 
         protected override void UpdateView()

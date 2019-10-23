@@ -141,13 +141,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverATimeEntryIsAdded()
             {
-                var deletedSubject = new Subject<long>();
                 var midnightSubject = new Subject<DateTimeOffset>();
                 var createdSubject = new Subject<IThreadSafeTimeEntry>();
-                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
-                DataSource.TimeEntries.Updated.Returns(updatedSubject);
-                DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
@@ -162,13 +157,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverATimeEntryIsUpdated()
             {
-                var deletedSubject = new Subject<long>();
                 var midnightSubject = new Subject<DateTimeOffset>();
-                var createdSubject = new Subject<IThreadSafeTimeEntry>();
                 var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
-                DataSource.TimeEntries.Updated.Returns(updatedSubject);
-                DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
@@ -185,11 +175,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var deletedSubject = new Subject<long>();
                 var midnightSubject = new Subject<DateTimeOffset>();
-                var createdSubject = new Subject<IThreadSafeTimeEntry>();
-                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
-                DataSource.TimeEntries.Updated.Returns(updatedSubject);
-                DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
@@ -204,13 +189,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverTheDayChanges()
             {
-                var deletedSubject = new Subject<long>();
                 var midnightSubject = new Subject<DateTimeOffset>();
-                var createdSubject = new Subject<IThreadSafeTimeEntry>();
-                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
-                DataSource.TimeEntries.Updated.Returns(updatedSubject);
-                DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 await ViewModel.Initialize();
                 CalendarInteractor.ClearReceivedCalls();
@@ -225,14 +204,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task RefetchesWheneverTheSelectedCalendarsChange()
             {
-                var deletedSubject = new Subject<long>();
                 var calendarSubject = new Subject<List<string>>();
                 var midnightSubject = new Subject<DateTimeOffset>();
-                var createdSubject = new Subject<IThreadSafeTimeEntry>();
-                var updatedSubject = new Subject<EntityUpdate<IThreadSafeTimeEntry>>();
-                DataSource.TimeEntries.Deleted.Returns(deletedSubject);
-                DataSource.TimeEntries.Updated.Returns(updatedSubject);
-                DataSource.TimeEntries.Created.Returns(createdSubject);
                 TimeService.MidnightObservable.Returns(midnightSubject);
                 UserPreferences.EnabledCalendars.Returns(calendarSubject);
                 await ViewModel.Initialize();

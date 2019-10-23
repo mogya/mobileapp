@@ -3,10 +3,9 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using Toggl.Core.DataSources;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
@@ -19,16 +18,21 @@ namespace Toggl.Core.Tests.Interactors.Workspace
         public sealed class TheObserveAllWorkspacesInteractor : BaseInteractorTests
         {
             [Fact, LogIfTooSlow]
-            public async Task GetsAllChangesToWorkspaces()
+            public void GetsAllChangesToWorkspaces()
             {
-                var createSubject = new Subject<IThreadSafeWorkspace>();
-                DataSource.Workspaces.Created.Returns(createSubject.AsObservable());
-                DataSource.Workspaces.Updated.Returns(Observable.Never<EntityUpdate<IThreadSafeWorkspace>>());
-                DataSource.Workspaces.Deleted.Returns(Observable.Never<long>());
+                var itemsChangedSubject = new Subject<Unit>();
+                DataSource.Workspaces.ItemsChanged.Returns(itemsChangedSubject);
 
                 var workspaces = Enumerable.Range(0, 10)
                     .Select(id => new MockWorkspace { Id = id });
-                DataSource.Workspaces.GetAll().Returns(Observable.Return(workspaces));
+
+                var workspaces2 = Enumerable.Range(20, 10)
+                    .Select(id => new MockWorkspace { Id = id });
+
+                DataSource.Workspaces.GetAll()
+                    .Returns(
+                        Observable.Return(workspaces),
+                        Observable.Return(workspaces2));
 
                 var testScheduler = new TestScheduler();
                 var observer = testScheduler.CreateObserver<IEnumerable<IThreadSafeWorkspace>>();
@@ -36,23 +40,18 @@ namespace Toggl.Core.Tests.Interactors.Workspace
                 InteractorFactory.ObserveAllWorkspaces().Execute()
                     .Subscribe(observer);
 
-                var mockWorkspace = new MockWorkspace { Id = 42 };
-                var newWorkspaces = workspaces.Append(mockWorkspace);
-                DataSource.Workspaces.GetAll().Returns(Observable.Return(newWorkspaces));
-                createSubject.OnNext(mockWorkspace);
+                itemsChangedSubject.OnNext(Unit.Default);
 
                 observer.Messages.Should().HaveCount(2);
                 observer.Messages.First().Value.Value.Should().BeEquivalentTo(workspaces);
-                observer.LastEmittedValue().Should().BeEquivalentTo(newWorkspaces);
+                observer.LastEmittedValue().Should().BeEquivalentTo(workspaces2);
             }
 
             [Fact, LogIfTooSlow]
-            public async Task DoesntEmitIfWorkspacesDidntChange()
+            public void DoesntEmitIfWorkspacesDidntChange()
             {
-                var createSubject = new Subject<IThreadSafeWorkspace>();
-                DataSource.Workspaces.Created.Returns(createSubject.AsObservable());
-                DataSource.Workspaces.Updated.Returns(Observable.Never<EntityUpdate<IThreadSafeWorkspace>>());
-                DataSource.Workspaces.Deleted.Returns(Observable.Never<long>());
+                var itemsNeverChange = Observable.Never<Unit>();
+                DataSource.Workspaces.ItemsChanged.Returns(itemsNeverChange);
 
                 var workspaces = Enumerable.Range(0, 10)
                     .Select(id => new MockWorkspace { Id = id });
@@ -63,8 +62,6 @@ namespace Toggl.Core.Tests.Interactors.Workspace
 
                 InteractorFactory.ObserveAllWorkspaces().Execute()
                     .Subscribe(observer);
-
-                createSubject.OnNext(new MockWorkspace { Id = 42 });
 
                 observer.Messages.Should().HaveCount(1);
                 observer.Messages.First().Value.Value.Should().BeEquivalentTo(workspaces);

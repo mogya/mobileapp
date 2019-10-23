@@ -25,8 +25,11 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UITextField SearchTextField { get; set; }
 
 		[Outlet]
-		UIKit.UILabel TitleLabel { get; set; }
+		UIKit.UIView SearchView { get; set; }
 
+		[Outlet]
+		UIKit.UILabel TitleLabel { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (BottomConstraint != null) {
@@ -52,6 +55,11 @@ namespace Toggl.iOS.ViewControllers
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
+			}
+
+			if (SearchView != null) {
+				SearchView.Dispose ();
+				SearchView = null;
 			}
 		}
 	}

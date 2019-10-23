@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -39,13 +38,6 @@ namespace Toggl.Core.Interactors
                 .Select(TimeEntry.DirtyDeleted)
                 .Select(te => te.UpdatedAt(timeService.CurrentDateTime))
                 .SelectMany(dataSource.Update)
-                .Do(notifyTimeEntryDeleted)
                 .SelectUnit();
-
-        private void notifyTimeEntryDeleted(IThreadSafeTimeEntry timeEntry)
-        {
-            if (dataSource is TimeEntriesDataSource timeEntriesDataSource)
-                timeEntriesDataSource.OnTimeEntrySoftDeleted(timeEntry);
-        }
     }
 }

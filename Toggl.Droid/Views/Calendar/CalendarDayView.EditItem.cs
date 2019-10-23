@@ -31,19 +31,11 @@ namespace Toggl.Droid.Views.Calendar
         private int autoScrollExtraDelta;
         private int smoothAutoScrollDurationInMillis = 300;
         private bool shouldTryToAutoScrollToEvent = false;
-        
-        private readonly ISubject<CalendarItem> editCalendarItemSubject = new Subject<CalendarItem>();
-        public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSubject.AsObservable();
 
         partial void initEventEditionBackingFields()
         {
             handleTouchExtraMargins = 24.DpToPixels(Context);
             autoScrollExtraDelta = 5.DpToPixels(Context);
-        }
-
-        private void commitEditedChanges()
-        {
-            editCalendarItemSubject.OnNext(itemEditInEditMode.CalendarItem);
         }
 
         private void onTouchDownWhileEditingItem(MotionEvent e1)
@@ -275,6 +267,18 @@ namespace Toggl.Droid.Views.Calendar
 
             itemEditInEditMode = itemEditInEditMode.WithCalendarItem(newCalendarItem, hourHeight, minHourHeight, timeService.CurrentDateTime);
             updateEditingStartEndLabels();
+            notifyUpdateInItemInEditMode();
+        }
+        
+        private void notifyUpdateInItemInEditMode()
+        {
+            if (itemEditInEditMode.OriginalIndex != runningTimeEntryIndex)
+            {
+                calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem);
+                return;
+            }
+            
+            calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem.WithDuration(null));
         }
 
         private void updateEditingStartEndLabels()

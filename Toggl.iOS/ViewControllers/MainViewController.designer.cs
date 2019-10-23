@@ -76,15 +76,9 @@ namespace Toggl.iOS.ViewControllers
 		Toggl.iOS.Views.TimeEntriesLogTableView TimeEntriesLogTableView { get; set; }
 
 		[Outlet]
-		UIKit.NSLayoutConstraint TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint { get; set; }
-
-		[Outlet]
 		UIKit.NSLayoutConstraint TopConstraint { get; set; }
 
-		[Outlet]
-		UIKit.UIView TopSeparator { get; set; }
-
-		[Outlet]
+        [Outlet]
 		UIKit.UILabel WelcomeBackDescriptionLabel { get; set; }
 
 		[Outlet]
@@ -92,7 +86,7 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UIView WelcomeBackView { get; set; }
-		
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (CurrentTimeEntryCard != null) {
@@ -190,22 +184,12 @@ namespace Toggl.iOS.ViewControllers
 				TimeEntriesLogTableView = null;
 			}
 
-			if (TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint != null) {
-				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint.Dispose ();
-				TimeEntriesLogTableViewBottomToTopCurrentEntryConstraint = null;
-			}
-
 			if (TopConstraint != null) {
 				TopConstraint.Dispose ();
 				TopConstraint = null;
 			}
 
-			if (TopSeparator != null) {
-				TopSeparator.Dispose ();
-				TopSeparator = null;
-			}
-
-			if (WelcomeBackDescriptionLabel != null) {
+            if (WelcomeBackDescriptionLabel != null) {
 				WelcomeBackDescriptionLabel.Dispose ();
 				WelcomeBackDescriptionLabel = null;
 			}

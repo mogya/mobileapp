@@ -44,16 +44,16 @@ namespace Toggl.iOS.ViewSources.Common
             base.RowSelected(tableView, indexPath);
             selectItem(indexPath.Row);
         }
-        
+
         public override nfloat GetHeightForHeader(UITableView tableView, nint section)
         {
-            return 1;
+            return 1 / UIScreen.MainScreen.Scale;
         }
 
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var headerView = new UIView();
-            headerView.BackgroundColor = Colors.Settings.SeparatorColor.ToNativeColor();
+            headerView.BackgroundColor = ColorAssets.Separator;
             return headerView;
         }
     }

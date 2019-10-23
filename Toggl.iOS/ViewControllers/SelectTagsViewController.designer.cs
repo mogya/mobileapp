@@ -30,6 +30,9 @@ namespace Toggl.iOS.ViewControllers
 		UIKit.UIButton SaveButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView SearchView { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UITableView TagsTableView { get; set; }
 
@@ -39,7 +42,7 @@ namespace Toggl.iOS.ViewControllers
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (BottomConstraint != null) {
@@ -80,6 +83,11 @@ namespace Toggl.iOS.ViewControllers
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
+			}
+
+			if (SearchView != null) {
+				SearchView.Dispose ();
+				SearchView = null;
 			}
 		}
 	}

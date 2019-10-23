@@ -36,15 +36,18 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
-            NavigationItem.RightBarButtonItem = new UIBarButtonItem(
+            View.BackgroundColor = ColorAssets.TableBackground;
+            NavigationController.NavigationBar.SetBackgroundImage(ImageExtension.ImageWithColor(ColorAssets.TableBackground), UIBarMetrics.Default);
+
+            NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
                 UIBarButtonSystemItem.Done,
-                (sender, args) => ViewModel.Close()
+                ViewModel.Close
             );
 
             var source = new SettingsTableViewSource(tableView);
             tableView.Source = source;
             tableView.TableFooterView = new UIView(frame: new CGRect(0, 0, 0, bottomInset));
-            tableView.BackgroundColor = Colors.Settings.Background.ToNativeColor();
+            tableView.BackgroundColor = ColorAssets.TableBackground;
 
             settingsSections()
                 .Subscribe(tableView.Rx().ReloadSections(source))

@@ -305,29 +305,8 @@ namespace Toggl.Core.UI.Helper
             public static readonly Color TextColor = black;
         }
 
-        public sealed class ReportsCalendar
-        {
-            public sealed class QuickSelect
-            {
-                public static readonly Color UnselectedBackground = new Color(181, 188, 192, 30);
-                public static readonly Color SelectedBackground = new Color(181, 188, 192);
-
-                public static readonly Color UnselectedTitle = new Color(181, 188, 192);
-                public static readonly Color SelectedTitle = new Color(255, 255, 255);
-            }
-
-            public static readonly Color SelectedDayBackgoundColor = new Color(181, 188, 192);
-            public static readonly Color YearColor = new Color(181, 188, 192);
-            public static readonly Color Today = new Color(181, 188, 192, 30);
-            public static readonly Color CellTextColorInCurrentMonth = new Color(0, 0, 0);
-            public static readonly Color CellTextColorOutOfCurrentMonth = new Color(163, 163, 163);
-            public static readonly Color CellTextColorSelected = new Color(255, 255, 255);
-        }
-
         public static class Reports
         {
-            public static readonly Color Background = new Color(250, 251, 252);
-
             public static readonly Color PercentageActivated = new Color(0, 171, 252);
 
             public static readonly Color PercentageActivatedBackground = new Color(6, 170, 245, 61);

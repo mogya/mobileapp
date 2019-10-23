@@ -21,18 +21,6 @@ namespace Toggl.iOS.Views.StartTimeEntry
         public static readonly NSString Key = new NSString(nameof(ReactiveProjectSuggestionViewCell));
         public static readonly UINib Nib;
 
-        public bool TopSeparatorHidden
-        {
-            get => TopSeparatorView.Hidden;
-            set => TopSeparatorView.Hidden = value;
-        }
-
-        public bool BottomSeparatorHidden
-        {
-            get => BottomSeparatorView.Hidden;
-            set => BottomSeparatorView.Hidden = value;
-        }
-
         public CompositeDisposable DisposeBag { get; private set; } = new CompositeDisposable();
 
         public IObservable<ProjectSuggestion> ToggleTaskSuggestions
@@ -51,6 +39,8 @@ namespace Toggl.iOS.Views.StartTimeEntry
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            ContentView.InsertSeparator();
 
             FadeView.FadeRight = true;
             ClientNameLabel.LineBreakMode = UILineBreakMode.TailTruncation;

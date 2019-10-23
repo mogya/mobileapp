@@ -62,7 +62,6 @@ namespace Toggl.iOS.ViewSources
                     var projectCell = (ReactiveProjectSuggestionViewCell)tableView.DequeueReusableCell(ReactiveProjectSuggestionViewCell.Key, indexPath);
                     projectCell.Item = projectSuggestion;
                     projectCell.ToggleTaskSuggestions.Subscribe(toggleTaskSuggestionsSubject).DisposedBy(projectCell.DisposeBag);
-                    updateSeparatorVisibility(tableView, projectCell, indexPath);
                     return projectCell;
 
                 case TaskSuggestion taskSuggestion:
@@ -78,20 +77,6 @@ namespace Toggl.iOS.ViewSources
                 default:
                     throw new Exception("Unexpected item type encountered");
             }
-        }
-
-        private void updateSeparatorVisibility(UITableView tableView, ReactiveProjectSuggestionViewCell cell, NSIndexPath indexPath)
-        {
-            var previousItemPath = NSIndexPath.FromItemSection(indexPath.Item - 1, indexPath.Section);
-            var previous = ModelAtOrDefault(previousItemPath);
-            var previousIsTask = previous is TaskSuggestion;
-            cell.TopSeparatorHidden = !previousIsTask;
-
-            var nextItemPath = NSIndexPath.FromItemSection(indexPath.Item + 1, indexPath.Section);
-            var next = ModelAtOrDefault(nextItemPath);
-            var isLastItemInSection = next == null;
-            var isLastSection = indexPath.Section == tableView.NumberOfSections() - 1;
-            cell.BottomSeparatorHidden = isLastItemInSection && !isLastSection;
         }
     }
 }

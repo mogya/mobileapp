@@ -44,12 +44,15 @@ namespace Toggl.Droid.Views.Calendar
         private int editingHandlesHorizontalMargins;
         private int editingHandlesRadius;
 
+        private ImmutableList<CalendarItem> originalCalendarItems = ImmutableList<CalendarItem>.Empty;
+
         public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems)
         {
             var newItems = calendarItems.IsEmpty
                 ? ImmutableList<CalendarItem>.Empty
                 : calendarItems[0].ToImmutableList();
-            
+
+            originalCalendarItems = newItems;
             updateItemsAndRecalculateEventsAttrs(newItems);
         }
         

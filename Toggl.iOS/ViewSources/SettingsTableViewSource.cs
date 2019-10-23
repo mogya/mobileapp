@@ -11,7 +11,7 @@ using UIKit;
 namespace Toggl.iOS.ViewSources
 {
     using SettingsSection = SectionModel<string, ISettingRow>;
-    
+
     public class SettingsTableViewSource: BaseTableViewSource<SettingsSection, string, ISettingRow>
     {
         private readonly float headerHeight = 48;
@@ -89,7 +89,7 @@ namespace Toggl.iOS.ViewSources
             if (string.IsNullOrEmpty(title))
             {
                 var view = new UIView();
-                view.BackgroundColor = Colors.Settings.Background.ToNativeColor();
+                view.BackgroundColor = ColorAssets.TableBackground;
                 return view;
             }
 

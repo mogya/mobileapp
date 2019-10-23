@@ -27,10 +27,10 @@ namespace Toggl.iOS.ViewSources
 
         private static readonly float scrollThreshold = 3 * syncBarHeight;
 
-        private readonly UIColor pullToRefreshColor = Colors.Main.PullToRefresh.ToNativeColor();
-        private readonly UIColor syncingColor = Colors.Main.Syncing.ToNativeColor();
-        private readonly UIColor syncFailedColor = Colors.Main.SyncFailed.ToNativeColor();
-        private readonly UIColor offlineColor = Colors.Main.Offline.ToNativeColor();
+        private readonly UIColor pullToRefreshColor = ColorAssets.CustomGray2;
+        private readonly UIColor syncingColor = ColorAssets.CustomGray2;
+        private readonly UIColor syncFailedColor = ColorAssets.CustomGray2;
+        private readonly UIColor offlineColor = ColorAssets.CustomGray2;
         private readonly UIColor syncCompletedColor = Colors.Main.SyncCompleted.ToNativeColor();
 
         private bool wasReleased;

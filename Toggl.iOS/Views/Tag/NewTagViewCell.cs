@@ -34,6 +34,13 @@ namespace Toggl.iOS.Views.Tag
         public override void SetHighlighted(bool highlighted, bool animated)
             => setBackgroundColor(highlighted, animated);
 
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            ContentView.InsertSeparator();
+        }
+
         protected override void UpdateView()
         {
             TextLabel.Text = Item.Name;

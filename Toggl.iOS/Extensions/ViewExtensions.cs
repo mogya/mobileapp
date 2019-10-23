@@ -1,4 +1,5 @@
-﻿using CoreAnimation;
+﻿using System;
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using UIKit;
@@ -51,6 +52,47 @@ namespace Toggl.iOS.Extensions
             }
 
             return null;
+        }
+
+        public static UIView InsertSeparator(this UIView self, UIRectEdge edge = UIRectEdge.Bottom)
+        {
+            var thickness = 1 / UIScreen.MainScreen.Scale;
+            var separator = new UIView();
+            separator.BackgroundColor = ColorAssets.Separator;
+            self.AddSubview(separator);
+
+            separator.TranslatesAutoresizingMaskIntoConstraints = false;
+            switch (edge)
+            {
+                case UIRectEdge.Top:
+                    separator.TopAnchor.ConstraintEqualTo(self.TopAnchor).Active = true;
+                    separator.LeftAnchor.ConstraintEqualTo(self.LeftAnchor).Active = true;
+                    separator.RightAnchor.ConstraintEqualTo(self.RightAnchor).Active = true;
+                    separator.HeightAnchor.ConstraintEqualTo(thickness).Active = true;
+                    break;
+                case UIRectEdge.Bottom:
+                    separator.BottomAnchor.ConstraintEqualTo(self.BottomAnchor, -thickness).Active = true;
+                    separator.LeftAnchor.ConstraintEqualTo(self.LeftAnchor).Active = true;
+                    separator.RightAnchor.ConstraintEqualTo(self.RightAnchor).Active = true;
+                    separator.HeightAnchor.ConstraintEqualTo(thickness).Active = true;
+                    break;
+                case UIRectEdge.Left:
+                    separator.LeftAnchor.ConstraintEqualTo(self.LeftAnchor).Active = true;
+                    separator.BottomAnchor.ConstraintEqualTo(self.BottomAnchor).Active = true;
+                    separator.TopAnchor.ConstraintEqualTo(self.TopAnchor).Active = true;
+                    separator.WidthAnchor.ConstraintEqualTo(thickness).Active = true;
+                    break;
+                case UIRectEdge.Right:
+                    separator.RightAnchor.ConstraintEqualTo(self.RightAnchor).Active = true;
+                    separator.BottomAnchor.ConstraintEqualTo(self.BottomAnchor).Active = true;
+                    separator.TopAnchor.ConstraintEqualTo(self.TopAnchor).Active = true;
+                    separator.WidthAnchor.ConstraintEqualTo(thickness).Active = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(edge), edge, null);
+            }
+
+            return separator;
         }
     }
 }

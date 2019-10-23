@@ -71,6 +71,9 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            var separator = NavigationController.NavigationBar.InsertSeparator();
+            separator.BackgroundColor = ColorAssets.OpaqueSeparator;
+
             calendarViewController = ViewControllerLocator.GetViewController(ViewModel.CalendarViewModel) as ReportsCalendarViewController;
             prepareViews();
 
@@ -133,6 +136,7 @@ namespace Toggl.iOS.ViewControllers
             //Visibility
             ViewModel.WorkspacesObservable
                 .Select(areThereEnoughWorkspaces)
+                .Do(updateWorkspaceButtonInsets)
                 .Subscribe(WorkspaceButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
@@ -333,9 +337,9 @@ namespace Toggl.iOS.ViewControllers
             // Title view
             NavigationItem.TitleView = titleButton = new UIButton(new CGRect(0, 0, 200, 40));
             titleButton.Font = UIFont.SystemFontOfSize(14, UIFontWeight.Medium);
-            titleButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
+            titleButton.SetTitleColor(ColorAssets.Text, UIControlState.Normal);
             activityIndicator = new UIActivityIndicatorView();
-            activityIndicator.Color = UIColor.Black;
+            activityIndicator.Color = ColorAssets.Text;
             activityIndicator.StartAnimating();
             activityIndicator.Frame = activityIndicatorCenteredFrame;
             titleButton.AddSubview(activityIndicator);
@@ -349,11 +353,18 @@ namespace Toggl.iOS.ViewControllers
             WorkspaceButton.Layer.ShadowRadius = 10;
             WorkspaceButton.Layer.ShadowOffset = new CGSize(0, 2);
             WorkspaceButton.Layer.ShadowOpacity = 0.10f;
+            WorkspaceButton.Layer.BorderColor = ColorAssets.Separator.CGColor;
+            WorkspaceButton.Layer.BorderWidth = 0.35f;
         }
 
         private void onCalendarSizeChanged(NSObservedChange change)
         {
             TopCalendarConstraint.Constant = calendarIsVisible ? 0 : calendarHeight;
+        }
+
+        private void updateWorkspaceButtonInsets(bool workspacesButtonIsShown)
+        {
+            source.UpdateContentInset(workspacesButtonIsShown);
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Transformations;
@@ -60,8 +59,14 @@ namespace Toggl.iOS.Views
 
             projectTaskClientToAttributedString = new ProjectTaskClientToAttributedString(
                 ProjectTaskClientLabel.Font.CapHeight,
-                Colors.TimeEntriesLog.ClientColor.ToNativeColor()
+                ColorAssets.Text3
             );
+
+            GroupSizeBackground.Layer.CornerRadius = 14;
+
+            ContinueImageView.SetTemplateColor(ColorAssets.Text4);
+
+            this.InsertSeparator();
         }
 
         public override void PrepareForReuse()
@@ -69,9 +74,6 @@ namespace Toggl.iOS.Views
             base.PrepareForReuse();
             DisposeBag.Dispose();
             DisposeBag = new CompositeDisposable();
-
-            BackgroundColor = UIColor.White;
-            GroupSizeBackground.Layer.CornerRadius = 14;
         }
 
         protected override void UpdateView()
@@ -85,8 +87,10 @@ namespace Toggl.iOS.Views
 
             // Colors
             DescriptionLabel.TextColor = Item.HasDescription
-                ? UIColor.Black
-                : Colors.TimeEntriesLog.AddDescriptionTextColor.ToNativeColor();
+                ? ColorAssets.Text
+                : ColorAssets.Text3;
+
+            ContentView.BackgroundColor = ColorAssets.CellBackground;
 
             // Visibility
             ProjectTaskClientFadeView.Hidden = !Item.HasProject;
@@ -134,9 +138,9 @@ namespace Toggl.iOS.Views
             GroupSizeContainer.UserInteractionEnabled = true;
             GroupSizeBackground.Hidden = false;
             GroupSizeBackground.Layer.BorderWidth = 1;
-            GroupSizeBackground.Layer.BorderColor = Colors.TimeEntriesLog.Grouping.Collapsed.Border.ToNativeColor().CGColor;
-            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Collapsed.Background.ToNativeColor();
-            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Collapsed.Text.ToNativeColor();
+            GroupSizeBackground.Layer.BorderColor = ColorAssets.Separator.CGColor;
+            GroupSizeBackground.BackgroundColor = ColorAssets.CellBackground;
+            GroupSizeLabel.TextColor = ColorAssets.Text2;
         }
 
         private void presentAsExpandedGroupHeader(int groupSize)
@@ -147,8 +151,8 @@ namespace Toggl.iOS.Views
             GroupSizeContainer.UserInteractionEnabled = true;
             GroupSizeBackground.Hidden = false;
             GroupSizeBackground.Layer.BorderWidth = 0;
-            GroupSizeBackground.BackgroundColor = Colors.TimeEntriesLog.Grouping.Expanded.Background.ToNativeColor();
-            GroupSizeLabel.TextColor = Colors.TimeEntriesLog.Grouping.Expanded.Text.ToNativeColor();
+            GroupSizeBackground.BackgroundColor = ColorAssets.CustomGray5;
+            GroupSizeLabel.TextColor = ColorAssets.LightishGreen;
         }
 
         private void presentAsSingleTimeEntry()
@@ -163,7 +167,7 @@ namespace Toggl.iOS.Views
             GroupSizeContainer.Hidden = false;
             GroupSizeContainer.UserInteractionEnabled = false;
             GroupSizeBackground.Hidden = true;
-            BackgroundColor = Colors.TimeEntriesLog.Grouping.GroupedTimeEntry.Background.ToNativeColor();
+            ContentView.BackgroundColor = ColorAssets.CustomGray6;
         }
 
         private void updateAccessibilityProperties()

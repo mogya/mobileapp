@@ -1,6 +1,7 @@
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.LayoutManagers;
 using Toggl.Droid.Views;
 using static Toggl.Droid.Resource.Id;
 
@@ -32,7 +33,7 @@ namespace Toggl.Droid.Activities
             descriptionField = FindViewById<AutocompleteEditText>(DescriptionTextField);
 
             adapter = new StartTimeEntryRecyclerAdapter();
-            recyclerView.SetLayoutManager(new LinearLayoutManager(this));
+            recyclerView.SetLayoutManager(new UnpredictiveLinearLayoutManager(this));
             recyclerView.SetAdapter(adapter);
 
             SetupToolbar();

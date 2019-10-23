@@ -445,57 +445,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-        public sealed class TheOpenReportsCommand : MainViewModelTest
-        {
-            [Fact, LogIfTooSlow]
-            public async ThreadingTask NavigatesToTheReportsViewModel()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                await NavigationService.Received().Navigate<ReportsViewModel>(View);
-            }
-
-            [Fact, LogIfTooSlow]
-            public void MarksTheActionBeforeStopButtonForOnboardingPurposes()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(false));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                OnboardingStorage.DidNotReceive().SetNavigatedAwayFromMainViewAfterStopButton();
-            }
-
-            [Fact, LogIfTooSlow]
-            public void MarksTheActionAfterStopButtonForOnboardingPurposes()
-            {
-                const long workspaceId = 10;
-                var workspace = Substitute.For<IThreadSafeWorkspace>();
-                workspace.Id.Returns(workspaceId);
-                InteractorFactory.GetDefaultWorkspace().Execute().Returns(Observable.Return(workspace));
-                OnboardingStorage.StopButtonWasTappedBefore.Returns(Observable.Return(true));
-                ViewModel.Initialize().Wait();
-
-                ViewModel.OpenReports.Execute();
-
-                TestScheduler.Start();
-                OnboardingStorage.Received().SetNavigatedAwayFromMainViewAfterStopButton();
-            }
-        }
-
         public sealed class TheOpenSyncFailuresCommand : MainViewModelTest
         {
             [Fact, LogIfTooSlow]

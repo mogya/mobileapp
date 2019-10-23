@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,48 +14,46 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Toggl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQZ-Qw-UMW">
                         <rect key="frame" x="16" y="14" width="33.5" height="16"/>
                         <accessibility key="accessibilityConfiguration" identifier="CountryLabel"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" name="Text"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tau-OM-ERl" userLabel="Bottom Separator">
-                        <rect key="frame" x="0.0" y="42.5" width="320" height="1"/>
-                        <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="oYs-Rv-ulu"/>
-                        </constraints>
-                    </view>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icCheckBoxChecked" translatesAutoresizingMaskIntoConstraints="NO" id="2UY-1c-BnW">
-                        <rect key="frame" x="290" y="14" width="14" height="15.5"/>
+                        <rect key="frame" x="290" y="14.5" width="14" height="15"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="2UY-1c-BnW" secondAttribute="height" multiplier="10:11" id="E39-RC-o1B"/>
                             <constraint firstAttribute="width" constant="14" id="LdM-Fx-CiG"/>
                         </constraints>
                     </imageView>
                 </subviews>
+                <color key="backgroundColor" name="Background"/>
                 <constraints>
-                    <constraint firstItem="tau-OM-ERl" firstAttribute="centerX" secondItem="YTl-1W-gDM" secondAttribute="centerX" id="Ip4-tc-CH5"/>
                     <constraint firstItem="IQZ-Qw-UMW" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="16" id="KPd-S3-hBl"/>
-                    <constraint firstAttribute="bottom" secondItem="tau-OM-ERl" secondAttribute="bottom" id="OiM-bw-ePe"/>
                     <constraint firstAttribute="trailing" secondItem="2UY-1c-BnW" secondAttribute="trailing" constant="16" id="X4O-Nr-wHW"/>
                     <constraint firstItem="IQZ-Qw-UMW" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="Zc5-5J-kgR"/>
                     <constraint firstItem="2UY-1c-BnW" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="fgP-6J-zQ3"/>
-                    <constraint firstItem="tau-OM-ERl" firstAttribute="width" secondItem="YTl-1W-gDM" secondAttribute="width" id="uhL-Lb-K45"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="CheckBoxImageView" destination="2UY-1c-BnW" id="w83-QM-dy4"/>
                 <outlet property="NameLabel" destination="IQZ-Qw-UMW" id="533-9y-paO"/>
             </connections>
+            <point key="canvasLocation" x="131" y="154"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="icCheckBoxChecked" width="14" height="14"/>
+        <namedColor name="Background">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

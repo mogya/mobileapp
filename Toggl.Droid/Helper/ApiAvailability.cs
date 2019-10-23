@@ -31,9 +31,7 @@ namespace Toggl.Droid.Helper
 
     public static class QApis
     {
-        private const BuildVersionCodes Q = BuildVersionCodes.P + 1;
-
         public static bool AreAvailable
-            => Build.VERSION.SdkInt >= Q;
+            => Build.VERSION.SdkInt >= BuildVersionCodes.Q;
     }
 }

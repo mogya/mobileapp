@@ -27,6 +27,8 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+
             TitleLabel.Text = Resources.NewProject;
             NameTextField.Placeholder = Resources.ProjectName;
             ErrorLabel.Text = Resources.ProjectNameTakenError;
@@ -102,10 +104,6 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(PrivateProjectSwitchContainer.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CanCreatePublicProjects
-                .Subscribe(BottomSeparator.Rx().IsVisible())
-                .DisposedBy(DisposeBag);
-
             // Save
             DoneButton.Rx()
                 .BindAction(ViewModel.Save)
@@ -122,6 +120,11 @@ namespace Toggl.iOS.ViewControllers
 
                 return new NSAttributedString(clientName);
             }
+
+            NameView.InsertSeparator();
+            WorkspaceView.InsertSeparator();
+            ClientView.InsertSeparator();
+            PrivateProjectSwitchContainer.InsertSeparator();
         }
     }
 }

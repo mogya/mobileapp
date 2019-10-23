@@ -17,10 +17,8 @@ namespace Toggl.Core.Interactors.Changes
         }
 
         public IObservable<Unit> Execute()
-            => Observable.CombineLatest(
+            => Observable.Merge(
                 interactorFactory.ObserveWorkspacesChanges().Execute(),
-                interactorFactory.ObserveTimeEntriesChanges().Execute(),
-                (workspaces, timeEntries) => Unit.Default
-            );
+                interactorFactory.ObserveTimeEntriesChanges().Execute());
     }
 }

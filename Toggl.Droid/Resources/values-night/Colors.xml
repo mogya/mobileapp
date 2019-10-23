@@ -15,4 +15,7 @@
   <color name="licensesBorder">#BBFFFFFF</color>
   <color name="licensesBackground">#FF303030</color>
   <color name="tagToken">#DDFFFFFF</color>
+  <color name="darkBackground">#DDFFFFFF</color>
+  <color name="primaryTextOnDarkBackground">#FF000000</color>
+  <color name="weekStripeDisabledDayColor">#656565</color>
 </resources>

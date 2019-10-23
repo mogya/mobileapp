@@ -34,12 +34,13 @@ namespace Toggl.iOS.Presentation
                 : ViewControllerLocator.GetViewController(viewModel);
 
             var oldRootViewController = Window.RootViewController;
+            Window.RootViewController = rootViewController;
 
             UIView.Transition(
                 Window,
                 Animation.Timings.EnterTiming,
                 UIViewAnimationOptions.TransitionCrossDissolve,
-                () => Window.RootViewController = rootViewController,
+                () => { },
                 () => detachOldRootViewController(oldRootViewController)
             );
         }

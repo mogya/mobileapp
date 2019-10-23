@@ -23,6 +23,9 @@ namespace Toggl.iOS.ViewControllers
         {
             base.ViewDidLoad();
 
+            CloseButton.SetTemplateColor(ColorAssets.Text2);
+            SearchView.InsertSeparator();
+
             TitleLabel.Text = Resources.Clients;
             SearchTextField.Placeholder = Resources.AddFilterClients;
 

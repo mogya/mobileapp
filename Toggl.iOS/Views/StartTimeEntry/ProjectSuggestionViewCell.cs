@@ -21,18 +21,6 @@ namespace Toggl.iOS.Views
         public static readonly string Identifier = nameof(ProjectSuggestionViewCell);
         public static readonly UINib Nib;
 
-        public bool TopSeparatorHidden
-        {
-            get => TopSeparatorView.Hidden;
-            set => TopSeparatorView.Hidden = value;
-        }
-
-        public bool BottomSeparatorHidden
-        {
-            get => BottomSeparatorView.Hidden;
-            set => BottomSeparatorView.Hidden = value;
-        }
-
         public CompositeDisposable DisposeBag = new CompositeDisposable();
         public IObservable<ProjectSuggestion> ToggleTasks { get; private set; }
 
@@ -49,6 +37,8 @@ namespace Toggl.iOS.Views
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            this.InsertSeparator();
 
             FadeView.FadeRight = true;
             ClientNameLabel.LineBreakMode = UILineBreakMode.TailTruncation;

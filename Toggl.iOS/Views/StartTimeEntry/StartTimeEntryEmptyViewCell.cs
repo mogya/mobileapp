@@ -23,6 +23,12 @@ namespace Toggl.iOS.Views
             // Note: this .ctor should not contain any initialization logic.
         }
 
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+            this.InsertSeparator();
+        }
+
         protected override void UpdateView()
         {
             DescriptionLabel.AttributedText = suggestionToAttributedString(Item);

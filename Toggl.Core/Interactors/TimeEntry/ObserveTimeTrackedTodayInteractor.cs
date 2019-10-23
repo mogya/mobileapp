@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Toggl.Core.DataSources;
-using Toggl.Core.Extensions;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -35,7 +34,7 @@ namespace Toggl.Core.Interactors
 
         private IObservable<Unit> whenUpdateIsNecessary()
             => Observable.Merge(
-                    timeEntries.ItemsChanged(),
+                    timeEntries.ItemsChanged,
                     timeService.MidnightObservable.SelectUnit(),
                     timeService.SignificantTimeChangeObservable)
                 .StartWith(Unit.Default);

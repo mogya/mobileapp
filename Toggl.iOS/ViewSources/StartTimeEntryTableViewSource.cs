@@ -27,9 +27,7 @@ namespace Toggl.iOS.ViewSources
 
         public StartTimeEntryTableViewSource(UITableView tableView)
         {
-            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
-            tableView.SeparatorColor = Colors.StartTimeEntry.SeparatorColor.ToNativeColor();
-            tableView.SeparatorInset = UIEdgeInsets.Zero;
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             tableView.TableFooterView = new UIView(new CGRect(0, 0, 0, 1));
             tableView.RegisterNibForCellReuse(TagSuggestionViewCell.Nib, TagSuggestionViewCell.Identifier);
             tableView.RegisterNibForCellReuse(TaskSuggestionViewCell.Nib, TaskSuggestionViewCell.Identifier);
@@ -81,8 +79,6 @@ namespace Toggl.iOS.ViewSources
                             .Subscribe(toggleTasks.Accept)
                             .DisposedBy(cell.DisposeBag);
 
-                        cell.TopSeparatorHidden = true;
-                        cell.BottomSeparatorHidden = true;
                         return cell;
                     }
                 case QuerySymbolSuggestion querySuggestion:

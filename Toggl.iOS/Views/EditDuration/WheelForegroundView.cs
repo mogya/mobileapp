@@ -144,8 +144,10 @@ namespace Toggl.iOS.Views.EditDuration
         {
             startCap.Position = startTimePosition;
             startCap.Color = foregroundColor;
+            startCap.Angle = startTimeAngle;
             endCap.Position = endTimePosition;
             endCap.Color = foregroundColor;
+            endCap.Angle = endTimeAngle;
             endCap.ShowOnlyBackground = IsRunning;
 
             fullWheel.FillColor = backgroundColor;

@@ -16,6 +16,7 @@ using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Settings;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.Core.UI.Views;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
@@ -39,6 +40,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         public InputAction<CalendarItem> OnTimeEntryEdited { get; }
         public InputAction<CalendarItem> OnCalendarEventLongPressed { get; }
         public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
+
+        public CalendarContextualMenuViewModel ContextualMenuViewModel { get; }
 
         public CalendarDayViewModel(
             DateTimeOffset date,
@@ -66,6 +69,14 @@ namespace Toggl.Core.UI.ViewModels.Calendar
             this.timeService = timeService;
             this.analyticsService = analyticsService;
             this.interactorFactory = interactorFactory;
+            
+            ContextualMenuViewModel = new CalendarContextualMenuViewModel(
+                interactorFactory,
+                schedulerProvider,
+                analyticsService,
+                rxActionFactory,
+                timeService,
+                navigationService);
 
             OnItemTapped = rxActionFactory.FromAsync<CalendarItem>(handleCalendarItem);
             OnTimeEntryEdited = rxActionFactory.FromAsync<CalendarItem>(onTimeEntryEdited);

@@ -17,14 +17,24 @@ namespace Toggl.Droid.Views.Calendar
     public partial class CalendarDayView
     {
         private readonly Dictionary<string, StaticLayout> textLayouts = new Dictionary<string, StaticLayout>();
-
         private readonly float calendarItemColorAlpha = 0.25f;
+        private readonly double minimumTextContrast = 1.6;
+        private readonly RectF eventRect = new RectF();
+        private readonly RectF stripeRect = new RectF();
+        private readonly Paint eventsPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint textEventsPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint editingHoursLabelPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly Paint calendarIconPaint = new Paint(PaintFlags.AntiAlias);
+        private readonly PathEffect dashEffect = new DashPathEffect(new []{ 10f, 10f }, 0f);
+        private readonly CalendarItemStartTimeComparer calendarItemComparer = new CalendarItemStartTimeComparer();
+
         private float leftMargin;
         private float leftPadding;
         private float rightPadding;
         private float itemSpacing;
         private float minHourHeight;
-
+        private float runningTimeEntryStripesSpacing;
+        private float runningTimeEntryThinStripeWidth;
         private int shortCalendarItemHeight;
         private int regularCalendarItemVerticalPadding;
         private int regularCalendarItemHorizontalPadding;
@@ -32,24 +42,25 @@ namespace Toggl.Droid.Views.Calendar
         private int shortCalendarItemHorizontalPadding;
         private int regularCalendarItemFontSize;
         private int shortCalendarItemFontSize;
-        
-        private readonly RectF eventRect = new RectF();
-        private readonly Paint eventsPaint = new Paint(PaintFlags.AntiAlias);
-        private readonly Paint textEventsPaint = new Paint(PaintFlags.AntiAlias);
-        private readonly Paint editingHoursLabelPaint = new Paint(PaintFlags.AntiAlias);
-
-        private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
-        private readonly CalendarItemStartTimeComparer calendarItemComparer = new CalendarItemStartTimeComparer();
         private int? runningTimeEntryIndex = null;
         private int editingHandlesHorizontalMargins;
         private int editingHandlesRadius;
+        private Bitmap calendarIconBitmap;
+        private int runningTimeEntryDashedHourTopPadding;
+        private int calendarEventBottomLineHeight;
+        private int calendarIconRightInsetMargin;
+        private float commonRoundRectRadius;
+        private int calendarIconSize;
+        private Color lastCalendarItemBackgroundColor;
+        private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
 
         public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems)
         {
             var newItems = calendarItems.IsEmpty
                 ? ImmutableList<CalendarItem>.Empty
                 : calendarItems[0].ToImmutableList();
-            
+
+            originalCalendarItems = newItems;
             updateItemsAndRecalculateEventsAttrs(newItems);
         }
         
@@ -67,7 +78,7 @@ namespace Toggl.Droid.Views.Calendar
             regularCalendarItemHorizontalPadding = 4.DpToPixels(Context);
             shortCalendarItemVerticalPadding = 0.5f.DpToPixels(Context);
             shortCalendarItemHorizontalPadding = 2.DpToPixels(Context);
-            regularCalendarItemFontSize = 10.DpToPixels(Context);
+            regularCalendarItemFontSize = 12.DpToPixels(Context);
             shortCalendarItemFontSize = 10.DpToPixels(Context);
 
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
@@ -77,6 +88,14 @@ namespace Toggl.Droid.Views.Calendar
             editingHoursLabelPaint.TextSize = 12.SpToPixels(Context);
             editingHandlesHorizontalMargins = 8.DpToPixels(Context);
             editingHandlesRadius = 3.DpToPixels(Context);
+            runningTimeEntryStripesSpacing = 12.DpToPixels(Context);
+            runningTimeEntryThinStripeWidth = 2.DpToPixels(Context);
+            commonRoundRectRadius = leftPadding / 2;
+            runningTimeEntryDashedHourTopPadding = 4.DpToPixels(Context);
+            calendarEventBottomLineHeight = 2.DpToPixels(Context);
+            calendarIconSize = 24.DpToPixels(Context);
+            calendarIconRightInsetMargin = 4.DpToPixels(Context);
+            calendarIconBitmap = Context.GetVectorDrawable(Resource.Drawable.ic_calendar).ToBitmap(calendarIconSize, calendarIconSize);
         }
 
         private void updateItemsAndRecalculateEventsAttrs(ImmutableList<CalendarItem> newItems)
@@ -90,6 +109,8 @@ namespace Toggl.Droid.Views.Calendar
                     .CalculateLayoutAttributes(newItems)
                     .Select(calculateCalendarItemRect)
                     .ToImmutableList();
+                
+                textLayouts.Clear();
             }
 
             var runningIndex = newItems.IndexOf(item => item.Duration == null);
@@ -156,8 +177,8 @@ namespace Toggl.Droid.Views.Calendar
                 itemAttr.CalculateRect(hourHeight, minHourHeight, eventRect);
                 if (!(eventRect.Bottom > scrollOffset) || !(eventRect.Top - scrollOffset < Height)) continue;
                 
-                drawCalendarShape(canvas, item, eventRect);
-                drawCalendarItemText(canvas, item, eventRect);
+                drawCalendarShape(canvas, item, eventRect, eventIndex == runningTimeEntryIndex);
+                drawCalendarItemText(canvas, item, eventRect, eventIndex == runningTimeEntryIndex);
             }
             
             drawCalendarItemInEditMode(canvas, currentItemInEditMode);
@@ -172,8 +193,8 @@ namespace Toggl.Droid.Views.Calendar
 
             if (!(eventRect.Bottom > scrollOffset) || !(eventRect.Top - scrollOffset < Height)) return;
 
-            drawCalendarShape(canvas, calendarItem, eventRect);
-            drawCalendarItemText(canvas, calendarItem, eventRect);
+            drawCalendarShape(canvas, calendarItem, eventRect, itemIsRunning(currentItemInEditMode));
+            drawCalendarItemText(canvas, calendarItem, eventRect, itemIsRunning(currentItemInEditMode));
             drawEditingHandles(canvas, currentItemInEditMode);
             canvas.DrawText(startHourLabel, hoursX, eventRect.Top + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
             canvas.DrawText(endHourLabel, hoursX, eventRect.Bottom + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
@@ -181,50 +202,151 @@ namespace Toggl.Droid.Views.Calendar
 
         private void drawEditingHandles(Canvas canvas, CalendarItemEditInfo itemInEditModeToDraw)
         {
-            var eventColor = eventsPaint.Color;
             eventsPaint.Color = Color.White;
+            eventsPaint.SetStyle(Paint.Style.FillAndStroke);
 
             canvas.DrawCircle(eventRect.Right - editingHandlesHorizontalMargins, eventRect.Top, editingHandlesRadius, eventsPaint);
-            if (itemInEditModeToDraw.OriginalIndex != runningTimeEntryIndex)
+            if (!itemIsRunning(itemInEditModeToDraw))
                 canvas.DrawCircle(eventRect.Left + editingHandlesHorizontalMargins, eventRect.Bottom, editingHandlesRadius, eventsPaint);
 
             eventsPaint.SetStyle(Paint.Style.Stroke);
             eventsPaint.StrokeWidth = 1.DpToPixels(Context);
-            eventsPaint.Color = eventColor;
+            eventsPaint.Color = new Color(Color.ParseColor(itemInEditModeToDraw.CalendarItem.Color));
             
             canvas.DrawCircle(eventRect.Right - editingHandlesHorizontalMargins, eventRect.Top, editingHandlesRadius, eventsPaint);
-            if (itemInEditModeToDraw.OriginalIndex != runningTimeEntryIndex)
+            if (!itemIsRunning(itemInEditModeToDraw))
                 canvas.DrawCircle(eventRect.Left + editingHandlesHorizontalMargins, eventRect.Bottom, editingHandlesRadius, eventsPaint);
         }
 
-        private void drawCalendarShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
+        private bool itemIsRunning(CalendarItemEditInfo itemInEditModeToDraw)
+            => itemInEditModeToDraw.OriginalIndex == runningTimeEntryIndex;
+
+        private void drawCalendarShape(Canvas canvas, CalendarItem item, RectF calendarItemRect, bool isRunning)
         {
-            var color = Color.ParseColor(item.Color);
-            if (item.Source == CalendarItemSource.Calendar)
-            {
-                color.A = (byte)(color.A * calendarItemColorAlpha);
-                color = new Color(ColorUtils.CompositeColors(color, ColorObject.White));
-            }
-            eventsPaint.SetStyle(Paint.Style.FillAndStroke);
-            eventsPaint.Color = color;
-                
-            canvas.DrawRoundRect(calendarItemRect, leftPadding / 2, leftPadding / 2, eventsPaint);
+            if (!isRunning)
+                drawRegularCalendarItemShape(canvas, item, calendarItemRect);
+            else 
+                drawRunningTimeEntryCalendarItemShape(canvas, item, calendarItemRect);
         }
 
-        private void drawCalendarItemText(Canvas canvas, CalendarItem calendarItem, RectF calendarItemRect)
+        private void drawRegularCalendarItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
         {
+            if (item.Source == CalendarItemSource.Calendar)
+                drawCalendarEventItemShape(canvas, item, calendarItemRect);
+            else
+                drawCalendarTimeEntryItemShape(canvas, item, calendarItemRect);
+        }
+
+        private void drawCalendarEventItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
+        {
+            var originalColor = Color.ParseColor(item.Color);
+            var fadedColor = new Color(originalColor); 
+            fadedColor.A = (byte)(originalColor.A * calendarItemColorAlpha);
+            fadedColor = new Color(ColorUtils.CompositeColors(fadedColor, ColorObject.White));
+            eventsPaint.SetStyle(Paint.Style.FillAndStroke);
+            eventsPaint.Color = fadedColor;
+            lastCalendarItemBackgroundColor = fadedColor;
+            canvas.DrawRoundRect(calendarItemRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+
+            eventsPaint.Color = originalColor;
+            canvas.DrawRoundRect(calendarItemRect.Left, calendarItemRect.Bottom - calendarEventBottomLineHeight, calendarItemRect.Right, calendarItemRect.Bottom, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+            
+            calendarIconPaint.SetColorFilter(new PorterDuffColorFilter(originalColor, PorterDuff.Mode.SrcIn));
+            canvas.DrawBitmap(calendarIconBitmap, calendarItemRect.Left, calendarItemRect.Top, calendarIconPaint);
+        }
+        
+        private void drawCalendarTimeEntryItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
+        {
+            var color = Color.ParseColor(item.Color);
+            eventsPaint.SetStyle(Paint.Style.FillAndStroke);
+            eventsPaint.Color = color;
+            lastCalendarItemBackgroundColor = color;
+            canvas.DrawRoundRect(calendarItemRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+        }
+
+        private void drawRunningTimeEntryCalendarItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
+        {
+            var itemColor = Color.ParseColor(item.Color);
+            var calendarFillColor = new Color(itemColor);
+            calendarFillColor.A = (byte) (calendarFillColor.A * 0.05f);
+            var bgColor = Context.SafeGetColor(Resource.Color.cardBackground);
+            calendarFillColor = new Color(ColorUtils.CompositeColors(calendarFillColor, bgColor));
+            
+            var calendarStripeColor = new Color(itemColor);
+            calendarStripeColor.A = (byte) (calendarStripeColor.A * 0.1f);
+
+            lastCalendarItemBackgroundColor = calendarFillColor;
+            drawShapeBaseBackgroundFilling(calendarItemRect, calendarFillColor);
+            drawShapeBackgroundStripes(calendarItemRect, calendarStripeColor);
+            drawSolidBorder(calendarItemRect, itemColor);
+            drawBottomDashedBorder(calendarItemRect, calendarFillColor);
+
+            void drawShapeBaseBackgroundFilling(RectF rectF, Color color)
+            {
+                eventsPaint.Color = color;
+                eventsPaint.SetStyle(Paint.Style.FillAndStroke);
+                canvas.DrawRoundRect(rectF, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+            }
+
+            void drawShapeBackgroundStripes(RectF shapeRect, Color color)
+            {
+                canvas.Save();
+                canvas.ClipRect(shapeRect);
+                canvas.Rotate(45f, shapeRect.Left, shapeRect.Top);
+                eventsPaint.Color = color;
+                var hyp = (float) Math.Sqrt(Math.Pow(shapeRect.Height(), 2) + Math.Pow(shapeRect.Width(), 2));
+                stripeRect.Set(shapeRect.Left, shapeRect.Top - hyp, shapeRect.Left + runningTimeEntryThinStripeWidth, shapeRect.Bottom + hyp);
+                for (var stripeStart = 0f; stripeStart < hyp; stripeStart += runningTimeEntryStripesSpacing)
+                {
+                    stripeRect.Set(shapeRect.Left + stripeStart, stripeRect.Top, shapeRect.Left + stripeStart + runningTimeEntryThinStripeWidth, stripeRect.Bottom);
+                    canvas.DrawRect(stripeRect, eventsPaint);
+                }
+
+                canvas.Restore();
+            }
+
+            void drawSolidBorder(RectF borderRect, Color color)
+            {
+                eventsPaint.SetStyle(Paint.Style.Stroke);
+                eventsPaint.StrokeWidth = 1.DpToPixels(Context);
+                eventsPaint.Color = color;
+                canvas.DrawRoundRect(borderRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+            }
+
+            void drawBottomDashedBorder(RectF dashedBorderRect, Color color)
+            {
+                canvas.Save();
+                var currentHourPx = calculateCurrentHourOffset() - runningTimeEntryDashedHourTopPadding;
+                var sevenMinutesInPixels = (float) TimeSpan.FromMinutes(7).TotalHours * hourHeight;
+                var bottom = dashedBorderRect.Bottom + 2.DpToPixels(Context);
+                stripeRect.Set(dashedBorderRect.Left - eventsPaint.StrokeWidth, currentHourPx, dashedBorderRect.Right + eventsPaint.StrokeWidth, bottom + eventsPaint.StrokeWidth);
+                canvas.ClipRect(stripeRect);
+                eventsPaint.SetPathEffect(dashEffect);
+
+                eventsPaint.Color = color;
+                stripeRect.Set(dashedBorderRect.Left, stripeRect.Top - sevenMinutesInPixels, dashedBorderRect.Right, dashedBorderRect.Bottom);
+
+                canvas.DrawRoundRect(stripeRect, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
+                eventsPaint.SetPathEffect(null);
+                canvas.Restore();
+            }
+        }
+
+        private void drawCalendarItemText(Canvas canvas, CalendarItem calendarItem, RectF calendarItemRect, bool isRunning)
+        {
+            var textLeftPadding = calendarItem.Source == CalendarItemSource.Calendar ? calendarIconSize - calendarIconRightInsetMargin : 0;
             var eventHeight = calendarItemRect.Height();
-            var eventWidth = calendarItemRect.Width();
+            var eventWidth = calendarItemRect.Width() - textLeftPadding;
             var fontSize = eventHeight <= shortCalendarItemHeight ? shortCalendarItemFontSize : regularCalendarItemFontSize;
             var textVerticalPadding = eventHeight <= shortCalendarItemHeight ? shortCalendarItemVerticalPadding : regularCalendarItemVerticalPadding;
             textVerticalPadding = (int) Math.Min((eventHeight - fontSize) / 2f, textVerticalPadding);
             var textHorizontalPadding = eventHeight <= shortCalendarItemHeight ? shortCalendarItemHorizontalPadding : regularCalendarItemHorizontalPadding;
 
-            var eventTextLayout = getCalendarItemTextLayout(calendarItem, eventWidth - textHorizontalPadding, fontSize);
+            var eventTextLayout = getCalendarItemTextLayout(calendarItem, eventWidth - textHorizontalPadding * 2, fontSize, isRunning);
             var totalLineHeight = calculateLineHeight(eventHeight, eventTextLayout);
 
             canvas.Save();
-            canvas.Translate(calendarItemRect.Left + textHorizontalPadding, calendarItemRect.Top + textVerticalPadding);
+            canvas.Translate(calendarItemRect.Left + textHorizontalPadding + textLeftPadding, calendarItemRect.Top + textVerticalPadding);
             canvas.ClipRect(0, 0, eventWidth - textHorizontalPadding, totalLineHeight);
             eventTextLayout.Draw(canvas);
             canvas.Restore();
@@ -245,13 +367,20 @@ namespace Toggl.Droid.Views.Calendar
             return totalLineHeight;
         }
 
-        private StaticLayout getCalendarItemTextLayout(CalendarItem item, float eventWidth, int fontSize)
+        private StaticLayout getCalendarItemTextLayout(CalendarItem item, float eventWidth, int fontSize, bool isRunning)
         {
             textLayouts.TryGetValue(item.Id, out var eventTextLayout);
             if (eventTextLayout != null && !(Math.Abs(eventTextLayout.Width - eventWidth) > 0.1) && eventTextLayout.Text == item.Description) 
                 return eventTextLayout;
             
-            var color = item.Source == CalendarItemSource.Calendar ? Color.ParseColor(item.Color) : Color.White;
+            var color = item.Source == CalendarItemSource.Calendar || isRunning
+                ? Color.ParseColor(item.Color) 
+                : Color.White;
+
+            var primaryTextColor = Context.SafeGetColor(Resource.Color.primaryText);
+            var itemColorContrast = ColorUtils.CalculateContrast(color, lastCalendarItemBackgroundColor);
+            color = itemColorContrast >= minimumTextContrast ? color : primaryTextColor;
+            
             textEventsPaint.Color = color;
             textEventsPaint.TextSize = fontSize;
             

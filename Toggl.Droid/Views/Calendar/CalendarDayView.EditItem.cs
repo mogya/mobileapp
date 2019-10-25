@@ -18,32 +18,24 @@ namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarDayView
     {
-        private string startHourLabel = string.Empty;
-        private string endHourLabel = string.Empty;
-        private DateTimeOffset previousStartTime;
-        private DateTimeOffset previousEndTime;
+        private const int smoothAutoScrollDurationInMillis = 300;
         private readonly RectF dragTopRect = new RectF();
         private readonly RectF dragBottomRect = new RectF();
-        private EditAction editAction = EditAction.None;
-
+        
+        private string startHourLabel = string.Empty;
+        private string endHourLabel = string.Empty;
         private int distanceFromItemTopAndFirstTouch;
         private int handleTouchExtraMargins;
         private int autoScrollExtraDelta;
-        private int smoothAutoScrollDurationInMillis = 300;
         private bool shouldTryToAutoScrollToEvent = false;
-        
-        private readonly ISubject<CalendarItem> editCalendarItemSubject = new Subject<CalendarItem>();
-        public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSubject.AsObservable();
+        private DateTimeOffset previousStartTime;
+        private DateTimeOffset previousEndTime;
+        private EditAction editAction = EditAction.None;
 
         partial void initEventEditionBackingFields()
         {
             handleTouchExtraMargins = 24.DpToPixels(Context);
             autoScrollExtraDelta = 5.DpToPixels(Context);
-        }
-
-        private void commitEditedChanges()
-        {
-            editCalendarItemSubject.OnNext(itemEditInEditMode.CalendarItem);
         }
 
         private void onTouchDownWhileEditingItem(MotionEvent e1)
@@ -275,6 +267,18 @@ namespace Toggl.Droid.Views.Calendar
 
             itemEditInEditMode = itemEditInEditMode.WithCalendarItem(newCalendarItem, hourHeight, minHourHeight, timeService.CurrentDateTime);
             updateEditingStartEndLabels();
+            notifyUpdateInItemInEditMode();
+        }
+        
+        private void notifyUpdateInItemInEditMode()
+        {
+            if (itemEditInEditMode.OriginalIndex != runningTimeEntryIndex)
+            {
+                calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem);
+                return;
+            }
+            
+            calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem.WithDuration(null));
         }
 
         private void updateEditingStartEndLabels()

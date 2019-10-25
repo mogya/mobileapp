@@ -1,38 +1,39 @@
-using Android.OS;
 using Android.Views;
 using Android.Widget;
 using System;
-using System.Reactive.Linq;
+using Android.App;
+using Android.Content.PM;
+using Android.Runtime;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
-using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using Toggl.Storage.Settings;
-using Xamarin.Essentials;
-using static Android.Support.V7.App.AppCompatDelegate;
 using static Toggl.Shared.Resources;
 
-namespace Toggl.Droid.Fragments
+namespace Toggl.Droid.Activities
 {
-    public sealed partial class SettingsFragment : ReactiveTabFragment<SettingsViewModel>, IScrollableToStart
+    [Activity(Theme = "@style/Theme.Splash",
+        ScreenOrientation = ScreenOrientation.Portrait,
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    public partial class SettingsActivity : ReactiveActivity<SettingsViewModel>
     {
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public SettingsActivity() : base(
+            Resource.Layout.SettingsFragment,
+            Resource.Style.AppTheme,
+            Transitions.SlideInFromRight)
         {
-            var view = inflater.Inflate(Resource.Layout.SettingsFragment, container, false);
-
-            InitializeViews(view);
-            SetupToolbar(view, title: Settings);
-            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
-            return view;
         }
 
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        public SettingsActivity(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
-            base.OnViewCreated(view, savedInstanceState);
+        }
+
+        protected override void InitializeBindings()
+        {
+            scrollView.AttachMaterialScrollBehaviour(appBarLayout);
 
             versionTextView.Text = ViewModel.Version;
 
@@ -97,7 +98,7 @@ namespace Toggl.Droid.Fragments
                 .DisposedBy(DisposeBag);
 
             ViewModel.LoggingOut
-                .Subscribe(Context.CancelAllNotifications)
+                .Subscribe(this.CancelAllNotifications)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsFeedbackSuccessViewShowing
@@ -207,16 +208,11 @@ namespace Toggl.Droid.Fragments
             visibleView.Visibility = ViewStates.Visible;
         }
 
-        public void ScrollToStart()
+        private void showFeedbackSuccessToast(bool succeeded)
         {
-            scrollView?.SmoothScrollTo(0, 0);
-        }
+            if (!succeeded) return;
 
-        private void showFeedbackSuccessToast(bool succeeeded)
-        {
-            if (!succeeeded) return;
-
-            var toast = Toast.MakeText(Context, Shared.Resources.SendFeedbackSuccessMessage, ToastLength.Long);
+            var toast = Toast.MakeText(this, Shared.Resources.SendFeedbackSuccessMessage, ToastLength.Long);
             toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom, 0, 0);
             toast.Show();
         }

@@ -41,9 +41,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar
 
         public BehaviorRelay<DateTime> CurrentlyShownDate { get; }
 
-        public IObservable<IImmutableList<CalendarWeeklyViewDayViewModel>> WeekViewDays { get; }
+        public IObservable<ImmutableList<CalendarWeeklyViewDayViewModel>> WeekViewDays { get; }
 
-        public IObservable<IImmutableList<DayOfWeek>> WeekViewHeaders { get; }
+        public IObservable<ImmutableList<DayOfWeek>> WeekViewHeaders { get; }
 
         public ViewAction OpenSettings { get; }
 
@@ -166,6 +166,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private void selectDayFromWeekView(CalendarWeeklyViewDayViewModel day)
         {
             CurrentlyShownDate.Accept(day.Date);
+
+            var daysSinceToday = (timeService.CurrentDateTime.ToLocalTime().Date - day.Date).Days;
+            var dayOfWeek = day.Date.DayOfWeek.ToString();
+            analyticsService.CalendarWeeklyDatePickerSelectionChanged.Track(daysSinceToday, dayOfWeek);
         }
     }
 }

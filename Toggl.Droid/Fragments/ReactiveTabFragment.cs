@@ -1,18 +1,17 @@
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
-using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
+using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 
 namespace Toggl.Droid.Fragments
 {
-    public abstract partial class ReactiveTabFragment<TViewModel> : Fragment, IView
+    public abstract partial class ReactiveTabFragment<TViewModel> : Fragment, IView, IMenuItemOnMenuItemClickListener 
         where TViewModel : class, IViewModel
     {
         protected CompositeDisposable DisposeBag = new CompositeDisposable();
@@ -88,15 +87,13 @@ namespace Toggl.Droid.Fragments
             DisposeBag?.Dispose();
         }
 
-        public void SetupToolbar(View fragmentView, string title = "")
+        public void SetupToolbar(View fragmentView)
         {
-            var activity = Activity as AppCompatActivity;
             var toolbar = fragmentView.FindViewById<Toolbar>(Resource.Id.Toolbar);
-            toolbar.Title = title;
-            activity.SetSupportActionBar(toolbar);
-
-            activity.SupportActionBar.SetDisplayHomeAsUpEnabled(false);
-            activity.SupportActionBar.SetDisplayShowHomeEnabled(false);
+            toolbar.InflateMenu(Resource.Menu.SettingsMenu);
+            var saveMenuItem = toolbar.Menu.FindItem(Resource.Id.Settings);
+            saveMenuItem.SetTitle(Shared.Resources.Settings);
+            saveMenuItem.SetOnMenuItemClickListener(this);
         }
 
         public void Close()
@@ -109,6 +106,16 @@ namespace Toggl.Droid.Fragments
                 throw new InvalidOperationException();
 
             return tokenProvider.GetGoogleToken();
+        }
+
+        public bool OnMenuItemClick(IMenuItem item)
+        {
+            AndroidDependencyContainer
+                .Instance
+                .NavigationService
+                .Navigate<SettingsViewModel>(this);
+
+            return true;
         }
     }
 }

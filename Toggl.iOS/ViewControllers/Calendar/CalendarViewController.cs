@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Foundation;
+using Toggl.Core.Analytics;
 using CoreGraphics;
 using System.Collections.Immutable;
 using Toggl.Core.UI.Helper;
@@ -197,6 +198,15 @@ namespace Toggl.iOS.ViewControllers
 
             currentlyShownDate = newDate;
             ViewModel.CurrentlyShownDate.Accept(newDate);
+
+            var previousIndex = previousViewControllers.FirstOrDefault()?.View?.Tag;
+            if (previousIndex == null) return;
+            var swipeDirection = previousIndex > newIndex
+                ? CalendarSwipeDirection.Left
+                : CalendarSwipeDirection.Rignt;
+            var daysSinceToday = (int)newIndex.Value;
+            var dayOfWeek = ViewModel.IndexToDate((int)newIndex.Value).DayOfWeek.ToString();
+            IosDependencyContainer.Instance.AnalyticsService.CalendarSingleSwipe.Track(swipeDirection, daysSinceToday, dayOfWeek);
         }
 
         private void setupWeekViewHeaderLabels()

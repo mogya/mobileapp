@@ -505,6 +505,18 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 observer.Values().Last().Should().Be(dayToSelect.Date);
             }
+
+            [Fact, LogIfTooSlow]
+            public void TracksCalendarWeeklyDatePickerSelectionChangedEvent()
+            {
+                var daysSinceToday = 3;
+                var dayToSelect = new CalendarWeeklyViewDayViewModel(now.AddDays(-daysSinceToday).Date, false,  true);
+
+                ViewModel.SelectDayFromWeekView.Execute(dayToSelect);
+                TestScheduler.Start();
+
+                AnalyticsService.CalendarWeeklyDatePickerSelectionChanged.Received().Track(daysSinceToday, dayToSelect.Date.DayOfWeek.ToString());
+            }
         }
 
         public sealed class TheOpenSettingsAction : CalendarViewModelTest

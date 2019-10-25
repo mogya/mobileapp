@@ -381,6 +381,10 @@
     <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
       <DependentUpon>SendFeedbackActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
+      <DependentUpon>SettingsActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\Calendar\Anchor.cs" />
     <Compile Include="Adapters\Calendar\AnchorData.cs" />
     <Compile Include="Adapters\Calendar\CalendarAdapter.cs" />
@@ -404,9 +408,14 @@
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.PermissionHandler.cs">
       <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.ViewBinds.cs">
+      <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fragments\LockableViewPager.cs" />
     <Compile Include="Fragments\ReportsCalendarFragment.cs" />
     <Compile Include="Helper\ActiveTheme.cs" />
     <Compile Include="LayoutManagers\UnpredictiveLinearLayoutManager.cs" />
+    <Compile Include="Helper\IBackPressHandler.cs" />
     <Compile Include="Presentation\ActivityTransitions.cs" />
     <Compile Include="Presentation\RunningTimeEntrySheetBehavior.cs" />
     <Compile Include="Services\JobServicesConstants.cs" />
@@ -425,6 +434,8 @@
     <Compile Include="Extensions\FloatingActionButtonExtensions.cs" />
     <Compile Include="Presentation\IScrollableToStart.cs" />
     <Compile Include="ViewHelpers\CalendarItemRectAttributes.cs" />
+    <Compile Include="ViewHolders\CalendarMenuActionCellViewHolder.cs" />
+    <Compile Include="ViewHolders\CalendarWeekSectionViewHolder.cs" />
     <Compile Include="ViewHolders\LicenseViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
@@ -635,10 +646,6 @@
     <Compile Include="Views\EditDuration\WheelDurationInput.InputFilter.cs">
       <DependentUpon>WheelDurationInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SettingsFragment.cs" />
-    <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
-      <DependentUpon>SettingsFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Fragments\ReactiveTabFragment.cs" />
     <Compile Include="Fragments\ReactiveTabFragment.DialogProvider.cs">
       <DependentUpon>ReactiveTabFragment.cs</DependentUpon>
@@ -694,6 +701,11 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\ic_calendar.xml" />
+    <AndroidResource Include="Resources\drawable\ic_copy.xml" />
+    <AndroidResource Include="Resources\drawable\ic_delete.xml" />
+    <AndroidResource Include="Resources\drawable\ic_edit.xml" />
+    <AndroidResource Include="Resources\drawable\ic_save.xml" />
     <AndroidResource Include="Resources\drawable\ic_settings.xml" />
     <AndroidResource Include="Resources\drawable\toolbar_close.xml" />
     <AndroidResource Include="Resources\drawable\Dot.xml" />
@@ -701,6 +713,10 @@
     <AndroidResource Include="Resources\drawable\Splash.xml" />
     <AndroidResource Include="Resources\drawable\text_placeholder.xml" />
     <AndroidResource Include="Resources\layout\AboutActivity.axml" />
+    <AndroidResource Include="Resources\layout\CalendarDayFragmentPage.axml" />
+    <AndroidResource Include="Resources\layout\ContextualMenuActionCell.axml" />
+    <AndroidResource Include="Resources\layout\CalendarWeekStripeLabelsView.axml" />
+    <AndroidResource Include="Resources\layout\CalendarWeekStripeDaysView.axml" />
     <AndroidResource Include="Resources\layout\ReportsCalendar.axml" />
     <AndroidResource Include="Resources\layout\SelectTagsActivity.axml" />
     <AndroidResource Include="Resources\layout\SelectProjectActivity.axml" />
@@ -713,7 +729,7 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
-    <AndroidResource Include="Resources\menu\CalendarFragmentMenu.xml" />
+    <AndroidResource Include="Resources\menu\SettingsMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />

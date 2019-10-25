@@ -395,17 +395,17 @@ namespace Toggl.Networking.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async Task FailsIfDeletingANonExistingTimeEntryInAWorkspaceWhereTheUserBelongs()
+            public async Task SucceedsEvenIfDeletingAnAlreadyDeletedTimeEntry()
             {
                 var (togglApi, user) = await SetupTestUser();
                 var timeEntry = createTimeEntry(user);
                 var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
-                var timeEntryToDelete = new TimeEntry { Id = persistedTimeEntry.Id + 1000000, WorkspaceId = persistedTimeEntry.WorkspaceId };
 
-                Action deleteNonExistingTimeEntry = () => togglApi.TimeEntries.Delete(timeEntryToDelete).Wait();
+                await togglApi.TimeEntries.Delete(persistedTimeEntry);
+                await togglApi.TimeEntries.Delete(persistedTimeEntry);
+                var timeEntriesOnServer = await togglApi.TimeEntries.GetAll();
 
-                deleteNonExistingTimeEntry.Should().Throw<NotFoundException>();
-                (await togglApi.TimeEntries.GetAll()).Should().Contain(te => te.Id == persistedTimeEntry.Id);
+                timeEntriesOnServer.Should().BeEmpty();
             }
 
             [Fact, LogTestInfo]
@@ -437,16 +437,17 @@ namespace Toggl.Networking.Tests.Integration
             }
 
             [Fact, LogTestInfo]
-            public async Task FailsIfDeletingAnAlreadyDeletedTimeEntry()
+            public async Task SucceedsEvenIfTheDeletedTimeEntryDoesNotExistOnTheServer()
             {
                 var (togglApi, user) = await SetupTestUser();
                 var timeEntry = createTimeEntry(user);
                 var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
+                var timeEntryToDelete = new TimeEntry { Id = persistedTimeEntry.Id + 1000000, WorkspaceId = persistedTimeEntry.WorkspaceId };
 
-                await togglApi.TimeEntries.Delete(persistedTimeEntry);
-                Action secondDelete = () => togglApi.TimeEntries.Delete(persistedTimeEntry).Wait();
+                await togglApi.TimeEntries.Delete(timeEntryToDelete);
+                var timeEntriesOnServer = await togglApi.TimeEntries.GetAll();
 
-                secondDelete.Should().Throw<NotFoundException>();
+                timeEntriesOnServer.Should().Contain(te => te.Id == persistedTimeEntry.Id);
             }
 
             [Fact, LogTestInfo]

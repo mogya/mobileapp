@@ -10,16 +10,15 @@ namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarDayView
     {
-        private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private float hoursX;
         private float timeSliceStartX;
         private float timeSlicesTopPadding;
         private float verticalLineLeftMargin;
         private float hoursDistanceFromTimeLine;
+        private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private ImmutableArray<string> hours = ImmutableArray<string>.Empty;
         private ImmutableArray<float> timeLinesYs = ImmutableArray<float>.Empty;
         private ImmutableArray<float> hoursYs = ImmutableArray<float>.Empty;
-
         private Paint hoursLabelPaint;
         private Paint linesPaint;
 

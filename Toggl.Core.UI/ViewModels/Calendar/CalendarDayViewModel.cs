@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
@@ -150,9 +152,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .Execute();
 
             var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
-            var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
-
-            await Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
+            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
         }
     }
 }

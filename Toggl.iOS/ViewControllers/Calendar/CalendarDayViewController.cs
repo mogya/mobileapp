@@ -93,8 +93,7 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.DataSource = dataSource;
             CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
-
-            //Editing
+            //Editing items
             dataSource.ItemTapped
                 .Select(item => (CalendarItem?)item)
                 .Subscribe(editItemHelper.StartEditingItem.Inputs)
@@ -118,11 +117,10 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(_ => editItemHelper.StopEditing())
                 .DisposedBy(DisposeBag);
 
-
-//            createFromSpanHelper.CreateFromSpan
-//                .Subscribe(ViewModel.OnDurationSelected.Inputs)
-//                .DisposedBy(DisposeBag);
-
+            //Creating items
+            createFromSpanHelper.CreateFromSpan
+                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+                .DisposedBy(DisposeBag);
 
             //Contextual menu
             ViewModel.ContextualMenuViewModel.CurrentMenu

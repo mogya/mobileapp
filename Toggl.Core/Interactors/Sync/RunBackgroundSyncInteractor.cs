@@ -26,7 +26,7 @@ namespace Toggl.Core.Interactors
         public IObservable<SyncOutcome> Execute()
         {
             analyticsService.BackgroundSyncStarted.Track();
-            return syncManager.PullTimeEntries()
+            return syncManager.ForceFullSync()
                 .LastAsync()
                 .Select(_ => SyncOutcome.NewData)
                 .Catch((Exception error) => syncFailed(error))

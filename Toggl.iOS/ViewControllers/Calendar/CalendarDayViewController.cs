@@ -9,11 +9,10 @@ using Toggl.iOS.ViewSources;
 using Toggl.Shared.Extensions;
 using UIKit;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reactive.Subjects;
-using Toggl.Core.Analytics;
+using System.Reactive;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Calendar.ContextualMenu;
 using Toggl.iOS.Extensions;
@@ -30,6 +29,7 @@ namespace Toggl.iOS.ViewControllers
         private const int collectionViewHorizontalInset = 20;
 
         private readonly ITimeService timeService;
+        private readonly IRxActionFactory rxActionFactory;
 
         private bool contextualMenuInitialised;
 
@@ -50,6 +50,8 @@ namespace Toggl.iOS.ViewControllers
             Ensure.Argument.IsNotNull(contextualMenuVisible, nameof(contextualMenuVisible));
 
             timeService = IosDependencyContainer.Instance.TimeService;
+            rxActionFactory = IosDependencyContainer.Instance.RxActionFactory;
+
             this.contextualMenuVisible = contextualMenuVisible;
         }
 
@@ -61,6 +63,8 @@ namespace Toggl.iOS.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            ViewModel.ContextualMenuViewModel.AttachView(this);
 
             ContextualMenu.Layer.CornerRadius = 8;
             ContextualMenu.Layer.ShadowColor = UIColor.Black.CGColor;
@@ -80,7 +84,7 @@ namespace Toggl.iOS.ViewControllers
 
             layout = new CalendarCollectionViewLayout(ViewModel.Date.ToLocalTime().Date, timeService, dataSource);
 
-            editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, timeService, dataSource, layout);
+            editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, timeService, rxActionFactory, dataSource, layout);
             createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);
             zoomHelper = new CalendarCollectionViewZoomHelper(CalendarCollectionView, layout);
 
@@ -89,22 +93,36 @@ namespace Toggl.iOS.ViewControllers
             CalendarCollectionView.DataSource = dataSource;
             CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
 
+
+            //Editing
             dataSource.ItemTapped
+                .Select(item => (CalendarItem?)item)
+                .Subscribe(editItemHelper.StartEditingItem.Inputs)
+                .DisposedBy(DisposeBag);
+
+            editItemHelper.ItemUpdated
                 .Select(item => (CalendarItem?)item)
                 .Subscribe(ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Inputs)
                 .DisposedBy(DisposeBag);
 
-            editItemHelper.EditCalendarItem
-                .Subscribe(ViewModel.OnTimeEntryEdited.Inputs)
+            editItemHelper.ItemUpdated
+                .Subscribe(item => dataSource.UpdateItemView(item))
                 .DisposedBy(DisposeBag);
 
-            editItemHelper.LongPressCalendarEvent
-                .Subscribe(ViewModel.OnCalendarEventLongPressed.Inputs)
+            ViewModel.ContextualMenuViewModel.DiscardChanges
+                .Subscribe(_ => editItemHelper.DiscardChanges())
                 .DisposedBy(DisposeBag);
 
-            createFromSpanHelper.CreateFromSpan
-                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+            ViewModel.ContextualMenuViewModel.CalendarItemInEditMode
+                .Where(item => item == null)
+                .Subscribe(_ => editItemHelper.StopEditing())
                 .DisposedBy(DisposeBag);
+
+
+//            createFromSpanHelper.CreateFromSpan
+//                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+//                .DisposedBy(DisposeBag);
+
 
             //Contextual menu
             ViewModel.ContextualMenuViewModel.CurrentMenu

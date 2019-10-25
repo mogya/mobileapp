@@ -197,10 +197,26 @@ namespace Toggl.iOS.ViewSources
 
         public void StartEditing(NSIndexPath indexPath)
         {
+            var indexPathsToReload = new List<NSIndexPath> { indexPath };
+            if (editingItemIndexPath != null && !editingItemIndexPath.Equals(indexPath))
+                indexPathsToReload.Add(editingItemIndexPath);
             IsEditing = true;
             editingItemIndexPath = indexPath;
             layout.IsEditing = true;
-            collectionView.ReloadItems(new NSIndexPath[] { indexPath });
+            collectionView.ReloadItems(indexPathsToReload.ToArray());
+        }
+
+        public void StartEditing(CalendarItem calendarItem)
+            => StartEditing(indexPathFor(calendarItem));
+
+        private NSIndexPath indexPathFor(CalendarItem calendarItem)
+        {
+            var itemIndex = calendarItems.IndexOf(calendarItem);
+            if (itemIndex == -1)
+                return null;
+
+            var index = NSIndexPath.FromRowSection(itemIndex, 0);
+            return index;
         }
 
         public void StopEditing()
@@ -208,7 +224,10 @@ namespace Toggl.iOS.ViewSources
             IsEditing = false;
             layout.IsEditing = false;
             layoutAttributes = calculateLayoutAttributes();
-            layout.InvalidateLayoutForVisibleItems();
+            layout.InvalidateLayout();
+            var itemsToReload = new[] {editingItemIndexPath};
+            editingItemIndexPath = null;
+            collectionView.ReloadItems(itemsToReload);
         }
 
         public NSIndexPath InsertItemView(DateTimeOffset startTime, TimeSpan duration)
@@ -223,16 +242,27 @@ namespace Toggl.iOS.ViewSources
 
         public NSIndexPath UpdateItemView(DateTimeOffset startTime, TimeSpan duration)
         {
-            if (!IsEditing)
-                throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
+            try
+            {
+                if (!IsEditing)
+                    throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-            editingItemIndexPath = updateCalendarItem(editingItemIndexPath, startTime, duration);
+                editingItemIndexPath = updateCalendarItem(editingItemIndexPath, startTime, duration);
 
-            updateEditingHours();
-            layout.InvalidateLayoutForVisibleItems();
+                updateEditingHours();
+                layout.InvalidateLayoutForVisibleItems();
 
-            return editingItemIndexPath;
+                return editingItemIndexPath;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
+
+        public NSIndexPath UpdateItemView(CalendarItem calendarItem)
+            => UpdateItemView(calendarItem.StartTime, calendarItem.Duration(timeService.CurrentDateTime));
 
         public void RemoveItemView()
         {

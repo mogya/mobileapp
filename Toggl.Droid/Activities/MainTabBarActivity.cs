@@ -128,9 +128,6 @@ namespace Toggl.Droid.Activities
                     case CalendarFragment calendarFragment:
                         calendarFragment.ViewModel = getTabViewModel<CalendarViewModel>();
                         break;
-                    case SettingsFragment settingsFragment:
-                        settingsFragment.ViewModel = getTabViewModel<SettingsViewModel>();
-                        break;
                 }
             }
         }
@@ -185,9 +182,6 @@ namespace Toggl.Droid.Activities
                     break;
                 case Resource.Id.MainTabCalendarItem:
                     fragment = new CalendarFragment { ViewModel = getTabViewModel<CalendarViewModel>() };
-                    break;
-                case Resource.Id.MainTabSettinsItem:
-                    fragment = new SettingsFragment { ViewModel = getTabViewModel<SettingsViewModel>() };
                     break;
                 default:
                     throw new ArgumentException($"Unexpected item id {itemId}");

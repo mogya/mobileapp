@@ -155,6 +155,10 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private void selectDayFromWeekView(CalendarWeeklyViewDayViewModel day)
         {
             CurrentlyShownDate.Accept(day.Date);
+
+            var daysSinceToday = (timeService.CurrentDateTime.ToLocalTime().Date - day.Date).Days;
+            var dayOfWeek = day.Date.DayOfWeek.ToString();
+            analyticsService.CalendarWeeklyDatePickerSelectionChanged.Track(daysSinceToday, dayOfWeek);
         }
     }
 }

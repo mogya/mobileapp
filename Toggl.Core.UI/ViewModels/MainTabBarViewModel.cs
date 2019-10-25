@@ -21,13 +21,9 @@ namespace Toggl.Core.UI.ViewModels
     [Preserve(AllMembers = true)]
     public sealed class MainTabBarViewModel : ViewModel
     {
-        private readonly IRemoteConfigService remoteConfigService;
-        private readonly IPlatformInfo platformInfo;
-
         private readonly MainViewModel mainViewModel;
         private readonly ReportsViewModel reportsViewModel;
         private readonly CalendarViewModel calendarViewModel;
-        private readonly SettingsViewModel settingsViewModel;
 
         private bool hasOpenedReports = false;
 
@@ -77,9 +73,6 @@ namespace Toggl.Core.UI.ViewModels
             Ensure.Argument.IsNotNull(privateSharedStorageService, nameof(privateSharedStorageService));
             Ensure.Argument.IsNotNull(platformInfo, nameof(platformInfo));
 
-            this.remoteConfigService = remoteConfigService;
-            this.platformInfo = platformInfo;
-
             mainViewModel = new MainViewModel(
                 dataSource,
                 syncManager,
@@ -119,19 +112,7 @@ namespace Toggl.Core.UI.ViewModels
                 interactorFactory,
                 schedulerProvider,
                 navigationService);
-
-            settingsViewModel = new SettingsViewModel(
-                dataSource,
-                syncManager,
-                platformInfo,
-                userPreferences,
-                analyticsService,
-                interactorFactory,
-                navigationService,
-                rxActionFactory,
-                permissionsChecker,
-                schedulerProvider);
-
+            
             Tabs = getViewModels().ToList();
         }
 
@@ -149,11 +130,6 @@ namespace Toggl.Core.UI.ViewModels
             yield return mainViewModel;
             yield return reportsViewModel;
             yield return calendarViewModel;
-
-            if (platformInfo.Platform == Platform.Giskard)
-            {
-                yield return settingsViewModel;
-            }
         }
     }
 }

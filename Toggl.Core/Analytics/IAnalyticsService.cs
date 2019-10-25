@@ -194,16 +194,20 @@ namespace Toggl.Core.Analytics
         IAnalyticsEvent<bool> AccessibilityEnabled { get; }
 
         IAnalyticsEvent<bool> WatchPaired { get; }
-        
+
         IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
-        
+
         IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
-        
+
         IAnalyticsEvent<CalendarContextualMenuActionType> CalendarExistingTimeEntryContextualMenu { get; }
-        
+
         IAnalyticsEvent<CalendarContextualMenuActionType> CalendarRunningTimeEntryContextualMenu { get; }
-        
+
         IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
+
+        IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
+        IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
 
         void SetAppCenterUserId(long id);
         void ResetAppCenterUserId();

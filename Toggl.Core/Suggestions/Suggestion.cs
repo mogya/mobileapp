@@ -55,6 +55,8 @@ namespace Toggl.Core.Suggestions
             Description = timeEntry.Description;
             WorkspaceId = timeEntry.WorkspaceId;
 
+            TagIds = timeEntry.TagIds?.ToArray() ?? Array.Empty<long>();
+
             if (timeEntry.Project == null)
                 return;
 

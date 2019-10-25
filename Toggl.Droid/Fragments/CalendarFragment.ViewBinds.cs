@@ -37,13 +37,5 @@ namespace Toggl.Droid.Fragments
             
             toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
-
-        private void setupToolbar()
-        {
-            //todo: setup on settings toolbars revamp issue
-            toolbar.InflateMenu(Resource.Menu.CalendarFragmentMenu);
-            var saveMenuItem = toolbar.Menu.FindItem(Resource.Id.Settings);
-            saveMenuItem.SetTitle(Shared.Resources.Settings);
-        }
     }
 }

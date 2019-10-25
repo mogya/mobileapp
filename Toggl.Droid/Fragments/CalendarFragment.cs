@@ -41,6 +41,7 @@ namespace Toggl.Droid.Fragments
         {
             var view = inflater.Inflate(Resource.Layout.CalendarFragment, container, false);
             InitializeViews(view);
+            SetupToolbar(view);
             timeService = AndroidDependencyContainer.Instance.TimeService;
             defaultToolbarElevationInDPs = 4.DpToPixels(Context);
             return view;

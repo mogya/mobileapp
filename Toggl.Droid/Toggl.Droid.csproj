@@ -381,6 +381,10 @@
     <Compile Include="Activities\SendFeedbackActivity.ViewBinds.cs">
       <DependentUpon>SendFeedbackActivity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Activities\SettingsActivity.ViewBinds.cs">
+      <DependentUpon>SettingsActivity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Adapters\Calendar\Anchor.cs" />
     <Compile Include="Adapters\Calendar\AnchorData.cs" />
     <Compile Include="Adapters\Calendar\CalendarAdapter.cs" />
@@ -642,10 +646,6 @@
     <Compile Include="Views\EditDuration\WheelDurationInput.InputFilter.cs">
       <DependentUpon>WheelDurationInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fragments\SettingsFragment.cs" />
-    <Compile Include="Fragments\SettingsFragment.ViewBinds.cs">
-      <DependentUpon>SettingsFragment.cs</DependentUpon>
-    </Compile>
     <Compile Include="Fragments\ReactiveTabFragment.cs" />
     <Compile Include="Fragments\ReactiveTabFragment.DialogProvider.cs">
       <DependentUpon>ReactiveTabFragment.cs</DependentUpon>
@@ -701,6 +701,7 @@
     <None Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\color\FlatButtonTextColor.xml" />
     <AndroidResource Include="Resources\color\ToolbarButtonTextColor.xml" />
+    <AndroidResource Include="Resources\drawable\ic_calendar.xml" />
     <AndroidResource Include="Resources\drawable\ic_copy.xml" />
     <AndroidResource Include="Resources\drawable\ic_delete.xml" />
     <AndroidResource Include="Resources\drawable\ic_edit.xml" />
@@ -728,7 +729,7 @@
     <GoogleServicesJson Include="google-services.json" />
     <AndroidResource Include="Resources\layout\ReportsFragment.axml" />
     <AndroidResource Include="Resources\layout\ReportsFragmentHeader.axml" />
-    <AndroidResource Include="Resources\menu\CalendarFragmentMenu.xml" />
+    <AndroidResource Include="Resources\menu\SettingsMenu.xml" />
     <AndroidResource Include="Resources\menu\DoneOrClearMenu.xml" />
     <AndroidResource Include="Resources\menu\OneButtonMenu.xml" />
     <AndroidResource Include="Resources\values\Strings.xml" />

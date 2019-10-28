@@ -535,7 +535,7 @@ namespace Toggl.Core.UI.ViewModels
                 close(EditViewCloseReason.Delete);
         }
 
-        private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<IObservable<Unit>> deletionInteractor)
+        private async Task<bool> delete(ActionType actionType, int entriesCount, IInteractor<Task> deletionInteractor)
         {
             var isDeletionConfirmed = await View.ConfirmDestructiveAction(actionType, entriesCount);
 

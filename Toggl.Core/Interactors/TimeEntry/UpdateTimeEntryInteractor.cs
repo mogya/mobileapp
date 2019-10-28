@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.DataSources;
 using Toggl.Core.DTOs;
 using Toggl.Core.Extensions;
@@ -9,10 +10,11 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
+using Task = Toggl.Core.Models.Task;
 
 namespace Toggl.Core.Interactors
 {
-    internal class UpdateTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
+    internal class UpdateTimeEntryInteractor : IInteractor<Task<IThreadSafeTimeEntry>>
     {
         private readonly EditTimeEntryDto dto;
         private readonly ITimeService timeService;
@@ -40,12 +42,15 @@ namespace Toggl.Core.Interactors
             this.syncManager = syncManager;
         }
 
-        public IObservable<IThreadSafeTimeEntry> Execute()
-            => interactorFactory.GetTimeEntryById(dto.Id)
-                .Execute()
-                .Select(createUpdatedTimeEntry)
-                .SelectMany(dataSource.TimeEntries.Update)
-                .Do(syncManager.InitiatePushSync);
+        public Task<IThreadSafeTimeEntry> Execute()
+            => System.Threading.Tasks.Task.Run(async () =>
+            {
+                var originalTimeEntry = await interactorFactory.GetTimeEntryById(dto.Id).Execute(); 
+                var timeEntryToUpdate = createUpdatedTimeEntry(originalTimeEntry);
+                var updatedTimeEntry = await dataSource.TimeEntries.Update(timeEntryToUpdate);
+                syncManager.InitiatePushSync();
+                return updatedTimeEntry;
+            });
 
         private TimeEntry createUpdatedTimeEntry(IThreadSafeTimeEntry timeEntry)
             => TimeEntry.Builder.Create(dto.Id)

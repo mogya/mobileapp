@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Android.Graphics;
-using Android.Util;
 using Android.Views;
 using Toggl.Core.Calendar;
 using Toggl.Core.Extensions;
@@ -21,7 +18,7 @@ namespace Toggl.Droid.Views.Calendar
         private const int smoothAutoScrollDurationInMillis = 300;
         private readonly RectF dragTopRect = new RectF();
         private readonly RectF dragBottomRect = new RectF();
-        
+
         private string startHourLabel = string.Empty;
         private string endHourLabel = string.Empty;
         private int distanceFromItemTopAndFirstTouch;
@@ -92,24 +89,33 @@ namespace Toggl.Droid.Views.Calendar
             dragBottomRect.Right = dragBottomRect.Left + handleTouchExtraMargins;
             dragBottomRect.Left -= handleTouchExtraMargins;
         }
-        
+
         private bool handleDragInEditMode(MotionEvent e1, MotionEvent e2, float deltaX, float deltaY)
         {
             var calendarItemInfoInEditMode = itemEditInEditMode;
             if (!calendarItemInfoInEditMode.IsValid) return false;
 
+            var histCount = e2.HistorySize;
+            var avgYtouch = 0f;
+            for (var i = 0; i < histCount; i++)
+            {
+                avgYtouch += e2.GetHistoricalY(0, i);
+            }
+
+            var touchY = histCount > 0 ? avgYtouch / histCount : e2.GetY();
+
             switch (editAction)
             {
                 case EditAction.ChangeStart:
-                    changeStartTime(e2.GetY() - deltaY + scrollOffset);
+                    changeStartTime(touchY - deltaY + scrollOffset);
                     break;
 
                 case EditAction.ChangeEnd:
-                    changeEndTime(e2.GetY() - deltaY + scrollOffset);
+                    changeEndTime(touchY - deltaY + scrollOffset);
                     break;
 
                 case EditAction.ChangeOffset:
-                    changeOffset(e2.GetY() - deltaY + scrollOffset - distanceFromItemTopAndFirstTouch);
+                    changeOffset(touchY + -deltaY + scrollOffset - distanceFromItemTopAndFirstTouch);
                     break;
 
                 case EditAction.None:
@@ -130,6 +136,8 @@ namespace Toggl.Droid.Views.Calendar
 
             if (touchY < 0 || touchY >= maxHeight)
                 return;
+
+            itemInEditModeRect.Top = touchY;
 
             var itemToEdit = itemEditInEditMode;
             var calendarItem = itemToEdit.CalendarItem;
@@ -156,6 +164,8 @@ namespace Toggl.Droid.Views.Calendar
                 shouldTryToAutoScrollToEvent = true;
             }
 
+            if (isScrolling) return;
+
             if (touchY < scrollOffset)
                 autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
             else
@@ -173,6 +183,8 @@ namespace Toggl.Droid.Views.Calendar
 
             if (touchY < 0 || touchY >= maxHeight)
                 return;
+            
+            itemInEditModeRect.Bottom = touchY;
 
             var now = timeService.CurrentDateTime;
             var calendarItem = itemToEdit.CalendarItem;
@@ -196,6 +208,8 @@ namespace Toggl.Droid.Views.Calendar
                 shouldTryToAutoScrollToEvent = true;
             }
 
+            if (isScrolling) return;
+
             if (touchY > Height + scrollOffset)
                 autoScroll((int) (touchY - (Height + scrollOffset) + autoScrollExtraDelta));
             else
@@ -209,12 +223,22 @@ namespace Toggl.Droid.Views.Calendar
 
             var itemToEdit = itemEditInEditMode;
             var calendarItem = itemToEdit.CalendarItem;
+            
+            if (touchY < 0 || touchY >= maxHeight)
+                return;
+            
+            var newBottom = touchY + itemInEditModeRect.Height();
+            if (newBottom < 0 || newBottom >= maxHeight)
+                return;
+            
+            itemInEditModeRect.Top = touchY;
+            itemInEditModeRect.Bottom = newBottom;
 
             var newStartTime = newStartTimeWithStaticDuration(touchY, allItemsStartAndEndTime, calendarItem.Duration);
 
             var now = timeService.CurrentDateTime;
 
-            if (newStartTime + calendarItem.Duration >= currentDate.AddDays(1)) 
+            if (newStartTime + calendarItem.Duration >= currentDate.AddDays(1))
                 return;
 
             calendarItem = calendarItem
@@ -231,6 +255,9 @@ namespace Toggl.Droid.Views.Calendar
 
             var duration = calendarItem.Duration(now);
             var durationInPx = duration.TotalHours * hourHeight;
+            
+            if (isScrolling) return;
+            
             if (touchY < scrollOffset)
                 autoScroll((int) -(scrollOffset - touchY + autoScrollExtraDelta));
             else if (touchY + durationInPx > Height + scrollOffset)
@@ -249,14 +276,14 @@ namespace Toggl.Droid.Views.Calendar
                 scroller.StartScroll(0, scrollOffset, 0, deltaY);
             else
                 scroller.StartScroll(0, scrollOffset, 0, deltaY, smoothAutoScrollDurationInMillis);
-            
+
             handler.Post(continueScroll);
         }
 
         private void stopScroll()
         {
             scroller.ForceFinished(true);
-            isScrolling = false;   
+            isScrolling = false;
         }
 
         private void updateItemInEditMode(DateTimeOffset startTime, TimeSpan duration)
@@ -266,10 +293,11 @@ namespace Toggl.Droid.Views.Calendar
                 .WithDuration(duration);
 
             itemEditInEditMode = itemEditInEditMode.WithCalendarItem(newCalendarItem, hourHeight, minHourHeight, timeService.CurrentDateTime);
+
             updateEditingStartEndLabels();
             notifyUpdateInItemInEditMode();
         }
-        
+
         private void notifyUpdateInItemInEditMode()
         {
             if (itemEditInEditMode.OriginalIndex != runningTimeEntryIndex)
@@ -277,7 +305,7 @@ namespace Toggl.Droid.Views.Calendar
                 calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem);
                 return;
             }
-            
+
             calendarItemTappedSubject.OnNext(itemEditInEditMode.CalendarItem.WithDuration(null));
         }
 
@@ -385,7 +413,7 @@ namespace Toggl.Droid.Views.Calendar
         {
             hapticFeedbackProvider?.ActivateVibration(vibrationDurationInMilliseconds, vibrationAmplitude);
         }
-        
+
         private static float calculateHourOffsetFrom(DateTimeOffset dateTimeOffset, float hourHeight)
         {
             return (dateTimeOffset.Hour + dateTimeOffset.Minute / 60f) * hourHeight;
@@ -405,7 +433,7 @@ namespace Toggl.Droid.Views.Calendar
             public int OriginalIndex { get; private set; }
             public bool IsValid { get; private set; }
             public bool HasChanged { get; private set; }
-            
+
             private float top;
             private float bottom;
             private float left;
@@ -445,10 +473,10 @@ namespace Toggl.Droid.Views.Calendar
                     right = right
                 };
                 newCalendarItemEditInfo.enforceMinHeight(minHeight);
-                
+
                 return newCalendarItemEditInfo;
             }
-            
+
             private void enforceMinHeight(float minHeight)
             {
                 if (bottom - top < minHeight)

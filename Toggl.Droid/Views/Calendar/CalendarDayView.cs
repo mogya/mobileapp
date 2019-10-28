@@ -16,7 +16,6 @@ using Toggl.Core.Extensions;
 using Toggl.Core.UI.Calendar;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.ViewHelpers;
-using Toggl.Shared.Extensions;
 using Constants = Toggl.Core.Helper.Constants;
 
 namespace Toggl.Droid.Views.Calendar
@@ -143,9 +142,13 @@ namespace Toggl.Droid.Views.Calendar
             if (!calendarItemInEditMode.HasValue)
             {
                 if (isCurrentlyEditingItem)
+                {
                     cancelCurrentEdition();
+                }
                 else
+                {
                     ClearEditMode();
+                }
                 return;
             }
 
@@ -182,6 +185,7 @@ namespace Toggl.Droid.Views.Calendar
             var itemInEditMode = new CalendarItemEditInfo(calendarItem, calendarLayoutItems[calendarItemIndex], calendarItemIndex, hourHeight, minHourHeight, timeService.CurrentDateTime);
             
             itemEditInEditMode = itemInEditMode;
+            itemInEditMode.CalculateRect(itemInEditModeRect);
             updateEditingStartEndLabels();
             allItemsStartAndEndTime = selectItemsStartAndEndTime();
             Invalidate();
@@ -323,7 +327,8 @@ namespace Toggl.Droid.Views.Calendar
             var touchY = e1.GetY();
             var calendarItemInfo = findCalendarItemFromPoint(touchX, touchY);
             
-            if (calendarItemInfo.IsValid) return;
+            if (calendarItemInfo.IsValid) 
+                return;
 
             var startTime = dateAtYOffset(touchY + scrollOffset);
             var duration = defaultDuration;
@@ -366,10 +371,6 @@ namespace Toggl.Droid.Views.Calendar
             ClearEditMode();
             DiscardEditModeChanges();
         }
-        
-        private bool itemIsAlreadyBeingEdited(CalendarItemEditInfo calendarItemInfo)
-            => itemEditInEditMode.CalendarItem.Source == calendarItemInfo.CalendarItem.Source
-                && itemEditInEditMode.CalendarItem.Id == calendarItemInfo.CalendarItem.Id;
         
         private bool isEditingItem() => itemEditInEditMode.IsValid;
 

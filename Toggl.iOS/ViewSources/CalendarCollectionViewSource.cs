@@ -240,29 +240,21 @@ namespace Toggl.iOS.ViewSources
             return editingItemIndexPath;
         }
 
-        public NSIndexPath UpdateItemView(DateTimeOffset startTime, TimeSpan duration)
+        public NSIndexPath UpdateItemView(DateTimeOffset startTime, TimeSpan? duration)
         {
-            try
-            {
-                if (!IsEditing)
-                    throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
+            if (!IsEditing)
+                throw new InvalidOperationException("Set IsEditing before calling insert/update/remove");
 
-                editingItemIndexPath = updateCalendarItem(editingItemIndexPath, startTime, duration);
+            editingItemIndexPath = updateCalendarItem(editingItemIndexPath, startTime, duration);
 
-                updateEditingHours();
-                layout.InvalidateLayoutForVisibleItems();
+            updateEditingHours();
+            layout.InvalidateLayoutForVisibleItems();
 
-                return editingItemIndexPath;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            return editingItemIndexPath;
         }
 
         public NSIndexPath UpdateItemView(CalendarItem calendarItem)
-            => UpdateItemView(calendarItem.StartTime, calendarItem.Duration(timeService.CurrentDateTime));
+            => UpdateItemView(calendarItem.StartTime, calendarItem.Duration);
 
         public void RemoveItemView()
         {

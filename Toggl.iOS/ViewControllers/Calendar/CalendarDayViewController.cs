@@ -96,7 +96,15 @@ namespace Toggl.iOS.ViewControllers
             //Editing items
             dataSource.ItemTapped
                 .Select(item => (CalendarItem?)item)
+                .Subscribe(ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Inputs)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.CalendarItemInEditMode
                 .Subscribe(editItemHelper.StartEditingItem.Inputs)
+                .DisposedBy(DisposeBag);
+
+            editItemHelper.ItemUpdated
+                .Subscribe(item => dataSource.UpdateItemView(item))
                 .DisposedBy(DisposeBag);
 
             editItemHelper.ItemUpdated
@@ -104,17 +112,8 @@ namespace Toggl.iOS.ViewControllers
                 .Subscribe(ViewModel.ContextualMenuViewModel.OnCalendarItemUpdated.Inputs)
                 .DisposedBy(DisposeBag);
 
-            editItemHelper.ItemUpdated
-                .Subscribe(item => dataSource.UpdateItemView(item))
-                .DisposedBy(DisposeBag);
-
             ViewModel.ContextualMenuViewModel.DiscardChanges
                 .Subscribe(_ => editItemHelper.DiscardChanges())
-                .DisposedBy(DisposeBag);
-
-            ViewModel.ContextualMenuViewModel.CalendarItemInEditMode
-                .Where(item => item == null)
-                .Subscribe(_ => editItemHelper.StopEditing())
                 .DisposedBy(DisposeBag);
 
             //Creating items

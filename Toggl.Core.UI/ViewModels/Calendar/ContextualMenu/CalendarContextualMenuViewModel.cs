@@ -119,6 +119,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
                 var willUpdateCurrentItem = await View.ConfirmDestructiveAction(ActionType.DiscardEditingChanges);
                 if (!willUpdateCurrentItem)
                     return;
+                discardChangesSubject.OnNext(Unit.Default);
             }
 
             updateCalendarItem(newCalendarItem);

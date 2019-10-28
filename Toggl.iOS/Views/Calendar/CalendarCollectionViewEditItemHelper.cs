@@ -123,14 +123,7 @@ namespace Toggl.iOS.Views.Calendar
 
         public void DiscardChanges()
         {
-            try
-            {
-                itemUpdatedSubject.OnNext(originalCalendarItem);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            itemUpdatedSubject.OnNext(originalCalendarItem);
         }
 
         [Export("gestureRecognizer:shouldReceiveTouch:")]
@@ -351,7 +344,6 @@ namespace Toggl.iOS.Views.Calendar
                 return;
 
             LastPoint = point;
-            var now = timeService.CurrentDateTime;
 
             var newEndTime = NewEndTimeWithDynamicDuration(point, allItemsStartAndEndTime);
 
@@ -418,12 +410,6 @@ namespace Toggl.iOS.Views.Calendar
             if (!isActive) return;
 
             stopEditingCurrentCellIfNotVisible();
-        }
-
-        public void StopEditing()
-        {
-            resignActive();
-            dataSource.StopEditing();
         }
 
         public void stopEditingCurrentCell()

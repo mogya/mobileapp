@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
+using Toggl.Networking.Exceptions;
 using Toggl.Networking.Models;
 using Toggl.Networking.Network;
 using Toggl.Networking.Serialization;
@@ -46,7 +47,8 @@ namespace Toggl.Networking.ApiClients
         public IObservable<Unit> Delete(ITimeEntry timeEntry)
             => SendRequest<ITimeEntry>(endPoints.Delete(timeEntry.WorkspaceId, timeEntry.Id), AuthHeader)
                 .SingleAsync()
-                .Select(_ => Unit.Default);
+                .Select(_ => Unit.Default)
+                .Catch<Unit, NotFoundException>(_ => Observable.Return(Unit.Default));
 
         private IObservable<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
         {

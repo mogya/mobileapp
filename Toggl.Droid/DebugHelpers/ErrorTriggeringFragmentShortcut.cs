@@ -5,11 +5,11 @@ using Toggl.Droid.Debug;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
 
-namespace Toggl.Droid.Fragments
+namespace Toggl.Droid.Activities
 {
-    public partial class SettingsFragment
+    public partial class SettingsActivity
     {
-        public override void OnResume()
+        protected override void OnResume()
         {
             base.OnResume();
 
@@ -21,7 +21,7 @@ namespace Toggl.Droid.Fragments
         private void showErrorTriggeringView()
         {
             new ErrorTriggeringFragment()
-                .Show(FragmentManager, nameof(ErrorTriggeringFragment));
+                .Show(SupportFragmentManager, nameof(ErrorTriggeringFragment));
         }
     }
 }

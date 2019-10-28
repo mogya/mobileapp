@@ -18,19 +18,19 @@ namespace Toggl.Droid.Views.Calendar
 {
     public partial class CalendarDayView
     {
-        private string startHourLabel = string.Empty;
-        private string endHourLabel = string.Empty;
-        private DateTimeOffset previousStartTime;
-        private DateTimeOffset previousEndTime;
+        private const int smoothAutoScrollDurationInMillis = 300;
         private readonly RectF dragTopRect = new RectF();
         private readonly RectF dragBottomRect = new RectF();
-        private EditAction editAction = EditAction.None;
-
+        
+        private string startHourLabel = string.Empty;
+        private string endHourLabel = string.Empty;
         private int distanceFromItemTopAndFirstTouch;
         private int handleTouchExtraMargins;
         private int autoScrollExtraDelta;
-        private int smoothAutoScrollDurationInMillis = 300;
         private bool shouldTryToAutoScrollToEvent = false;
+        private DateTimeOffset previousStartTime;
+        private DateTimeOffset previousEndTime;
+        private EditAction editAction = EditAction.None;
 
         partial void initEventEditionBackingFields()
         {

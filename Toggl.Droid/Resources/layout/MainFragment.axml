@@ -62,8 +62,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/Toolbar"
             style="@style/ToolbarStyle"
-            app:layout_scrollFlags="scroll|enterAlways"
-            >
+            app:layout_scrollFlags="scroll|enterAlways">
             <ImageView 
               android:src="@drawable/ic_toggl_logo"
               android:layout_gravity="start"

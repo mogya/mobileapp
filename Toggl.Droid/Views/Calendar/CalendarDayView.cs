@@ -25,6 +25,15 @@ namespace Toggl.Droid.Views.Calendar
     public partial class CalendarDayView : View
     {
         private const int hoursPerDay = Constants.HoursPerDay;
+        private const int vibrationDurationInMilliseconds = 5;
+        private const int vibrationAmplitude = 7;
+        private const int scrollAnimationDurationInMillis = 300;
+        
+        private readonly ISubject<CalendarItem?> calendarItemTappedSubject = new Subject<CalendarItem?>();
+        private readonly ISubject<DateTimeOffset> emptySpansTouchedObservable = new Subject<DateTimeOffset>();
+        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
+        private readonly RectF tapCheckRectF = new RectF();
+        private readonly TimeSpan defaultDuration = TimeSpan.FromMinutes(30);
 
         private GestureDetector gestureDetector;
         private OverScroller scroller;
@@ -32,37 +41,25 @@ namespace Toggl.Droid.Views.Calendar
         private ITimeService timeService;
         private CalendarLayoutCalculator calendarLayoutCalculator;
         private DateTime currentDate = DateTime.Now;
+        private Paint currentHourPaint;
+        private Vibrator hapticFeedbackProvider;
         private bool shouldDrawCurrentHourIndicator = false;
-
         private int scrollOffset;
         private bool isScrolling;
         private bool flingWasCalled;
-
         private float availableWidth;
         private int hourHeight;
         private int maxHeight;
-        private Paint currentHourPaint;
-        private readonly RectF tapCheckRectF = new RectF();
-        
-        private Vibrator hapticFeedbackProvider;
-        private int vibrationDurationInMilliseconds = 5;
-        private int vibrationAmplitude = 7;
-        private int scrollAnimationDurationInMillis = 300;
 
+        private ImmutableList<CalendarItem> originalCalendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItem> calendarItems = ImmutableList<CalendarItem>.Empty;
         private ImmutableList<CalendarItemRectAttributes> calendarItemLayoutAttributes = ImmutableList<CalendarItemRectAttributes>.Empty;
-
-        private readonly ISubject<CalendarItem?> calendarItemTappedSubject = new Subject<CalendarItem?>();
-
+        
         public IObservable<CalendarItem?> CalendarItemTappedObservable
             => calendarItemTappedSubject.AsObservable();
 
-        private readonly ISubject<DateTimeOffset> emptySpansTouchedObservable = new Subject<DateTimeOffset>();
-
         public IObservable<DateTimeOffset> EmptySpansTouchedObservable
             => emptySpansTouchedObservable.AsObservable();
-        
-        private readonly ISubject<int> scrollOffsetSubject = new Subject<int>();
 
         public IObservable<int> ScrollOffsetObservable
             => scrollOffsetSubject.AsObservable();
@@ -142,21 +139,52 @@ namespace Toggl.Droid.Views.Calendar
 
         public void SetCurrentItemInEditMode(CalendarItem? calendarItemInEditMode)
         {
+            var isCurrentlyEditingItem = isEditingItem();
             if (!calendarItemInEditMode.HasValue)
             {
-                if (isEditingItem())
+                if (isCurrentlyEditingItem)
                     cancelCurrentEdition();
                 else
                     ClearEditMode();
                 return;
             }
-            
+
             var calendarItem = calendarItemInEditMode.Value;
+            if (!isCurrentlyEditingItem && calendarItem.Source == CalendarItemSource.Calendar)
+                return;
+            
+            if (isCurrentlyEditingItem)
+            {
+                if (calendarItem.Id == itemEditInEditMode.CalendarItem.Id)
+                    return;
+                
+                cancelCurrentEdition();
+                if (calendarItem.Source == CalendarItemSource.Calendar)
+                    return;
+            }
+
+            beginEdition(calendarItem);
+        }
+        
+        private void beginEdition(CalendarItem calendarItem)
+        {
             var calendarItemsToSearch = calendarItems;
+            if (string.IsNullOrEmpty(calendarItem.Id))
+            {
+                var indexToInsertNewItem = calendarItemsToSearch.FindIndex(item => item.StartTime >= calendarItem.StartTime);
+                indexToInsertNewItem = indexToInsertNewItem < 0 ? calendarItemsToSearch.Count : indexToInsertNewItem;
+                updateItemsAndRecalculateEventsAttrs(calendarItemsToSearch.Insert(indexToInsertNewItem, calendarItem));
+            }
+
+            calendarItemsToSearch = calendarItems;
             var calendarLayoutItems = calendarItemLayoutAttributes;
             var calendarItemIndex = calendarItemsToSearch.IndexOf(calendarItem);
             var itemInEditMode = new CalendarItemEditInfo(calendarItem, calendarLayoutItems[calendarItemIndex], calendarItemIndex, hourHeight, minHourHeight, timeService.CurrentDateTime);
-            beginEdition(itemInEditMode);   
+            
+            itemEditInEditMode = itemInEditMode;
+            updateEditingStartEndLabels();
+            allItemsStartAndEndTime = selectItemsStartAndEndTime();
+            Invalidate();
         }
 
         partial void initBackgroundBackingFields();
@@ -295,7 +323,17 @@ namespace Toggl.Droid.Views.Calendar
             var touchY = e1.GetY();
             var calendarItemInfo = findCalendarItemFromPoint(touchX, touchY);
             
-            //todo: do something onLongPress?
+            if (calendarItemInfo.IsValid) return;
+
+            var startTime = dateAtYOffset(touchY + scrollOffset);
+            var duration = defaultDuration;
+            var teGaps = calendarLayoutCalculator.CalculateTwoHoursOrLessGapsLayoutAttributes(calendarItems);
+            var matchingGap = teGaps.FirstOrDefault(gap => startTime > gap.StartTime && startTime < gap.StartTime + gap.Duration);
+            duration = matchingGap.Duration == default ? duration : matchingGap.Duration;
+            startTime = matchingGap.StartTime == default ? startTime : matchingGap.StartTime;
+            
+            var newCalendarItem = new CalendarItem("", CalendarItemSource.TimeEntry, startTime, duration, Shared.Resources.NewTimeEntry, CalendarIconKind.None);
+            calendarItemTappedSubject.OnNext(newCalendarItem);
         }
         
         private ImmutableList<DateTimeOffset> selectItemsStartAndEndTime()
@@ -323,22 +361,6 @@ namespace Toggl.Droid.Views.Calendar
             calendarItemTappedSubject.OnNext(calendarItemInfo.CalendarItem);
         }
 
-        private void beginEdition(CalendarItemEditInfo calendarItemInfo)
-        {
-            if (itemIsAlreadyBeingEdited(calendarItemInfo))
-                return;
-
-            cancelCurrentEdition();
-            
-            if (calendarItemInfo.CalendarItem.Source == CalendarItemSource.Calendar)
-                return;
-
-            itemEditInEditMode = calendarItemInfo;
-            updateEditingStartEndLabels();
-            allItemsStartAndEndTime = selectItemsStartAndEndTime();
-            Invalidate();   
-        }
-
         private void cancelCurrentEdition()
         {
             ClearEditMode();
@@ -346,7 +368,7 @@ namespace Toggl.Droid.Views.Calendar
         }
         
         private bool itemIsAlreadyBeingEdited(CalendarItemEditInfo calendarItemInfo)
-            =>  itemEditInEditMode.CalendarItem.Source == calendarItemInfo.CalendarItem.Source
+            => itemEditInEditMode.CalendarItem.Source == calendarItemInfo.CalendarItem.Source
                 && itemEditInEditMode.CalendarItem.Id == calendarItemInfo.CalendarItem.Id;
         
         private bool isEditingItem() => itemEditInEditMode.IsValid;

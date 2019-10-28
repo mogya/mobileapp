@@ -29,6 +29,7 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Stop timer
 - [ ] Enter description
 - [ ] Add new project
+- [ ] Add new project with already taken project name (does it show proper error message) 
 - [ ] Add new client
 - [ ] Add new tag
 - [ ] Add long (3000 characters) description and confirm character limit error shows in the edit view after sync

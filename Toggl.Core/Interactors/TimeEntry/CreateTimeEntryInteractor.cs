@@ -59,7 +59,7 @@ namespace Toggl.Core.Interactors
         public Task<IThreadSafeTimeEntry> Execute()
             => Task.Run(async () =>
             {
-                var currentUser = await dataSource.User.Current;
+                var currentUser = await dataSource.User.Current.FirstAsync();
                 var timeEntryPrototype = userFromPrototype(currentUser);    
                 var createdTimeEntry = await dataSource.TimeEntries.Create(timeEntryPrototype);
                 notifyOfNewTimeEntryIfPossible(createdTimeEntry);

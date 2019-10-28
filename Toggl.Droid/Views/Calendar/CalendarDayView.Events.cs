@@ -21,6 +21,7 @@ namespace Toggl.Droid.Views.Calendar
         private readonly double minimumTextContrast = 1.6;
         private readonly RectF eventRect = new RectF();
         private readonly RectF stripeRect = new RectF();
+        private readonly RectF itemInEditModeRect = new RectF();
         private readonly Paint eventsPaint = new Paint(PaintFlags.AntiAlias);
         private readonly Paint textEventsPaint = new Paint(PaintFlags.AntiAlias);
         private readonly Paint editingHoursLabelPaint = new Paint(PaintFlags.AntiAlias);
@@ -63,7 +64,7 @@ namespace Toggl.Droid.Views.Calendar
             originalCalendarItems = newItems;
             updateItemsAndRecalculateEventsAttrs(newItems);
         }
-        
+
         partial void initEventDrawingBackingFields()
         {
             minHourHeight = hourHeight / 4f;
@@ -102,14 +103,14 @@ namespace Toggl.Droid.Views.Calendar
         {
             if (availableWidth > 0)
             {
-                if (itemEditInEditMode.IsValid && itemEditInEditMode.HasChanged) 
+                if (itemEditInEditMode.IsValid && itemEditInEditMode.HasChanged)
                     newItems = newItems.Sort(calendarItemComparer);
-                
+
                 calendarItemLayoutAttributes = calendarLayoutCalculator
                     .CalculateLayoutAttributes(newItems)
                     .Select(calculateCalendarItemRect)
                     .ToImmutableList();
-                
+
                 textLayouts.Clear();
             }
 
@@ -144,12 +145,14 @@ namespace Toggl.Droid.Views.Calendar
                     hourHeight,
                     minHourHeight,
                     timeService.CurrentDateTime);
+                itemEditInEditMode.CalculateRect(itemInEditModeRect);
             }
         }
 
         partial void processEventsOnLayout(bool changed, int left, int top, int right, int bottom)
         {
-            updateItemsAndRecalculateEventsAttrs(calendarItems);
+            if (changed)
+                updateItemsAndRecalculateEventsAttrs(calendarItems);
         }
 
         private CalendarItemRectAttributes calculateCalendarItemRect(CalendarItemLayoutAttributes attrs)
@@ -157,10 +160,10 @@ namespace Toggl.Droid.Views.Calendar
             var totalItemSpacing = (attrs.TotalColumns - 1) * itemSpacing;
             var eventWidth = (availableWidth - leftPadding - rightPadding - totalItemSpacing) / attrs.TotalColumns;
             var left = leftMargin + leftPadding + eventWidth * attrs.ColumnIndex + attrs.ColumnIndex * itemSpacing;
-            
+
             return new CalendarItemRectAttributes(attrs, left, left + eventWidth);
         }
-        
+
         partial void drawCalendarItems(Canvas canvas)
         {
             var itemsToDraw = calendarItems;
@@ -176,28 +179,27 @@ namespace Toggl.Droid.Views.Calendar
 
                 itemAttr.CalculateRect(hourHeight, minHourHeight, eventRect);
                 if (!(eventRect.Bottom > scrollOffset) || !(eventRect.Top - scrollOffset < Height)) continue;
-                
+
                 drawCalendarShape(canvas, item, eventRect, eventIndex == runningTimeEntryIndex);
                 drawCalendarItemText(canvas, item, eventRect, eventIndex == runningTimeEntryIndex);
             }
-            
+
             drawCalendarItemInEditMode(canvas, currentItemInEditMode);
         }
 
         private void drawCalendarItemInEditMode(Canvas canvas, CalendarItemEditInfo currentItemInEditMode)
         {
             if (!currentItemInEditMode.IsValid) return;
-            
+
             var calendarItem = currentItemInEditMode.CalendarItem;
-            currentItemInEditMode.CalculateRect(eventRect);
 
-            if (!(eventRect.Bottom > scrollOffset) || !(eventRect.Top - scrollOffset < Height)) return;
+            if (!(itemInEditModeRect.Bottom > scrollOffset) || !(itemInEditModeRect.Top - scrollOffset < Height)) return;
 
-            drawCalendarShape(canvas, calendarItem, eventRect, itemIsRunning(currentItemInEditMode));
-            drawCalendarItemText(canvas, calendarItem, eventRect, itemIsRunning(currentItemInEditMode));
+            drawCalendarShape(canvas, calendarItem, itemInEditModeRect, itemIsRunning(currentItemInEditMode));
+            drawCalendarItemText(canvas, calendarItem, itemInEditModeRect, itemIsRunning(currentItemInEditMode));
             drawEditingHandles(canvas, currentItemInEditMode);
-            canvas.DrawText(startHourLabel, hoursX, eventRect.Top + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
-            canvas.DrawText(endHourLabel, hoursX, eventRect.Bottom + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
+            canvas.DrawText(startHourLabel, hoursX, itemInEditModeRect.Top + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
+            canvas.DrawText(endHourLabel, hoursX, itemInEditModeRect.Bottom + editingHoursLabelPaint.Descent(), editingHoursLabelPaint);
         }
 
         private void drawEditingHandles(Canvas canvas, CalendarItemEditInfo itemInEditModeToDraw)
@@ -205,17 +207,17 @@ namespace Toggl.Droid.Views.Calendar
             eventsPaint.Color = Color.White;
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
 
-            canvas.DrawCircle(eventRect.Right - editingHandlesHorizontalMargins, eventRect.Top, editingHandlesRadius, eventsPaint);
+            canvas.DrawCircle(itemInEditModeRect.Right - editingHandlesHorizontalMargins, itemInEditModeRect.Top, editingHandlesRadius, eventsPaint);
             if (!itemIsRunning(itemInEditModeToDraw))
-                canvas.DrawCircle(eventRect.Left + editingHandlesHorizontalMargins, eventRect.Bottom, editingHandlesRadius, eventsPaint);
+                canvas.DrawCircle(itemInEditModeRect.Left + editingHandlesHorizontalMargins, itemInEditModeRect.Bottom, editingHandlesRadius, eventsPaint);
 
             eventsPaint.SetStyle(Paint.Style.Stroke);
             eventsPaint.StrokeWidth = 1.DpToPixels(Context);
             eventsPaint.Color = new Color(Color.ParseColor(itemInEditModeToDraw.CalendarItem.Color));
-            
-            canvas.DrawCircle(eventRect.Right - editingHandlesHorizontalMargins, eventRect.Top, editingHandlesRadius, eventsPaint);
+
+            canvas.DrawCircle(itemInEditModeRect.Right - editingHandlesHorizontalMargins, itemInEditModeRect.Top, editingHandlesRadius, eventsPaint);
             if (!itemIsRunning(itemInEditModeToDraw))
-                canvas.DrawCircle(eventRect.Left + editingHandlesHorizontalMargins, eventRect.Bottom, editingHandlesRadius, eventsPaint);
+                canvas.DrawCircle(itemInEditModeRect.Left + editingHandlesHorizontalMargins, itemInEditModeRect.Bottom, editingHandlesRadius, eventsPaint);
         }
 
         private bool itemIsRunning(CalendarItemEditInfo itemInEditModeToDraw)
@@ -225,7 +227,7 @@ namespace Toggl.Droid.Views.Calendar
         {
             if (!isRunning)
                 drawRegularCalendarItemShape(canvas, item, calendarItemRect);
-            else 
+            else
                 drawRunningTimeEntryCalendarItemShape(canvas, item, calendarItemRect);
         }
 
@@ -250,11 +252,11 @@ namespace Toggl.Droid.Views.Calendar
 
             eventsPaint.Color = originalColor;
             canvas.DrawRoundRect(calendarItemRect.Left, calendarItemRect.Bottom - calendarEventBottomLineHeight, calendarItemRect.Right, calendarItemRect.Bottom, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
-            
+
             calendarIconPaint.SetColorFilter(new PorterDuffColorFilter(originalColor, PorterDuff.Mode.SrcIn));
             canvas.DrawBitmap(calendarIconBitmap, calendarItemRect.Left, calendarItemRect.Top, calendarIconPaint);
         }
-        
+
         private void drawCalendarTimeEntryItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)
         {
             var color = Color.ParseColor(item.Color);
@@ -271,7 +273,7 @@ namespace Toggl.Droid.Views.Calendar
             calendarFillColor.A = (byte) (calendarFillColor.A * 0.05f);
             var bgColor = Context.SafeGetColor(Resource.Color.cardBackground);
             calendarFillColor = new Color(ColorUtils.CompositeColors(calendarFillColor, bgColor));
-            
+
             var calendarStripeColor = new Color(itemColor);
             calendarStripeColor.A = (byte) (calendarStripeColor.A * 0.1f);
 
@@ -370,20 +372,20 @@ namespace Toggl.Droid.Views.Calendar
         private StaticLayout getCalendarItemTextLayout(CalendarItem item, float eventWidth, int fontSize, bool isRunning)
         {
             textLayouts.TryGetValue(item.Id, out var eventTextLayout);
-            if (eventTextLayout != null && !(Math.Abs(eventTextLayout.Width - eventWidth) > 0.1) && eventTextLayout.Text == item.Description) 
+            if (eventTextLayout != null && !(Math.Abs(eventTextLayout.Width - eventWidth) > 0.1) && eventTextLayout.Text == item.Description)
                 return eventTextLayout;
-            
+
             var color = item.Source == CalendarItemSource.Calendar || isRunning
-                ? Color.ParseColor(item.Color) 
+                ? Color.ParseColor(item.Color)
                 : Color.White;
 
             var primaryTextColor = Context.SafeGetColor(Resource.Color.primaryText);
             var itemColorContrast = ColorUtils.CalculateContrast(color, lastCalendarItemBackgroundColor);
             color = itemColorContrast >= minimumTextContrast ? color : primaryTextColor;
-            
+
             textEventsPaint.Color = color;
             textEventsPaint.TextSize = fontSize;
-            
+
             eventTextLayout = new StaticLayout(item.Description,
                 0,
                 item.Description.Length,
@@ -399,10 +401,10 @@ namespace Toggl.Droid.Views.Calendar
 
             return eventTextLayout;
         }
-        
+
         private sealed class CalendarItemStartTimeComparer : Comparer<CalendarItem>
         {
-            public override int Compare(CalendarItem x, CalendarItem y) 
+            public override int Compare(CalendarItem x, CalendarItem y)
                 => x.StartTime.LocalDateTime.CompareTo(y.StartTime.LocalDateTime);
         }
     }

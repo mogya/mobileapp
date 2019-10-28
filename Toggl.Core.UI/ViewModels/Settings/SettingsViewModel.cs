@@ -197,16 +197,16 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource.Preferences.Current
                     .Select(preferences => preferences.CollapseTimeEntries)
                     .DistinctUntilChanged()
-                    .AsDriver(false, schedulerProvider);
+                    .AsDriver(schedulerProvider);
 
             IsCalendarSmartRemindersVisible = calendarPermissionGranted.AsObservable()
                 .CombineLatest(userPreferences.EnabledCalendars.Select(ids => ids.Any()), And)
-                .AsDriver(false, schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             CalendarSmartReminders = userPreferences.CalendarNotificationsSettings()
                 .Select(s => s.Title())
                 .DistinctUntilChanged()
-                .AsDriver("", schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             LoggingOut = loggingOutSubject.AsObservable()
                 .AsDriver(schedulerProvider);

@@ -73,7 +73,7 @@ namespace Toggl.Core.Interactors
         public IInteractor<Task> DeleteTimeEntry(long id)
             => new DeleteTimeEntryInteractor(timeService, dataSource.TimeEntries, this, id);
 
-        public IInteractor<IObservable<Unit>> DeleteMultipleTimeEntries(long[] ids)
+        public IInteractor<Task> DeleteMultipleTimeEntries(long[] ids)
              => new DeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, this, ids);
 
         public IInteractor<IObservable<Unit>> SoftDeleteMultipleTimeEntries(long[] ids)

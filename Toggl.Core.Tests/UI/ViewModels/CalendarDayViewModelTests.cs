@@ -55,17 +55,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory
                     .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), TimeEntryStartOrigin.CalendarEvent)
                     .Execute()
-                    .Returns(Observable.Return(timeEntry));
+                    .Returns(Task.FromResult<IThreadSafeTimeEntry>(timeEntry));
 
                 InteractorFactory
                     .CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), TimeEntryStartOrigin.CalendarTapAndDrag)
                     .Execute()
-                    .Returns(Observable.Return(timeEntry));
+                    .Returns(Task.FromResult<IThreadSafeTimeEntry>(timeEntry));
 
                 InteractorFactory
                     .UpdateTimeEntry(Arg.Any<EditTimeEntryDto>())
                     .Execute()
-                    .Returns(Observable.Return(timeEntry));
+                    .Returns(Task.FromResult<IThreadSafeTimeEntry>(timeEntry));
             }
 
             protected override CalendarDayViewModel CreateViewModel()

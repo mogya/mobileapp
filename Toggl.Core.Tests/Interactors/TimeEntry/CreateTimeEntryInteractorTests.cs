@@ -3,6 +3,7 @@ using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Models.Interfaces;
@@ -180,7 +181,7 @@ namespace Toggl.Core.Tests.Interactors
         public sealed class TheContinueTimeEntryInteractor : BaseCreateTimeEntryInteractorTest
         {
             protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
-                => InteractorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.SingleTimeEntryContinueButton).Execute();
+                => InteractorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.SingleTimeEntryContinueButton).Execute().ToObservable();
 
             public TheContinueTimeEntryInteractor()
             {
@@ -238,7 +239,7 @@ namespace Toggl.Core.Tests.Interactors
                     TagIds = prototype.TagIds
                 }, SuggestionProviderType.MostUsedTimeEntries);
 
-                return InteractorFactory.StartSuggestion(suggestion).Execute();
+                return InteractorFactory.StartSuggestion(suggestion).Execute().ToObservable();
             }
 
             public TheStartSuggestionInteractor()
@@ -269,7 +270,7 @@ namespace Toggl.Core.Tests.Interactors
         public sealed class TheCreateTimeEntryInteractor : BaseCreateTimeEntryInteractorTest
         {
             protected override IObservable<IDatabaseTimeEntry> CallInteractor(ITimeEntryPrototype prototype)
-                => InteractorFactory.CreateTimeEntry(prototype, prototype.Duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer).Execute();
+                => InteractorFactory.CreateTimeEntry(prototype, prototype.Duration.HasValue ? TimeEntryStartOrigin.Manual : TimeEntryStartOrigin.Timer).Execute().ToObservable();
 
             [Fact, LogIfTooSlow]
             public async Task RegistersTheEventAsATimerEventIfManualModeIsDisabled()

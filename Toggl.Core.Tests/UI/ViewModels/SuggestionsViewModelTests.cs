@@ -342,7 +342,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public async Task ExecutesTheContinueTimeEntryInteractor()
             {
                 var suggestion = createSuggestion();
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
                 await ViewModel.Initialize();
 
@@ -357,10 +357,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var suggestion = createSuggestion();
                 var timeEntry = Substitute.For<IThreadSafeTimeEntry>();
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
                 mockedInteractor.Execute()
-                    .Returns(Observable.Return(timeEntry));
+                    .Returns(Task.FromResult(timeEntry));
                 await ViewModel.Initialize();
 
                 var auxObservable = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();

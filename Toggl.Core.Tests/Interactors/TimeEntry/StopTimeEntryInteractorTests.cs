@@ -137,11 +137,9 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
                          .Return(timeEntries)
                          .Select(x => x.Where(callInfo.Arg<Func<IDatabaseTimeEntry, bool>>()).Cast<IThreadSafeTimeEntry>()));
 
-            var observer = testScheduler.CreateObserver<ITimeEntry>();
-            var observable = interactor.Execute();
-            observable.Subscribe(observer);
-
-            observer.Messages.Single().Value.Exception.Should().BeOfType<NoRunningTimeEntryException>();
+            Func<ThreadingTask> action = async () => await interactor.Execute();
+            
+            action.Should().Throw<NoRunningTimeEntryException>();
         }
 
         [Fact, LogIfTooSlow]

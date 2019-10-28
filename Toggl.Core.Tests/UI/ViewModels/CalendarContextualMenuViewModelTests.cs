@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Analytics;
@@ -19,6 +20,7 @@ using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Xunit;
 using ColorHelper = Toggl.Core.Helper.Colors;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -335,7 +337,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().CreateTimeEntry(prototypeArg, TimeEntryStartOrigin.CalendarEvent);
             }
 
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheCopyActionClosesTheMenuAfterItsExecution()
                 => ExecutesActionAndClosesMenu(TheCopyActionCreatesATimeEntryWithTheDetailsFromTheCalendarEvent);
 
@@ -364,7 +366,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().CreateTimeEntry(prototypeArg, TimeEntryStartOrigin.CalendarEvent);
             }
 
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheStartActionClosesTheMenuAfterItsExecution()
                 => ExecutesActionAndClosesMenu(TheStartActionCreatesARunningTimeEntryWithTheDetailsFromTheCalendarEvent);
 
@@ -408,7 +410,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Messages.Should().HaveCount(1);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheDiscardActionExecutesActionAndClosesMenu()
                 => ClosesTheMenuWithoutMakingChanges(TheDiscardActionTriggersTheDiscardChangesObservable);
 
@@ -444,7 +446,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService.Received().Navigate<StartTimeEntryViewModel, StartTimeEntryParameters, Unit>(startTimeEntryArg, view);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheEditActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheEditActionNavigatesToTheStartTimeEntryViewModelWithProperParameters);
 
@@ -478,7 +480,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().CreateTimeEntry(prototypeArg, TimeEntryStartOrigin.CalendarEvent);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheSaveActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheSaveActionCreatesATimeEntryWithNoDescriptionWithTheRightStartTimeAndDuration);
 
@@ -515,7 +517,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().DeleteTimeEntry(runningTimeEntryId);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheDiscardActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheDiscardActionDeletesTheRunningTimeEntry);
 
@@ -537,7 +539,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService.Received().Navigate<EditTimeEntryViewModel, long[], Unit>(idArg, view);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheEditActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId);
 
@@ -567,7 +569,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().UpdateTimeEntry(dtoArg);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheSaveActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheSaveActionUpdatesTheRunningTimeEntry);
 
@@ -588,7 +590,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().StopTimeEntry(now, TimeEntryStopOrigin.CalendarContextualMenu);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheStopActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheStopActionStopsTheRunningTimeEntry);
 
@@ -625,7 +627,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().DeleteTimeEntry(stoppedTimeEntryId);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheDeleteActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheDeleteActionDeletesTheRunningTimeEntry);
 
@@ -647,7 +649,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 NavigationService.Received().Navigate<EditTimeEntryViewModel, long[], Unit>(idArg, view);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheEditActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId);
 
@@ -681,11 +683,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().UpdateTimeEntry(dtoArg);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheSaveActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheSaveActionUpdatesTheRunningTimeEntry);
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheContinueActionStartsANewTheRunningTimeEntryWithTheDetailsFromTheCalendarItemCalledFromTheMenuAction()
             {
                 var continueAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Continue);
@@ -716,7 +718,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.Received().ContinueTimeEntry(continuePrototype, ContinueTimeEntryMode.CalendarContextualMenu);
             }
             
-            [Fact(Skip = "The tests broke (or became flaky) after adding the bg scheduler to the menu actions")]
+            [Fact]
             public void TheContinueActionExecutesActionAndClosesMenu()
                 => ExecutesActionAndClosesMenu(TheContinueActionStartsANewTheRunningTimeEntryWithTheDetailsFromTheCalendarItemCalledFromTheMenuAction);
             

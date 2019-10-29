@@ -360,7 +360,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.StartSuggestion(Arg.Any<Suggestion>()).Returns(mockedInteractor);
                 mockedInteractor.Execute()
-                    .Returns(Task.FromResult(timeEntry));
+                    .ReturnsTaskOf(timeEntry);
                 await ViewModel.Initialize();
 
                 var auxObservable = TestScheduler.CreateObserver<IThreadSafeTimeEntry>();

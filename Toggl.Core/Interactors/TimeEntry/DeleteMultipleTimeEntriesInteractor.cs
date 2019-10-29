@@ -33,7 +33,7 @@ namespace Toggl.Core.Interactors
             => Task.Run(async () =>
             {
                 var timeEntriesToDelete = await interactorFactory.GetMultipleTimeEntriesById(ids).Execute(); 
-                await  dataSource.DeleteAll(timeEntriesToDelete);
+                await dataSource.DeleteAll(timeEntriesToDelete);
             });
     }
 }

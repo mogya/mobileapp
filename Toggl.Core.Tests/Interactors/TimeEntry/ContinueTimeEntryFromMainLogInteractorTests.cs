@@ -94,7 +94,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             InteractorFactory
                 .ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<ContinueTimeEntryMode>())
                 .Execute()
-                .Returns(Task.FromResult(createdTimeEntry));
+                .ReturnsTaskOf(createdTimeEntry);
 
             var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,

@@ -35,7 +35,7 @@ namespace Toggl.Core.UI.ViewModels.Calendar
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IRxActionFactory rxActionFactory;
 
-        private readonly ISubject<Unit> realoadWeekView = new BehaviorSubject<Unit>(Unit.Default);
+        private readonly ISubject<Unit> realoadWeekView = new Subject<Unit>();
 
         public IObservable<string> CurrentlyShownDateString { get; }
 
@@ -90,11 +90,8 @@ namespace Toggl.Core.UI.ViewModels.Calendar
                 .Select(days => days.ToImmutableList())
                 .AsDriver(schedulerProvider);
 
-            WeekViewHeaders = Observable
-                .CombineLatest(
-                    beginningOfWeekObservable,
-                    realoadWeekView.AsObservable(),
-                    (beginingOfWeek, _) => beginingOfWeek)
+            WeekViewHeaders = beginningOfWeekObservable
+                .ReemitWhen(realoadWeekView)
                 .Select(weekViewHeaders)
                 .Select(dayOfWeekHeaders => dayOfWeekHeaders.ToImmutableList())
                 .AsDriver(schedulerProvider);

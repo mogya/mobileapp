@@ -12,7 +12,9 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.UI;
+using Toggl.Core.UI.Helper;
 using Toggl.Networking;
+using Toggl.Shared;
 using Toggl.Storage.Settings;
 using Xunit;
 using Xunit.Sdk;
@@ -206,8 +208,8 @@ namespace Toggl.Core.Tests.UI
 
                 call.Should().NotThrow();
             }
-            
-            
+
+
             [Fact, LogIfTooSlow]
             public void DoesNotCrashWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidCulture()
             {
@@ -218,7 +220,7 @@ namespace Toggl.Core.Tests.UI
 
                 call.Should().NotThrow();
             }
-            
+
             [Fact, LogIfTooSlow]
             public void DoesNotCrashWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidLanguageAndCultureCodes()
             {
@@ -229,7 +231,7 @@ namespace Toggl.Core.Tests.UI
 
                 call.Should().NotThrow();
             }
-            
+
             [Fact, LogIfTooSlow]
             public void SetsTheCultureInfoToEnglishWhenWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCodeWithAnInvalidLanguageAndCultureCodes()
             {
@@ -240,7 +242,7 @@ namespace Toggl.Core.Tests.UI
 
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
-            
+
             [Fact, LogIfTooSlow]
             public void SetsTheCultureInfoToEnglishWhenThePlatformInfoReturnsANullCurrentNativeLanguageCode()
             {
@@ -248,10 +250,10 @@ namespace Toggl.Core.Tests.UI
                 PlatformInfo.CurrentNativeLanguageCode.Returns(nullLanguageCode);
 
                 App.LoadLocalizationConfiguration();
-                
+
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
-            
+
             [Fact, LogIfTooSlow]
             public void SetsTheCultureInfoToEnglishWhenThePlatformInfoReturnsAnEmptyCurrentNativeLanguageCode()
             {
@@ -259,30 +261,52 @@ namespace Toggl.Core.Tests.UI
                 PlatformInfo.CurrentNativeLanguageCode.Returns(nullLanguageCode);
 
                 App.LoadLocalizationConfiguration();
-                
+
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("en");
             }
-            
+
             [Fact, LogIfTooSlow]
             public void SetsTheCultureInfoToTheClosestOneWhenThePlatformInfoReturnsAnInvalidCurrentNativeLanguageCode()
             {
                 string invalidLanguageCode = "ja_US";
                 PlatformInfo.CurrentNativeLanguageCode.Returns(invalidLanguageCode);
-                
+
                 App.LoadLocalizationConfiguration();
 
                 Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.Should().Be("ja");
             }
-            
+
             [Fact, LogIfTooSlow]
             public void SetsTheCultureInfoProperlyWhenThePlatformInfoReturnsAValidCurrentNativeLanguageCode()
             {
                 string invalidLanguageCode = "ja_JP";
                 PlatformInfo.CurrentNativeLanguageCode.Returns(invalidLanguageCode);
-                
+
                 App.LoadLocalizationConfiguration();
 
                 Thread.CurrentThread.CurrentCulture.Name.Should().Be("ja-JP");
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheDateFormatCultureInfoProperlyWhenThePlatformInfoReturnsASupportedCurrentNativeLanguageCode()
+            {
+                string supportedLanguageCode = "en";
+                PlatformInfo.CurrentNativeLanguageCode.Returns(supportedLanguageCode);
+
+                App.LoadLocalizationConfiguration();
+
+                DateFormatCultureInfo.CurrentCulture.Name.Should().Be("en");
+            }
+
+            [Fact, LogIfTooSlow]
+            public void SetsTheDateFormatCultureInfoProperlyWhenThePlatformInfoReturnsAnUnsupportedCurrentNativeLanguageCode()
+            {
+                string unsupportedLanguageCode = "ja_JP";
+                PlatformInfo.CurrentNativeLanguageCode.Returns(unsupportedLanguageCode);
+
+                App.LoadLocalizationConfiguration();
+
+                DateFormatCultureInfo.CurrentCulture.Name.Should().Be("en");
             }
         }
     }

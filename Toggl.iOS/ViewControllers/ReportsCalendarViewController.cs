@@ -64,7 +64,7 @@ namespace Toggl.iOS.ViewControllers
                 .Select(month =>
                 {
                     var dateTime = month.ToDateTime();
-                    var pattern = CultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern;
+                    var pattern = DateFormatCultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern;
 
                     var yearMonthString = dateTime.ToString(pattern);
 

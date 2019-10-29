@@ -17,6 +17,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Views;
@@ -227,7 +228,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Select(currentUser => currentUser.BeginningOfWeek)
                 .Subscribe(onBeginningOfWeekChanged)
                 .DisposedBy(disposeBag);
-            
+
             interactorFactory.ObserveDefaultWorkspaceId()
                 .Execute()
                 .Where(newWorkspaceId => newWorkspaceId != workspaceId)
@@ -240,7 +241,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private void updateWorkspace(IThreadSafeWorkspace newWorkspace)
         {
             if (viewAppearedForTheFirstTime()) return;
-            
+
             loadReport(newWorkspace, startDate, endDate, source);
         }
 
@@ -363,8 +364,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
             }
             else
             {
-                var startDateText = startDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
-                var endDateText = endDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
+                var startDateText = startDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+                var endDateText = endDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
                 var dateRangeText = $"{startDateText} - {endDateText}";
                 currentDateRangeStringSubject.OnNext(dateRangeText);
             }

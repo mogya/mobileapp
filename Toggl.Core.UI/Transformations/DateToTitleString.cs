@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Toggl.Core.UI.Helper;
 using Toggl.Shared;
 
 namespace Toggl.Core.UI.Transformations
@@ -17,7 +18,7 @@ namespace Toggl.Core.UI.Transformations
             if (localDate.AddDays(1) == localNow)
                 return Resources.Yesterday;
 
-            return date.ToLocalTime().ToString("ddd, dd MMM", cultureInfo ?? CultureInfo.CurrentCulture);
+            return date.ToLocalTime().ToString("ddd, dd MMM", cultureInfo ?? DateFormatCultureInfo.CurrentCulture);
         }
     }
 }

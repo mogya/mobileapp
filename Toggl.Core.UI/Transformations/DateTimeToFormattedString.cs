@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Toggl.Core.UI.Helper;
 
 namespace Toggl.Core.UI.Transformations
 {
@@ -15,7 +16,7 @@ namespace Toggl.Core.UI.Transformations
                 timeZoneInfo = TimeZoneInfo.Local;
             }
 
-            return getDateTimeOffsetInCorrectTimeZone(date, timeZoneInfo).ToString(format, CultureInfo.CurrentCulture);
+            return getDateTimeOffsetInCorrectTimeZone(date, timeZoneInfo).ToString(format, DateFormatCultureInfo.CurrentCulture);
         }
 
         private static DateTimeOffset getDateTimeOffsetInCorrectTimeZone(

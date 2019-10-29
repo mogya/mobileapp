@@ -19,9 +19,9 @@ namespace Toggl.Shared.Tests
         {
             CultureInfo.CurrentCulture = new CultureInfo("ja");
 
-            beginningOfWeek.ToLocalizedString().Should().Be(translation);
+            beginningOfWeek.ToLocalizedString(CultureInfo.CurrentCulture).Should().Be(translation);
         }
-        
+
         [Theory, LogIfTooSlow]
         [InlineData(BeginningOfWeek.Monday, "Monday")]
         [InlineData(BeginningOfWeek.Tuesday, "Tuesday")]
@@ -34,7 +34,7 @@ namespace Toggl.Shared.Tests
         {
             CultureInfo.CurrentCulture = new CultureInfo("en");
 
-            beginningOfWeek.ToLocalizedString().Should().Be(translation);
+            beginningOfWeek.ToLocalizedString(CultureInfo.CurrentCulture).Should().Be(translation);
         }
     }
 }

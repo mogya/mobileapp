@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using Toggl.Core.Conversions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Shared;
 
@@ -19,14 +20,14 @@ namespace Toggl.Droid.ViewHelpers
 
         private BarChartData(DateTimeOffset startDate, DateTimeOffset endDate, bool workspaceIsBillable, DateFormat dateFormat, IImmutableList<BarViewModel> bars, int maximumHoursPerBar, IImmutableList<DateTimeOffset> horizontalLegend)
         {
-            StartDate = startDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
-            EndDate = endDate.ToString(dateFormat.Short, CultureInfo.CurrentCulture);
+            StartDate = startDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
+            EndDate = endDate.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture);
             Bars = bars;
             MaximumHoursPerBar = maximumHoursPerBar;
             WorkspaceIsBillable = workspaceIsBillable;
             HorizontalLabels =
                 horizontalLegend
-                    ?.Select(date => new BarChartDayLabel(DateTimeOffsetConversion.ToDayOfWeekInitial(date), date.ToString(dateFormat.Short, CultureInfo.CurrentCulture)))
+                    ?.Select(date => new BarChartDayLabel(DateTimeOffsetConversion.ToDayOfWeekInitial(date), date.ToString(dateFormat.Short, DateFormatCultureInfo.CurrentCulture)))
                     .ToImmutableList()
                 ?? ImmutableList<BarChartDayLabel>.Empty;
         }

@@ -233,10 +233,10 @@
     </data>
     <data name="LogEmptyStateText" xml:space="preserve">
         <value>しばらく記録をつけていなかったみたいですね。
-記録を開始すると、よく使われている記録が表示されます。</value>
+記録を開始すると、よく使われている記録が表示されます</value>
     </data>
     <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
-        <value>他のワークスペースのプロジェクトが選択されました。</value>
+        <value>他のワークスペースのプロジェクトが選択されました</value>
     </data>
     <data name="DifferentWorkspaceAlertMessage" xml:space="preserve">
         <value>ワークスペースを変更しますか？</value>
@@ -281,7 +281,7 @@
         <value>個人プロジェクト</value>
     </data>
     <data name="Create" xml:space="preserve">
-        <value>Create</value>
+        <value>作成する</value>
     </data>
     <data name="AddClient" xml:space="preserve">
         <value>クライアントを追加</value>
@@ -320,19 +320,19 @@
         <value>パスワードをリセットするためにメールアドレスを入力してください</value>
     </data>
     <data name="PasswordResetSuccess" xml:space="preserve">
-        <value>リンクが送られました。メールを確認してパスワードをリセットしてください</value>
+        <value>メールが送信されました。メールを確認してパスワードをリセットしてください</value>
     </data>
     <data name="PasswordResetEmailDoesNotExistError" xml:space="preserve">
-        <value>あれ。知らないメールのようです。正しいメールアドレスを入力しているか確認してください</value>
+        <value>おっと。知らないメールのようです。正しいメールアドレスを入力しているか確認してください</value>
     </data>
     <data name="PasswordResetGeneralError" xml:space="preserve">
         <value>パスワードのリセットに失敗しました。もう一度お試しください</value>
     </data>
     <data name="PasswordResetOfflineError" xml:space="preserve">
-        <value>オフラインです。インターネットに接続してもう一度お試しください</value>
+        <value>現在オフラインです。インターネットに接続して、もう一度お試しください</value>
     </data>
     <data name="AreYouSure" xml:space="preserve">
-        <value>よいですか?</value>
+        <value>よろしいですか？</value>
     </data>
     <data name="IncorrectPassword" xml:space="preserve">
         <value>パスワードが違います。もう一度お試しください</value>
@@ -419,7 +419,7 @@
         <value>選択したワークスペースにプロジェクトと記録がひも付けられます</value>
     </data>
     <data name="Reports" xml:space="preserve">
-        <value>リポート</value>
+        <value>レポート</value>
     </data>
     <data name="Other" xml:space="preserve">
         <value>その他</value>
@@ -428,13 +428,13 @@
         <value>記録を開始</value>
     </data>
     <data name="Continue" xml:space="preserve">
-        <value>つづける</value>
+        <value>続ける</value>
     </data>
     <data name="DeleteThisTimeEntry" xml:space="preserve">
         <value>この記録を削除しますか？</value>
     </data>
     <data name="DeleteMultipleTimeEntries" xml:space="preserve">
-        <value>{0}の記録を完全に削除してよいですか?</value>
+        <value>{0}の記録を完全に削除してよろしいですか？</value>
     </data>
     <data name="DeleteThisEntry" xml:space="preserve">
         <value>この記録を削除</value>
@@ -443,13 +443,13 @@
         <value>{0}この記録を削除</value>
     </data>
     <data name="DiscardThisTimeEntry" xml:space="preserve">
-        <value>この記録を破棄してよいですか?</value>
+        <value>この記録を破棄してよろしいですか？</value>
     </data>
     <data name="DiscardEditingChanges" xml:space="preserve">
-        <value>変更を破棄しますか?</value>
+        <value>変更を破棄しますか？</value>
     </data>
     <data name="DurationFormatClassic" xml:space="preserve">
-        <value>クラッシック (47:06 分)</value>
+        <value>クラシック(47:06 分)</value>
     </data>
     <data name="DurationFormatImproved" xml:space="preserve">
         <value>改善版 (0:47:06)</value>
@@ -458,7 +458,7 @@
         <value>小数 (0.79 h)</value>
     </data>
     <data name="ContinueLastEntry" xml:space="preserve">
-        <value>最後の記録を継続</value>
+        <value>最後の記録を継続する</value>
     </data>
     <data name="TapToRetry" xml:space="preserve">
         <value>タップしてリトライ</value>
@@ -488,11 +488,11 @@
         <value>パスワードリセットのリンクを取得</value>
     </data>
     <data name="TermsOfServiceDialogMessage" xml:space="preserve">
-        <value>タップすることで、Togglの利用規約とプライバシーポリシーを理解して同意したことになります</value>
+        <value>Togglの利用規約とプライバシーポリシーに同意する</value>
     </data>
     <data name="TermsOfServiceDialogMessageDroid" xml:space="preserve">
-        <value>By tapping "I Agree", you
-understand and agree to Toggl's</value>
+        <value>「同意する」をタップすることにより、
+下記を理解して同意したことになります</value>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
         <value>居住国</value>
@@ -507,10 +507,10 @@ understand and agree to Toggl's</value>
         <value>まあいいんじゃない？</value>
     </data>
     <data name="RatingViewPositiveCallToActionDescriptionIos" xml:space="preserve">
-        <value>App StoreでTogglにレートを付けますか？あなたの評価がTogglをさらに素晴らしいアプリにします！</value>
+        <value>App StoreでTogglを評価しますか？あなたの評価がTogglをさらに素晴らしいアプリにします！</value>
     </data>
     <data name="RatingViewPositiveCallToActionDescriptionDroid" xml:space="preserve">
-        <value>Play StoreでTogglにレートを付けますか？あなたの評価がTogglをさらに素晴らしいアプリにします！</value>
+        <value>Play StoreでTogglを評価しますか？あなたの評価がTogglをさらに素晴らしいアプリにします！</value>
     </data>
     <data name="Later" xml:space="preserve">
         <value>あとで</value>
@@ -609,7 +609,7 @@ understand and agree to Toggl's</value>
         <value>スマートリマインダを設定</value>
     </data>
     <data name="SetSmartRemindersMessage" xml:space="preserve">
-        <value>Get an actionable reminder to start tracking time for your event</value>
+        <value>イベントの時間を記録するためのリマインダ</value>
     </data>
     <data name="OpenAppAndStartAction" xml:space="preserve">
         <value>アプリを起動して開始</value>
@@ -624,13 +624,13 @@ understand and agree to Toggl's</value>
         <value>今なにしてる？</value>
     </data>
     <data name="DiscardMessage" xml:space="preserve">
-        <value>メッセージを破棄しますか?</value>
+        <value>メッセージを破棄しますか？</value>
     </data>
     <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
-        <value>この記録は、アクセスできないワークスペースに属しているため、同期できません。 プロジェクトを変更するか削除して、別のワークスペースに移動してください。</value>
+        <value>この記録は、アクセスできないワークスペースに属しているため、同期できません。 プロジェクトを変更するか削除して、別のワークスペースに移動してください</value>
     </data>
     <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
-        <value>このグループの{1}個の記録のうち{0}個が同期に失敗しました。 記録の詳細を確認してください。</value>
+        <value>このグループの{1}個の記録のうち{0}個が同期に失敗しました。 記録の詳細を確認してください</value>
     </data>
     <data name="Calendar" xml:space="preserve">
         <value>カレンダー</value>
@@ -651,7 +651,7 @@ understand and agree to Toggl's</value>
         <value>クライアントを作成</value>
     </data>
     <data name="NoWorries" xml:space="preserve">
-        <value>心配無用。</value>
+        <value>ご心配なく。</value>
     </data>
     <data name="EnableAccessLater" xml:space="preserve">
         <value>あとで設定からアクセスを追加できます</value>
@@ -663,7 +663,7 @@ understand and agree to Toggl's</value>
         <value>カレンダーへのアクセスを許可する</value>
     </data>
     <data name="CalendarAccessExplanation" xml:space="preserve">
-        <value>Togglは、イベントを表示するためにカレンダーのアクセス権が必要です。 イベントは自分だけに表示され、レポートには表示されません。</value>
+        <value>Togglは、イベントを表示するためにカレンダーのアクセス権が必要です。 イベントは自分だけに表示され、レポートには表示されません</value>
     </data>
     <data name="Welcome" xml:space="preserve">
         <value>ようこそ</value>
@@ -720,7 +720,7 @@ understand and agree to Toggl's</value>
         <value>変更の確認</value>
     </data>
     <data name="CategorizeYourTimeWithProjects" xml:space="preserve">
-        <value>プロジェクトで記録をカテゴライズ</value>
+        <value>プロジェクトで記録を分類する</value>
     </data>
     <data name="AddTags" xml:space="preserve">
         <value>タグを追加</value>
@@ -756,7 +756,7 @@ understand and agree to Toggl's</value>
         <value>フィードバックありがとうございます。もし何か質問が書かれていたら、すぐお返事するようにしますね</value>
     </data>
     <data name="NotificationDisabledNotice" xml:space="preserve">
-        <value>通知が無効になっています。通知を受け取るためには、アプリの設定から有効にしてください。</value>
+        <value>通知が無効になっています。通知を受け取るためには、アプリの設定から有効にしてください</value>
     </data>
     <data name="OpenSettingsApp" xml:space="preserve">
         <value>設定を開く</value>
@@ -771,18 +771,18 @@ understand and agree to Toggl's</value>
         <value>新しいワークスペースを作成</value>
     </data>
     <data name="UhOh" xml:space="preserve">
-        <value>あれ。</value>
+        <value>おっと。</value>
     </data>
     <data name="NoWorkspaceErrorMessage" xml:space="preserve">
         <value>誰かがワークスペースからあなたを削除したようです。
-心配ありません。続行するには、新しいワークスペースを作成します。</value>
+ご心配なく。続行するには、新しいワークスペースを作成します</value>
     </data>
     <data name="Skip" xml:space="preserve">
         <value>スキップ</value>
     </data>
     <data name="AppOutdatedMessage" xml:space="preserve">
         <value>しばらくアプリを更新していないようですね...
-続行するにはアプリを更新してください。</value>
+続行するにはアプリを更新してください</value>
     </data>
     <data name="UpdateTheApp" xml:space="preserve">
         <value>アプリを更新</value>
@@ -815,20 +815,20 @@ understand and agree to Toggl's</value>
         <value>日時のフォーマット</value>
     </data>
     <data name="SelectDefaultWorkspaceDescription" xml:space="preserve">
-        <value>記録は自動的にこのワークスペースにひも付けられます。あとで設定から変更することもできます。</value>
+        <value>記録は自動的にこのワークスペースにひも付けられます。あとで設定から変更することもできます</value>
     </data>
     <data name="DurationFormat" xml:space="preserve">
         <value>期間のフォーマット</value>
     </data>
     <data name="Projects" xml:space="preserve">
-        <value>プロジェクト</value>
+        <value>プロジェクトの一覧</value>
     </data>
     <data name="Project" xml:space="preserve">
         <value>プロジェクト</value>
     </data>
     <data name="EmptyProjectText" xml:space="preserve">
         <value>プロジェクトがここに表示されます。
-プロジェクトで記録を分類する事ができます。</value>
+プロジェクトで記録を分類する事ができます</value>
     </data>
     <data name="Tags" xml:space="preserve">
         <value>タグ</value>
@@ -841,7 +841,7 @@ understand and agree to Toggl's</value>
     </data>
     <data name="EmptyTagText" xml:space="preserve">
         <value>ここにタグが表示されます。
-タグを使って記録にキーワードを追加する事ができます。</value>
+タグを使って記録にキーワードを追加する事ができます</value>
     </data>
     <data name="GroupTimeEntries" xml:space="preserve">
         <value>類似の記録をまとめる</value>
@@ -859,22 +859,22 @@ understand and agree to Toggl's</value>
         <value>ワークスペースを検索</value>
     </data>
     <data name="ContactUs" xml:space="preserve">
-        <value>Contact us</value>
+        <value>お問い合わせ</value>
     </data>
     <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
-        <value>エラーが発生しました。もう一度お試しください。</value>
+        <value>エラーが発生しました。もう一度お試しください</value>
     </data>
     <data name="ContactUsSend" xml:space="preserve">
-        <value>Send</value>
+        <value>送信する</value>
     </data>
     <data name="FeedbackFieldPlaceholder" xml:space="preserve">
-        <value>Togglについてどう思う？感想や質問を聞かせてください</value>
+        <value>Togglはいかがですか？感想や質問をお聞かせください</value>
     </data>
     <data name="FeedbackHint" xml:space="preserve">
         <value>メッセージ</value>
     </data>
     <data name="SomethingWentWrongTryAgain" xml:space="preserve">
-        <value>エラーが発生しました。もう一度お試しください。</value>
+        <value>エラーが発生しました。もう一度お試しください</value>
     </data>
     <data name="Send" xml:space="preserve">
         <value>送信</value>
@@ -895,7 +895,7 @@ understand and agree to Toggl's</value>
         <value>24時間表記を使用</value>
     </data>
     <data name="SwipeActions" xml:space="preserve">
-        <value>スワイプしたときのアクション</value>
+        <value>スワイプによるアクション</value>
     </data>
     <data name="ManualMode" xml:space="preserve">
         <value>マニュアル</value>
@@ -904,7 +904,7 @@ understand and agree to Toggl's</value>
         <value>デフォルトのタイマー</value>
     </data>
     <data name="ManualModeDescription" xml:space="preserve">
-        <value>スタートボタンのデフォルトの動作を設定します。 ボタンを長押しすると、常に代替モードがアクティブになります。</value>
+        <value>スタートボタンのデフォルトの動作を設定します。 ボタンを長押しすると、常に代替モードがアクティブになります</value>
     </data>
     <data name="SmartReminders" xml:space="preserve">
         <value>スマートアラート</value>
@@ -919,7 +919,7 @@ understand and agree to Toggl's</value>
         <value>Togglからログアウト</value>
     </data>
     <data name="AlreadyHaveAnAccountQuestionMark" xml:space="preserve">
-        <value>アカウントをお持ちですか?</value>
+        <value>アカウントをお持ちですか？</value>
     </data>
     <data name="AddProjectBubbleText" xml:space="preserve">
         <value>プロジェクトとタグをその場で追加できます</value>
@@ -931,7 +931,7 @@ understand and agree to Toggl's</value>
         <value>同意します</value>
     </data>
     <data name="TokenResetInstruction" xml:space="preserve">
-        <value>パスワードを入力してアカウントにログインしなおします</value>
+        <value>パスワードを入力してアカウントに再ログイン</value>
     </data>
     <data name="OrSignOut" xml:space="preserve">
         <value>サインアウト</value>
@@ -988,10 +988,10 @@ understand and agree to Toggl's</value>
         <value>詳細をクリップボードから貼り付ける</value>
     </data>
     <data name="SiriClipboardInstructionDescription" xml:space="preserve">
-        <value>システムのクリップボードにコピーされたテキストが記録の説明として使用されます。</value>
+        <value>システムのクリップボードにコピーされたテキストが記録の説明として使用されます</value>
     </data>
     <data name="SiriClipboardInstructionConfirm" xml:space="preserve">
-        <value>Ok</value>
+        <value>OK</value>
     </data>
     <data name="SiriClipboardInstructionDoNotShowAgain" xml:space="preserve">
         <value>今後表示しない</value>
@@ -1015,22 +1015,22 @@ understand and agree to Toggl's</value>
         <value>{0}の記録を表示</value>
     </data>
     <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
-        <value>{0}の記録を開始しますか?</value>
+        <value>{0}の記録を開始しますか？</value>
     </data>
     <data name="SiriStartTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
-        <value>記録を開始しますか?</value>
+        <value>記録を開始しますか？</value>
     </data>
     <data name="SiriStopTimerConfirmationMessage" xml:space="preserve">
-        <value>{0}の記録を終了しますか?</value>
+        <value>{0}の記録を終了しますか？</value>
     </data>
     <data name="SiriStopTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
-        <value>記録を終了しますか?</value>
+        <value>記録を終了しますか？</value>
     </data>
     <data name="SiriShortcutLoginToUseShortcut" xml:space="preserve">
         <value>ショートカットを使うにはログインしてください</value>
     </data>
     <data name="SiriShortcutOpenTheAppToSync" xml:space="preserve">
-        <value>アプリを開いてデータを同期してから、もう一度お試しください。</value>
+        <value>アプリを開いてデータを同期してから、もう一度お試しください</value>
     </data>
     <data name="SiriDurationWithSeconds" xml:space="preserve">
         <value>{0} 秒</value>
@@ -1051,8 +1051,8 @@ understand and agree to Toggl's</value>
         <value>時間を計測するためにログイン</value>
     </data>
     <data name="WidgetApiError" xml:space="preserve">
-        <value>ネットワーク接続が失敗しました。
-アプリを開くとオフラインでも計測ができます。</value>
+        <value>ネットワークの接続に失敗しました。
+アプリを開くとオフラインでも計測ができます</value>
     </data>
     <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
         <value>計測中のタイマーは見つかりませんでした。
@@ -1060,7 +1060,7 @@ understand and agree to Toggl's</value>
     </data>
     <data name="WidgetGenericError" xml:space="preserve">
         <value>エラーが発生しました。
-計測するためにアプリを開いてください。</value>
+計測するためにアプリを開いてください</value>
     </data>
     <data name="Heading" xml:space="preserve">
         <value>見出し</value>
@@ -1114,7 +1114,7 @@ understand and agree to Toggl's</value>
         <value>同期に失敗しました</value>
     </data>
     <data name="SyncFailedOffline" xml:space="preserve">
-        <value>同期に失敗しました。オフラインです。</value>
+        <value>同期に失敗しました。オフラインです</value>
     </data>
     <data name="SuccessfullySyncedData" xml:space="preserve">
         <value>同期に成功しました</value>
@@ -1123,7 +1123,7 @@ understand and agree to Toggl's</value>
         <value>削除した記録をもとに戻す</value>
     </data>
     <data name="CalendarFeatureDescription" xml:space="preserve">
-        <value>カレンダー機能はデバイス上のカレンダーにリンクしているため、イベントを表示して記録に変換できます。</value>
+        <value>カレンダー機能はデバイス上のカレンダーにリンクしているため、イベントを表示して記録に変換できます</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
         <value>または {0}</value>
@@ -1132,7 +1132,7 @@ understand and agree to Toggl's</value>
         <value>イベントを見るために権限を与える</value>
     </data>
     <data name="SelectCalendarsDescription" xml:space="preserve">
-        <value>イベントはあなただけが見ることが出来ます。レポートには表示されません。</value>
+        <value>イベントはあなただけが見ることが出来ます。レポートには表示されません</value>
     </data>
     <data name="NoWorkspaceOr" xml:space="preserve">
         <value>または {0}</value>
@@ -1144,7 +1144,7 @@ understand and agree to Toggl's</value>
         <value>toggl.comに移動</value>
     </data>
     <data name="RatingTitle" xml:space="preserve">
-        <value>Togglはお役に立てていますか?</value>
+        <value>Togglはお役に立てていますか？</value>
     </data>
     <data name="RatingYes" xml:space="preserve">
         <value>Yes!</value>
@@ -1153,10 +1153,10 @@ understand and agree to Toggl's</value>
         <value>微妙..</value>
     </data>
     <data name="ReportsEmptyStateTitle" xml:space="preserve">
-        <value>ここにはない</value>
+        <value>レポートが存在しません</value>
     </data>
     <data name="ReportsEmptyStateDescription" xml:space="preserve">
-        <value>指定した期間には記録が見当たりませんでした。</value>
+        <value>指定した期間には記録が見当たりませんでした</value>
     </data>
     <data name="SiriShortcutCellAdd" xml:space="preserve">
         <value>追加</value>
@@ -1201,7 +1201,7 @@ understand and agree to Toggl's</value>
         <value>カレンダーから開始する</value>
     </data>
     <data name="CalendarOnboardingMessage" xml:space="preserve">
-        <value>Toggle上でカレンダーのイベントを見て、タップ一つで記録に変換</value>
+        <value>Toggleでカレンダーのイベントを見て、タップで取り込む</value>
     </data>
     <data name="LinkCalendars" xml:space="preserve">
         <value>カレンダーとリンク</value>
@@ -1210,13 +1210,13 @@ understand and agree to Toggl's</value>
         <value>カレンダーとリンク</value>
     </data>
     <data name="LinkCalendarsMessage" xml:space="preserve">
-        <value>Toggle上でカレンダーのイベントを見て、タップ一つで取り込む</value>
+        <value>Toggleでカレンダーのイベントを見て、タップで取り込む</value>
     </data>
     <data name="AllowAccess" xml:space="preserve">
         <value>アクセスを許可</value>
     </data>
     <data name="PrivateProjectHint" xml:space="preserve">
-        <value>個人プロジェクトは、プロジェクトメンバーだけが見ることが出来ます。</value>
+        <value>個人プロジェクトは、プロジェクトメンバーだけが見ることが出来ます</value>
     </data>
     <data name="Username" xml:space="preserve">
         <value>Username</value>
@@ -1240,10 +1240,10 @@ understand and agree to Toggl's</value>
         <value>期間は999時間を超えることはできません！</value>
     </data>
     <data name="CategorizeWithProjects" xml:space="preserve">
-        <value>プロジェクトを追加して記録をカテゴライズ</value>
+        <value>プロジェクトを追加して記録を分類する</value>
     </data>
     <data name="GenericInternetConnectionErrorMessage" xml:space="preserve">
-        <value>インターネット接続がありません。もう一度試してみてください。</value>
+        <value>インターネット接続がありません。もう一度試してみてください</value>
     </data>
     <data name="TotalEvents" xml:space="preserve">
         <value>{0} イベント</value>
@@ -1270,7 +1270,7 @@ understand and agree to Toggl's</value>
         <value>その日の終わり</value>
     </data>
     <data name="SiriWorkflowDoneForTheDayDescription" xml:space="preserve">
-        <value>実行中のタイマーを停止し、カスタムレポートを表示します。</value>
+        <value>実行中のタイマーを停止し、カスタムレポートを表示します</value>
     </data>
     <data name="SiriWorkflowStartAPomodoroTitle" xml:space="preserve">
         <value>ポモドーロを開始</value>
@@ -1282,7 +1282,7 @@ understand and agree to Toggl's</value>
         <value>フォーカスモード</value>
     </data>
     <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
-        <value>記録を開始すると当時に、音楽プレイリストを選択し、おやすみモードをオンにします。</value>
+        <value>記録を開始すると当時に、音楽プレイリストを選択し、おやすみモードをオンにします</value>
     </data>
     <data name="SystemDefault" xml:space="preserve">
         <value>システムのデフォルト</value>
@@ -1297,7 +1297,7 @@ understand and agree to Toggl's</value>
         <value>再起動が必要です</value>
     </data>
     <data name="RestartNeededMessage" xml:space="preserve">
-        <value>変更を反映するために再起動が必要です。再起動していいですか？</value>
+        <value>変更を反映するために再起動が必要です。再起動してもよろしいですか？</value>
     </data>
     <data name="AppTheme" xml:space="preserve">
         <value>アプリテーマ</value>

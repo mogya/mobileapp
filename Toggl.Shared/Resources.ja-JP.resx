@@ -434,13 +434,13 @@
         <value>この記録を削除しますか？</value>
     </data>
     <data name="DeleteMultipleTimeEntries" xml:space="preserve">
-        <value>{0}の記録を完全に削除してよろしいですか？</value>
+        <value>{0}個の記録を完全に削除してもよろしいですか？</value>
     </data>
     <data name="DeleteThisEntry" xml:space="preserve">
         <value>この記録を削除</value>
     </data>
     <data name="DeleteNTimeEntries" xml:space="preserve">
-        <value>{0}この記録を削除</value>
+        <value>{0}個の記録を削除</value>
     </data>
     <data name="DiscardThisTimeEntry" xml:space="preserve">
         <value>この記録を破棄してよろしいですか？</value>
@@ -573,7 +573,7 @@
         <value>ラベルをはずす</value>
     </data>
     <data name="WhenEventStarts" xml:space="preserve">
-        <value>イベントがスタートしたとき</value>
+        <value>イベントが開始したとき</value>
     </data>
     <data name="FiveMinutes" xml:space="preserve">
         <value>5分前</value>
@@ -774,8 +774,8 @@
         <value>おっと。</value>
     </data>
     <data name="NoWorkspaceErrorMessage" xml:space="preserve">
-        <value>誰かがワークスペースからあなたを削除したようです。
-ご心配なく。続行するには、新しいワークスペースを作成します</value>
+        <value>他のユーザーによってワークスペースから外されたようですが、ご安心ください。
+続行するには、新しいワークスペースを作成します。</value>
     </data>
     <data name="Skip" xml:space="preserve">
         <value>スキップ</value>
@@ -1147,7 +1147,7 @@
         <value>Togglはお役に立てていますか？</value>
     </data>
     <data name="RatingYes" xml:space="preserve">
-        <value>Yes!</value>
+        <value>もちろん!</value>
     </data>
     <data name="RatingNotReally" xml:space="preserve">
         <value>微妙..</value>
@@ -1162,7 +1162,7 @@
         <value>追加</value>
     </data>
     <data name="CustomSiriShortcutCellIn" xml:space="preserve">
-        <value>in {0}</value>
+        <value>{0}に</value>
     </data>
     <data name="SiriShortcutsStartTimer" xml:space="preserve">
         <value>タイマーをスタート</value>
@@ -1303,10 +1303,10 @@
         <value>アプリテーマ</value>
     </data>
     <data name="Yes" xml:space="preserve">
-        <value>Yes</value>
+        <value>はい</value>
     </data>
     <data name="No" xml:space="preserve">
-        <value>No</value>
+        <value>いいえ</value>
     </data>
     <data name="LoginToTrack" xml:space="preserve">
         <value>時間を記録するためにログイン</value>

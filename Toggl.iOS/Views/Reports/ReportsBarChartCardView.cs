@@ -9,6 +9,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core.Conversions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Extensions;
@@ -60,14 +61,14 @@ namespace Toggl.iOS.Views.Reports
             Item.StartDate
                 .CombineLatest(
                     Item.BarChartViewModel.DateFormat,
-                    (startDate, format) => startDate.ToString(format.Short, CultureInfo.CurrentCulture))
+                    (startDate, format) => startDate.ToString(format.Short, DateFormatCultureInfo.CurrentCulture))
                 .Subscribe(StartDateLabel.Rx().Text())
                 .DisposedBy(disposeBag);
 
             Item.EndDate
                 .CombineLatest(
                     Item.BarChartViewModel.DateFormat,
-                    (endDate, format) => endDate.ToString(format.Short, CultureInfo.CurrentCulture))
+                    (endDate, format) => endDate.ToString(format.Short, DateFormatCultureInfo.CurrentCulture))
                 .Subscribe(EndDateLabel.Rx().Text())
                 .DisposedBy(disposeBag);
 
@@ -156,6 +157,6 @@ namespace Toggl.iOS.Views.Reports
             => dates.Select(date =>
                 new BarLegendLabel(
                     DateTimeOffsetConversion.ToDayOfWeekInitial(date),
-                    date.ToString(format.Short, CultureInfo.CurrentCulture)));
+                    date.ToString(format.Short, DateFormatCultureInfo.CurrentCulture)));
     }
 }

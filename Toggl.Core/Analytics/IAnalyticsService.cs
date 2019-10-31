@@ -115,6 +115,8 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent NoDefaultWorkspace { get; }
 
+        IAnalyticsEvent NoWorkspaces { get; }
+
         IAnalyticsEvent<string, string> HandledException { get; }
 
         IAnalyticsEvent TwoRunningTimeEntriesInconsistencyFixed { get; }

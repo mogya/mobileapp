@@ -421,9 +421,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SegmentsObservable.Subscribe(segmentsObservable);
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
-                TestScheduler.Start();
-
                 await Initialize();
+
+                TestScheduler.Start();
 
                 var actualSegments = segmentsObservable.Values().Last();
                 var actualGroupedSegments = groupedSegmentsObservable.Values().Last();
@@ -459,9 +459,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SegmentsObservable.Subscribe(segmentsObservable);
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
-                TestScheduler.Start();
-
                 await Initialize();
+
+                TestScheduler.Start();
 
                 var actualSegments = segmentsObservable.Values().Last();
                 var actualGroupedSegments = groupedSegmentsObservable.Values().Last();
@@ -498,9 +498,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SegmentsObservable.Subscribe(segmentsObservable);
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
-                TestScheduler.Start();
-
                 await Initialize();
+
+                TestScheduler.Start();
 
                 var actualSegments = segmentsObservable.Values().Last();
                 var actualGroupedSegments = groupedSegmentsObservable.Values().Last();
@@ -536,9 +536,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SegmentsObservable.Subscribe(segmentsObservable);
                 ViewModel.GroupedSegmentsObservable.Subscribe(groupedSegmentsObservable);
 
-                TestScheduler.Start();
-
                 await Initialize();
+
+                TestScheduler.Start();
 
                 var actualSegments = segmentsObservable.Values().Last();
                 var actualGroupedSegments = groupedSegmentsObservable.Values().Last();
@@ -555,7 +555,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .ForEach(percentage => percentage.Should().BeGreaterOrEqualTo(5));
             }
         }
-        
+
         public sealed class TheSelectWorkspaceCommand : ReportsViewModelTest
         {
             [Fact, LogIfTooSlow]
@@ -816,7 +816,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
                 await ViewModel.Initialize();
                 ViewModel.ViewAppeared();
-                
+
                 TestScheduler.Start();
 
                 InteractorFactory.Received(1).GetProjectSummary(
@@ -844,7 +844,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.ViewAppeared();
                 TestScheduler.AdvanceTo(100);
                 TestScheduler.Start();
-                
+
                 InteractorFactory.Received(1).GetProjectSummary(
                     initialWorkspaceId,
                     Arg.Any<DateTimeOffset>(),

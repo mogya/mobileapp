@@ -122,7 +122,7 @@ namespace Toggl.Core
             var updateWorkspacesSinceDate =
                 new UpdateSinceDateState<IWorkspace>(database.SinceParameters);
 
-            var detectNoWorkspaceState = new DetectNotHavingAccessToAnyWorkspaceState(dataSource);
+            var detectNoWorkspaceState = new DetectNotHavingAccessToAnyWorkspaceState(dataSource, analyticsService);
 
             var persistWorkspaceFeatures =
                 new PersistListState<IWorkspaceFeatureCollection, IDatabaseWorkspaceFeatureCollection, IThreadSafeWorkspaceFeatureCollection>(

@@ -15,6 +15,7 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.Services;
@@ -54,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels
         public string Title { get; private set; } = Resources.Settings;
         public bool CalendarSettingsEnabled => onboardingStorage.CompletedCalendarOnboarding();
         public string Version => $"{platformInfo.Version} ({platformInfo.BuildNumber})";
-        
+
         public IObservable<string> Name { get; }
         public IObservable<string> Email { get; }
         public IObservable<bool> IsSynced { get; }
@@ -172,7 +173,7 @@ namespace Toggl.Core.UI.ViewModels
                 dataSource.User.Current
                     .Select(user => user.BeginningOfWeek)
                     .DistinctUntilChanged()
-                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString())
+                    .Select(beginningOfWeek => beginningOfWeek.ToLocalizedString(DateFormatCultureInfo.CurrentCulture))
                     .AsDriver(schedulerProvider);
 
             DateFormat =
@@ -215,7 +216,7 @@ namespace Toggl.Core.UI.ViewModels
                 {
                     return PresentableSyncStatus.LoggingOut;
                 }
-                
+
                 return syncing ? PresentableSyncStatus.Syncing : PresentableSyncStatus.Synced;
             }
 
@@ -484,7 +485,7 @@ namespace Toggl.Core.UI.ViewModels
             syncManager.InitiatePushSync();
 
             SelectOption<BeginningOfWeek> selectOptionFromBeginningOfWeek(BeginningOfWeek beginningOfWeek)
-                => new SelectOption<BeginningOfWeek>(beginningOfWeek, beginningOfWeek.ToLocalizedString());
+                => new SelectOption<BeginningOfWeek>(beginningOfWeek, beginningOfWeek.ToLocalizedString(DateFormatCultureInfo.CurrentCulture));
         }
 
         private void checkCalendarPermissions()

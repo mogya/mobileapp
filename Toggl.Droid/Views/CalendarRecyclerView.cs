@@ -12,6 +12,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core;
 using Toggl.Core.Helper;
+using Toggl.Core.UI.Helper;
 using Toggl.Droid.Extensions;
 using Toggl.Shared;
 using Color = Android.Graphics.Color;
@@ -229,7 +230,7 @@ namespace Toggl.Droid.Views
         }
 
         private string formatHour(DateTime hour)
-            => hour.ToString(fixedHoursFormat(), CultureInfo.CurrentCulture);
+            => hour.ToString(fixedHoursFormat(), DateFormatCultureInfo.CurrentCulture);
 
         private string fixedHoursFormat()
             => timeOfDayFormat.IsTwentyFourHoursFormat ? twentyFourHoursFormat : twelveHoursFormat;

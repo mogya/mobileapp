@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
@@ -125,7 +126,7 @@ namespace Toggl.Droid.Views
 
             viewModel.CurrentMonthObservable
                 .Select(calendarMonth => calendarMonth.ToDateTime())
-                .Select(dateTime => dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern)) 
+                .Select(dateTime => dateTime.ToString(DateFormatCultureInfo.CurrentCulture.DateTimeFormat.YearMonthPattern))
                 .Subscribe(monthYear.Rx().TextObserver())
                 .DisposedBy(disposeBag);
 

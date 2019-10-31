@@ -449,10 +449,10 @@
         <value>変更を破棄しますか？</value>
     </data>
     <data name="DurationFormatClassic" xml:space="preserve">
-        <value>クラシック(47:06 分)</value>
+        <value>クラシック(47:06 min)</value>
     </data>
     <data name="DurationFormatImproved" xml:space="preserve">
-        <value>改善版 (0:47:06)</value>
+        <value>時分秒 (0:47:06)</value>
     </data>
     <data name="DurationFormatDecimal" xml:space="preserve">
         <value>小数 (0.79 h)</value>
@@ -467,7 +467,7 @@
         <value>入力されたメールアドレスのユーザーはすでに存在します</value>
     </data>
     <data name="About" xml:space="preserve">
-        <value>About</value>
+        <value>Togglについて</value>
     </data>
     <data name="Licenses" xml:space="preserve">
         <value>ライセンス</value>
@@ -516,7 +516,7 @@
         <value>あとで</value>
     </data>
     <data name="RatingViewNegativeCallToActionDescription" xml:space="preserve">
-        <value>フィードバックをお願いします。みなさまのフィードバックは、togglの改善にとても役に立っています！</value>
+        <value>フィードバックをお願いします。みなさまのフィードバックは、Togglの改善にとても役に立っています！</value>
     </data>
     <data name="RatingViewPositiveCallToActionButtonTitle" xml:space="preserve">
         <value>アプリを評価</value>
@@ -654,7 +654,7 @@
         <value>ご心配なく。</value>
     </data>
     <data name="EnableAccessLater" xml:space="preserve">
-        <value>あとで設定からアクセスを追加できます</value>
+        <value>あとで設定からアクセスを許可できます</value>
     </data>
     <data name="ContinueWithoutAccess" xml:space="preserve">
         <value>アクセスを許可せずに継続</value>
@@ -1201,16 +1201,16 @@
         <value>カレンダーから開始する</value>
     </data>
     <data name="CalendarOnboardingMessage" xml:space="preserve">
-        <value>Toggleでカレンダーのイベントを見て、タップで取り込む</value>
+        <value>Togglでカレンダーのイベントを見て、タップで取り込む</value>
     </data>
     <data name="LinkCalendars" xml:space="preserve">
         <value>カレンダーとリンク</value>
     </data>
     <data name="LinkYourCalendars" xml:space="preserve">
-        <value>カレンダーとリンク</value>
+        <value>あなたのカレンダーとリンク</value>
     </data>
     <data name="LinkCalendarsMessage" xml:space="preserve">
-        <value>Toggleでカレンダーのイベントを見て、タップで取り込む</value>
+        <value>Togglでカレンダーのイベントを見て、タップで取り込む</value>
     </data>
     <data name="AllowAccess" xml:space="preserve">
         <value>アクセスを許可</value>
@@ -1219,10 +1219,10 @@
         <value>個人プロジェクトは、プロジェクトメンバーだけが見ることが出来ます</value>
     </data>
     <data name="Username" xml:space="preserve">
-        <value>Username</value>
+        <value>ユーザー名</value>
     </data>
     <data name="Email" xml:space="preserve">
-        <value>Email</value>
+        <value>メールアドレス</value>
     </data>
     <data name="DefaultWorkspace" xml:space="preserve">
         <value>デフォルトのワークスペース</value>

@@ -13,6 +13,8 @@ namespace Toggl.Core.Tests.TestExtensions
 {
     public static class FluentAssertionsExtensions
     {
+        public static int ToInt(this string x) => int.Parse(x);
+
         public static AndConstraint<TAssertions> BeSequenceEquivalentTo<TExpectation, TSubject, TAssertions>(
             this CollectionAssertions<TSubject, TAssertions> collectionAssertions,
             IEnumerable<TExpectation> expectation,

@@ -48,7 +48,7 @@ namespace Toggl.Core.Tests.Sync.States.Pull
 
             await setState.Start();
 
-            analyticsService.NoDefaultWorkspace.Received().Track();
+            analyticsService.NoDefaultWorkspace.Received().Track(1);
         }
 
         [Fact, LogIfTooSlow]
@@ -58,7 +58,7 @@ namespace Toggl.Core.Tests.Sync.States.Pull
 
             await setState.Start();
 
-            analyticsService.NoDefaultWorkspace.DidNotReceive().Track();
+            analyticsService.NoDefaultWorkspace.DidNotReceive().Track(Arg.Any<int>());
         }
 
         private void setupUserWithDefaultWorkspace(long? defaultWorkspaceId)
@@ -66,6 +66,9 @@ namespace Toggl.Core.Tests.Sync.States.Pull
             var user = new MockUser { DefaultWorkspaceId = defaultWorkspaceId };
 
             dataSource.User.Get().Returns(Observable.Return(user));
+
+            var workspaces = new[] { new MockWorkspace { Id = defaultWorkspaceId ?? 123 } };
+            dataSource.Workspaces.GetAll().Returns(Observable.Return(workspaces));
         }
     }
 }

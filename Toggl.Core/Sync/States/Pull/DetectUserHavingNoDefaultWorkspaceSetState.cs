@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -28,15 +29,19 @@ namespace Toggl.Core.Sync.States.Pull
         public IObservable<ITransition> Start()
             => dataSource.User.Get()
                 .Select(user => user.DefaultWorkspaceId.HasValue)
-                .Do(trackNoDefaultWorkspaceIfNeeded)
-                .Select(userHasDefaultWorkspace => userHasDefaultWorkspace
-                    ? Done.Transition()
-                    : NoDefaultWorkspaceDetected.Transition());
+                .SelectMany(transitionToNextState);
 
-        private void trackNoDefaultWorkspaceIfNeeded(bool userHasDefaultWorkspace)
-        {
-            if (!userHasDefaultWorkspace)
-                analyticsService.NoDefaultWorkspace.Track();
-        }
+        private IObservable<ITransition> transitionToNextState(bool userHasDefaultWorkspace)
+            => userHasDefaultWorkspace
+                ? Observable.Return(Done.Transition())
+                : dataSource.Workspaces.GetAll()
+                    .Select(workspaces =>
+                    {
+                        var numberOfWorkspaces = workspaces.Count();
+                        analyticsService.NoDefaultWorkspace
+                            .Track(numberOfWorkspaces);
+
+                        return NoDefaultWorkspaceDetected.Transition();
+                    });
     }
 }

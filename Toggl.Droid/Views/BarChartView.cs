@@ -229,7 +229,7 @@ namespace Toggl.Droid.Views
                     canvas.DrawRect(left, nonBillableTop, barRight, billableTop, nonBillablePaint);
                 }
 
-                if (willDrawDayLabels && numberOfLabels >= i)
+                if (willDrawDayLabels && i < numberOfLabels)
                 {
                     var horizontalLabel = labelsToRender[i];
 

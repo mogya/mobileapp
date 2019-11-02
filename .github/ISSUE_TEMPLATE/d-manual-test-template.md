@@ -198,6 +198,14 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Try changing the workspace in the mobile app. Is this handed off to web properly?
 - [ ] Try changing the selected period in the mobile app. Is this handed off to web properly?
 
+## Testing Widgets
+- [ ] Install the time entry widget
+- [ ] Start a time entry from the widget
+- [ ] Stop the running time entry from the widget
+- [ ] Make sure the time entry appears in the main log
+- [ ] Install the suggestions widget (Android) or expand the timer widget (iOS)
+- [ ] Continue a suggestion
+
 ## Testing app restriction UI
 
 - [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About)

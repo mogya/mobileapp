@@ -113,7 +113,7 @@ namespace Toggl.Core.Analytics
 
         IAnalyticsEvent<string, string> EntitySyncStatus { get; }
 
-        IAnalyticsEvent NoDefaultWorkspace { get; }
+        IAnalyticsEvent<int> NoDefaultWorkspace { get; }
 
         IAnalyticsEvent NoWorkspaces { get; }
 

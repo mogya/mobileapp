@@ -906,9 +906,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 await viewModel.Initialize();
-                TestScheduler.Start();
-
                 viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
+                TestScheduler.Start();
 
                 observer.Messages.First().Value.Value.Should().BeTrue();
             }
@@ -923,9 +922,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 await viewModel.Initialize();
-                TestScheduler.Start();
-
                 viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
+                TestScheduler.Start();
 
                 observer.Messages.First().Value.Value.Should().BeFalse();
             }
@@ -940,10 +938,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 await viewModel.Initialize();
-                TestScheduler.Start();
-
                 viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
-
+                TestScheduler.Start();
+                
                 observer.Messages.First().Value.Value.Should().BeFalse();
             }
 
@@ -957,11 +954,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var viewModel = CreateViewModel();
 
                 await viewModel.Initialize();
+                viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
                 TestScheduler.Start();
 
-                viewModel.IsCalendarSmartRemindersVisible.Subscribe(observer);
-
                 viewModel.ViewAppeared();
+                TestScheduler.Start();
 
                 var messages = observer.Messages.Select(msg => msg.Value.Value);
 

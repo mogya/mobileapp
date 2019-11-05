@@ -42,7 +42,7 @@ namespace Toggl.Networking.Tests.Integration
                 await pushTags(togglApi, tags1, user.DefaultWorkspaceId.Value);
                 await pushTags(togglApi, tags2, otherWorkspace.Id);
 
-                var returnedTags = await CallEndpointWith(togglApi);
+                var returnedTags = await togglApi.Tags.GetAll();
 
                 returnedTags.Should().HaveCount(tags1.Length + tags2.Length);
                 assertTags(returnedTags, tags1, user.DefaultWorkspaceId.Value);
@@ -92,11 +92,8 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var user = await togglApi.User.Get();
                 var tag = createNewTag(user.DefaultWorkspaceId.Value);
-                return await CallEndpointWith(togglApi, tag);
+                return await togglApi.Tags.Create(tag);
             }
-
-            private Task<ITag> CallEndpointWith(ITogglApi togglApi, ITag tag)
-                => togglApi.Tags.Create(tag);
 
             [Fact, LogTestInfo]
             public async Task CreatesNewTag()
@@ -104,7 +101,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
 
                 var tag = createNewTag(user.DefaultWorkspaceId.Value);
-                var persistedTag = await CallEndpointWith(togglClient, tag);
+                var persistedTag = await togglClient.Tags.Create(tag);
 
                 persistedTag.Name.Should().Be(tag.Name);
                 persistedTag.WorkspaceId.Should().Be(user.DefaultWorkspaceId);

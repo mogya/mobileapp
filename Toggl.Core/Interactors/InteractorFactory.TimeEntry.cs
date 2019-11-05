@@ -75,7 +75,7 @@ namespace Toggl.Core.Interactors
              => new DeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, this, ids);
 
         public IInteractor<IObservable<Unit>> SoftDeleteMultipleTimeEntries(long[] ids)
-            => new SoftDeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, syncManager, this, ids);
+            => new SoftDeleteMultipleTimeEntriesInteractor(dataSource.TimeEntries, timeService, syncManager, this, ids);
 
         public IInteractor<IObservable<IThreadSafeTimeEntry>> GetTimeEntryById(long id)
             => new GetByIdInteractor<IThreadSafeTimeEntry, IDatabaseTimeEntry>(dataSource.TimeEntries, analyticsService, id)

@@ -45,7 +45,7 @@ namespace Toggl.Core.Tests.Sync.States.Push.BaseStates
         {
             var state = CreateState();
             var entity = new TestModel(-1, SyncStatus.SyncNeeded);
-            PrepareApiCallFunctionToThrow(exception);
+            PrepareApiCallFunctionToThrow(aggregate(exception));
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<(Exception Reason, IThreadSafeTestModel)>)transition).Parameter;
@@ -60,7 +60,7 @@ namespace Toggl.Core.Tests.Sync.States.Push.BaseStates
         {
             var state = CreateState();
             var entity = new TestModel(-1, SyncStatus.SyncNeeded);
-            PrepareApiCallFunctionToThrow(exception);
+            PrepareApiCallFunctionToThrow(aggregate(aggregate(exception)));
 
             var transition = state.Start(entity).SingleAsync().Wait();
             var parameter = ((Transition<ServerErrorException>)transition).Parameter;
@@ -103,7 +103,7 @@ namespace Toggl.Core.Tests.Sync.States.Push.BaseStates
         public void ThrowsWhenExceptionsWhichShouldBeRethrownAreCaught(Exception exception)
         {
             var state = CreateState();
-            PrepareApiCallFunctionToThrow(exception);
+            PrepareApiCallFunctionToThrow(aggregate(exception));
             Exception caughtException = null;
 
             try
@@ -173,5 +173,8 @@ namespace Toggl.Core.Tests.Sync.States.Push.BaseStates
                 ? testAnalyticsService.TestEvent
                 : SyncAnalyticsExtensions.DefaultSyncAnalyticsExtensionsSearchStrategy(entityType, analyticsService);
         }
+
+        private AggregateException aggregate(Exception exception)
+            => new AggregateException(new[] { exception });
     }
 }

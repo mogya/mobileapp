@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;
@@ -30,14 +31,25 @@ namespace Toggl.Core.Sync.States.Push
         }
 
         protected Func<Exception, IObservable<ITransition>> Fail(T entity, PushSyncOperation operation)
-            => exception
-                => Observable
-                    .Return(entity)
-                    .Track(typeof(T).ToSyncErrorAnalyticsEvent(AnalyticsService), $"{operation}:{exception.Message}")
-                    .Track(AnalyticsService.EntitySyncStatus, entity.GetSafeTypeName(), $"{operation}:{Resources.Failure}")
-                    .SelectMany(_ => shouldRethrow(exception)
-                        ? Observable.Throw<ITransition>(exception)
-                        : Observable.Return(failTransition(entity, exception)));
+            => exception =>
+            {
+                typeof(T).ToSyncErrorAnalyticsEvent(AnalyticsService).Track($"{operation}:{exception.Message}");
+                AnalyticsService.EntitySyncStatus.Track(entity.GetSafeTypeName(), $"{operation}:{Resources.Failure}");
+
+                if (exception is AggregateException aggregate)
+                {
+                    // We need to match exactly one exception. The aggregate exception is added by .NET around an exception
+                    // our code threw (an API exception) and even if there are multiple levels of nesting of the aggregate
+                    // exception, in the end there's only one inner exception we are interested in. So if the aggregate exception
+                    // holds more than one, it's a bug which must be fix. The app should crash at this point so that we can
+                    // analyze the crash log and fix it.
+                    exception = aggregate.Flatten().InnerExceptions.Single();
+                }
+
+                return shouldRethrow(exception)
+                    ? Observable.Throw<ITransition>(exception)
+                    : Observable.Return(failTransition(entity, exception));
+            };
 
         private bool shouldRethrow(Exception e)
             => e is ApiDeprecatedException || e is ClientDeprecatedException || e is UnauthorizedException || e is OfflineException;

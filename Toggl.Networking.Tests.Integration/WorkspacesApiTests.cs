@@ -27,7 +27,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().HaveCount(1);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -40,7 +40,7 @@ namespace Toggl.Networking.Tests.Integration
                 var secondWorkspace =
                     await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().HaveCount(2);
                 workspaces.Should().Contain(ws => ws.Id == user.DefaultWorkspaceId);
@@ -53,7 +53,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 await WorkspaceHelper.Delete(user, user.DefaultWorkspaceId.Value).ConfigureAwait(false);
 
-                var workspaces = await CallEndpointWith(togglClient);
+                var workspaces = await togglClient.Workspaces.GetAll();
 
                 workspaces.Should().BeEmpty();
             }
@@ -64,21 +64,15 @@ namespace Toggl.Networking.Tests.Integration
             protected override async Task<IWorkspace> CallEndpointWith(ITogglApi togglApi)
             {
                 var user = await togglApi.User.Get();
-                return await CallEndpointWith(togglApi, user.DefaultWorkspaceId.Value);
+                return await togglApi.Workspaces.GetById(user.DefaultWorkspaceId.Value);
             }
-
-            private Func<Task> CallingEndpointWith(ITogglApi togglApi, long id)
-                => async () => await CallEndpointWith(togglApi, id);
-
-            private Task<IWorkspace> CallEndpointWith(ITogglApi togglApi, long id)
-                => togglApi.Workspaces.GetById(id);
 
             [Fact, LogTestInfo]
             public async Task ReturnsDefaultWorkspace()
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                var workspace = await CallEndpointWith(togglClient, user.DefaultWorkspaceId.Value);
+                var workspace = await togglClient.Workspaces.GetById(user.DefaultWorkspaceId.Value);
 
                 workspace.Id.Should().Be(user.DefaultWorkspaceId);
             }
@@ -89,7 +83,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var secondWorkspace = await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var workspace = await CallEndpointWith(togglClient, secondWorkspace.Id);
+                var workspace = await togglClient.Workspaces.GetById(secondWorkspace.Id);
 
                 workspace.Id.Should().Be(secondWorkspace.Id);
                 workspace.Name.Should().Be(secondWorkspace.Name);
@@ -100,7 +94,9 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglClient, user) = await SetupTestUser();
 
-                CallingEndpointWith(togglClient, user.DefaultWorkspaceId.Value - 1).Should().Throw<ForbiddenException>();
+                Func<Task> gettingById = async () => await togglClient.Workspaces.GetById(user.DefaultWorkspaceId.Value - 1);
+
+                gettingById.Should().Throw<ForbiddenException>();
             }
         }
 

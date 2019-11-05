@@ -41,7 +41,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
 
                 userFromApi.Id.Should().NotBe(0);
             }
@@ -52,7 +52,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglApi, user) = await SetupTestUser();
                 var regex = "^[a-fA-F0-9]+$";
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
 
                 userFromApi.ApiToken.Should().NotBeNull()
                     .And.HaveLength(32)
@@ -64,7 +64,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
                 var beginningOfWeekInt = (int)userFromApi.BeginningOfWeek;
 
                 beginningOfWeekInt.Should().BeInRange(0, 6);
@@ -75,7 +75,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
                 var workspace = await togglApi.Workspaces.GetById(userFromApi.DefaultWorkspaceId.Value);
 
                 userFromApi.DefaultWorkspaceId.Should().NotBe(0);
@@ -87,7 +87,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
 
                 userFromApi.ImageUrl.Should().NotBeNullOrEmpty();
                 var uri = new Uri(userFromApi.ImageUrl);
@@ -100,7 +100,7 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var (togglApi, user) = await SetupTestUser();
 
-                var userFromApi = await CallEndpointWith(togglApi);
+                var userFromApi = await togglApi.User.Get();
 
                 userFromApi.Timezone.Should().NotBeNullOrEmpty();
             }

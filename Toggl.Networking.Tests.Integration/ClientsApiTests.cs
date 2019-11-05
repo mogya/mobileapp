@@ -31,7 +31,7 @@ namespace Toggl.Networking.Tests.Integration
                 var secondClient = new Client { Name = "Second", WorkspaceId = user.DefaultWorkspaceId.Value };
                 var secondClientPosted = await togglClient.Clients.Create(secondClient);
 
-                var clients = await CallEndpointWith(togglClient);
+                var clients = await togglClient.Clients.GetAll();
 
                 clients.Should().HaveCount(2);
                 clients.Should().Contain(clientWithSameIdNameAndWorkspaceAs(firstClientPosted));
@@ -59,14 +59,11 @@ namespace Toggl.Networking.Tests.Integration
         public sealed class TheCreateMethod : AuthenticatedPostEndpointBaseTests<IClient>
         {
             protected override async Task<IClient> CallEndpointWith(ITogglApi togglApi)
-            { 
+            {
                 var user = await togglApi.User.Get();
                 var client = new Client { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value };
-                return await CallEndpointWith(togglApi, client);
+                return await togglApi.Clients.Create(client);
             }
-
-            private Task<IClient> CallEndpointWith(ITogglApi togglApi, IClient client)
-                => togglApi.Clients.Create(client);
 
             [Fact, LogTestInfo]
             public async Task CreatesNewClient()
@@ -74,7 +71,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var newClient = new Client { Name = Guid.NewGuid().ToString(), WorkspaceId = user.DefaultWorkspaceId.Value };
 
-                var persistedClient = await CallEndpointWith(togglClient, newClient);
+                var persistedClient = await togglClient.Clients.Create(newClient);
 
                 persistedClient.Name.Should().Be(newClient.Name);
                 persistedClient.WorkspaceId.Should().Be(newClient.WorkspaceId);

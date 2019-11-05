@@ -26,7 +26,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var featuresInEnum = Enum.GetValues(typeof(WorkspaceFeatureId));
 
-                var workspaceFeatureCollections = await CallEndpointWith(togglClient);
+                var workspaceFeatureCollections = await togglClient.WorkspaceFeatures.GetAll();
                 var distinctWorkspacesCount = workspaceFeatureCollections.Select(f => f.WorkspaceId).Distinct().Count();
 
                 workspaceFeatureCollections.Should().HaveCount(1);
@@ -40,7 +40,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var anotherWorkspace = await togglClient.Workspaces.Create(new Workspace { Name = Guid.NewGuid().ToString() });
 
-                var workspaceFeatureCollection = await CallEndpointWith(togglClient);
+                var workspaceFeatureCollection = await togglClient.WorkspaceFeatures.GetAll();
 
                 workspaceFeatureCollection.Should().HaveCount(2);
                 workspaceFeatureCollection.Should().Contain(collection => collection.WorkspaceId == user.DefaultWorkspaceId);

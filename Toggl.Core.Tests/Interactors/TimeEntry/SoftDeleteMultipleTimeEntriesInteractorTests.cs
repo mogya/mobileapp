@@ -42,7 +42,7 @@ namespace Toggl.Core.Tests.Interactors
                     .GetMultipleTimeEntriesById(Arg.Any<long[]>())
                     .Returns(teInteractor);
 
-                testedInteractor = new SoftDeleteMultipleTimeEntriesInteractor(DataSource.TimeEntries, SyncManager, interactorFactory, ids);
+                testedInteractor = new SoftDeleteMultipleTimeEntriesInteractor(DataSource.TimeEntries, TimeService, SyncManager, interactorFactory, ids);
             }
 
             [Fact, LogIfTooSlow]
@@ -57,14 +57,20 @@ namespace Toggl.Core.Tests.Interactors
             }
 
             [Fact, LogIfTooSlow]
-            public void CallsBatchUpdateWithIsDeletedStatus()
+            public void CallsBatchUpdateWithUpdatedEntities()
             {
+                var now = new DateTimeOffset(2019, 11, 4, 8, 33, 00, TimeSpan.Zero);
+                TimeService.CurrentDateTime.Returns(now);
                 setupTest();
 
                 testedInteractor.Execute().Wait();
 
                 dataSource.Received().BatchUpdate(
-                    Arg.Is<IEnumerable<IThreadSafeTimeEntry>>(entries => entries.All(entry => entry.IsDeleted))
+                    Arg.Is<IEnumerable<IThreadSafeTimeEntry>>(entries => entries.All(
+                        entry =>
+                            entry.IsDeleted
+                            && entry.SyncStatus == Storage.SyncStatus.SyncNeeded
+                            && entry.At == now))
                 );
             }
 

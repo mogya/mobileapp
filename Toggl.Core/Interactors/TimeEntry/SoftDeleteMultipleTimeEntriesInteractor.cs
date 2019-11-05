@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -16,17 +17,20 @@ namespace Toggl.Core.Interactors
     {
         private readonly IInteractorFactory interactorFactory;
         private readonly IDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource;
+        private readonly ITimeService timeService;
         private readonly ISyncManager syncManager;
         private readonly long[] ids;
 
         public SoftDeleteMultipleTimeEntriesInteractor(
             IDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource,
+            ITimeService timeService,
             ISyncManager syncManager,
             IInteractorFactory interactorFactory,
             long[] ids)
         {
             this.interactorFactory = interactorFactory;
             this.dataSource = dataSource;
+            this.timeService = timeService;
             this.syncManager = syncManager;
             this.ids = ids;
         }
@@ -34,10 +38,13 @@ namespace Toggl.Core.Interactors
         public IObservable<Unit> Execute()
             => interactorFactory.GetMultipleTimeEntriesById(ids)
                 .Execute()
-                .Select(timeEntries => timeEntries.Select(TimeEntry.DirtyDeleted))
+                .Select(markAsDeleted)
                 .SelectMany(dataSource.BatchUpdate)
                 .SingleAsync()
                 .Do(syncManager.InitiatePushSync)
                 .SelectUnit();
+
+        private IEnumerable<IThreadSafeTimeEntry> markAsDeleted(IEnumerable<IThreadSafeTimeEntry> timeEntries)
+            => timeEntries.Select(TimeEntry.DirtyDeleted).Select(te => te.UpdatedAt(timeService.CurrentDateTime));
     }
 }

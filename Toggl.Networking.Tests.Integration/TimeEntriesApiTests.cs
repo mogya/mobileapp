@@ -27,7 +27,7 @@ namespace Toggl.Networking.Tests.Integration
                 var secondTimeEntry = createTimeEntry(user);
                 var secondTimeEntryPosted = await togglClient.TimeEntries.Create(secondTimeEntry);
 
-                var timeEntries = await CallEndpointWith(togglClient);
+                var timeEntries = await togglClient.TimeEntries.GetAll();
 
                 timeEntries.Should().HaveCount(2);
                 timeEntries.Should().Contain(entry =>
@@ -115,7 +115,7 @@ namespace Toggl.Networking.Tests.Integration
                 var (togglClient, user) = await SetupTestUser();
                 var newTimeEntry = createTimeEntry(user);
 
-                var persistedTimeEntry = await CallEndpointWith(togglClient, newTimeEntry);
+                var persistedTimeEntry = await togglClient.TimeEntries.Create(newTimeEntry);
 
                 persistedTimeEntry.Description.Should().Be(newTimeEntry.Description);
                 persistedTimeEntry.WorkspaceId.Should().Be(newTimeEntry.WorkspaceId);
@@ -154,7 +154,7 @@ namespace Toggl.Networking.Tests.Integration
                     CreatedWith = "IntegrationTests/0.0"
                 };
 
-                var persistedTimeEntry = await CallEndpointWith(togglApi, timeEntry);
+                var persistedTimeEntry = await togglApi.TimeEntries.Create(timeEntry);
 
                 persistedTimeEntry.Id.Should().BePositive();
             }
@@ -176,7 +176,7 @@ namespace Toggl.Networking.Tests.Integration
                     CreatedWith = "IntegrationTests/0.0"
                 };
 
-                Action creatingTimeEntry = () => CallEndpointWith(togglApi, timeEntry).Wait();
+                Func<Task> creatingTimeEntry = async () => await togglApi.TimeEntries.Create(timeEntry);
 
                 creatingTimeEntry.Should().Throw<BadRequestException>();
             }
@@ -251,11 +251,8 @@ namespace Toggl.Networking.Tests.Integration
             {
                 var user = await togglApi.User.Get();
                 var timeEntry = createTimeEntry(user);
-                return await CallEndpointWith(togglApi, timeEntry);
+                return await togglApi.TimeEntries.Create(timeEntry);
             }
-
-            private Task<ITimeEntry> CallEndpointWith(ITogglApi togglApi, TimeEntry client)
-                => togglApi.TimeEntries.Create(client);
         }
 
         public sealed class TheUpdateMethod : AuthenticatedPutEndpointBaseTests<ITimeEntry>

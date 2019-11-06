@@ -208,7 +208,7 @@ about: A manual testing checklist that can be assigned to a release to track the
 
 ## Testing app restriction UI
 
-- [ ] Check that all the non-permanent error screens are showing correctly (use the long-press on About)
+- [ ] Check that all the non-permanent error screens are showing correctly (long-press on About in Android or the navigation bar in iOS)
   - [ ] Token reset error
   - [ ] No workspace error
   - [ ] No default workspace error

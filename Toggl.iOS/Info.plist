@@ -81,7 +81,7 @@
 		<string>remote-notification</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5</string>
+	<string>2.6</string>
 	<key>CFBundleDisplayName</key>
 	<string>Toggl for Devs</string>
 	<key>CFBundleDevelopmentRegion</key>

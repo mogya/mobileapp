@@ -17,6 +17,7 @@ namespace Toggl.Droid
     [Application(AllowBackup = false)]
     public class TogglApplication : Application, ILifecycleObserver
     {
+        private const int modeNightAutoBattery = 3;
         public TimezoneChangedBroadcastReceiver TimezoneChangedBroadcastReceiver { get; set; }
 
         public bool IsInForeground { get; private set; } = false;
@@ -28,7 +29,7 @@ namespace Toggl.Droid
 
         public override void OnCreate()
         {
-            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : ModeNightAuto;
+            DefaultNightMode = QApis.AreAvailable ? ModeNightFollowSystem : modeNightAutoBattery;
 
             base.OnCreate();
             ProcessLifecycleOwner.Get().Lifecycle.AddObserver(this);

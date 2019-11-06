@@ -396,7 +396,7 @@ private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationT
     const string bundleIdToReplace = "com.toggl.daneel.debug.TimerWidgetExtension";
     const string appNameToReplace = "Toggl for Devs";
 
-    var commitCount = GetCommitCount();
+    var bundleVersion = GetCommitCount();
 
     var bundleId = bundleIdToReplace;
     var appName = appNameToReplace;
@@ -410,6 +410,7 @@ private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationT
     {
         bundleId = "com.toggl.daneel.TimerWidgetExtension";
         appName = "Toggl";
+        bundleVersion = GetVersionNumberFromTag();
     }
 
     var filePath = GetFiles(path).Single();
@@ -419,7 +420,7 @@ private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationT
     {
         Path = path,
         Original = file,
-        Temporary = file.Replace("IOS_BUNDLE_VERSION", commitCount)
+        Temporary = file.Replace("IOS_BUNDLE_VERSION", bundleVersion)
                         .Replace(bundleIdToReplace, bundleId)
                         .Replace(appNameToReplace, appName)
     };

@@ -83,8 +83,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.AppStore|iPhone' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhone\Release.AppStore</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>USE_PRODUCTION_API</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution: Toggl OU (B227VTMZ94)</CodesignKey>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
@@ -94,6 +93,8 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARM64</MtouchArch>
     <CodesignProvision>Daneel AppStore Widget Extension</CodesignProvision>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchLink>Full</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

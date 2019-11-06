@@ -64,7 +64,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchVerbosity>
@@ -73,6 +73,7 @@
     </OnDemandResourcesInitialInstallTags>
     <OnDemandResourcesPrefetchOrder>
     </OnDemandResourcesPrefetchOrder>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Adhoc|iPhone' ">
     <DebugType>pdbonly</DebugType>

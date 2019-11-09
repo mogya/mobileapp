@@ -2,6 +2,8 @@
 using System;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Extensions;
+using Toggl.iOS.Extensions.Reactive;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Cells.Calendar
@@ -11,6 +13,8 @@ namespace Toggl.iOS.Cells.Calendar
         public static readonly string Identifier = nameof(SelectableUserCalendarViewCell);
         public static readonly NSString Key = new NSString(nameof(SelectableUserCalendarViewCell));
         public static readonly UINib Nib;
+
+        public InputAction<SelectableUserCalendarViewModel> SelectCalendar { get; set; }
 
         static SelectableUserCalendarViewCell()
         {
@@ -26,16 +30,11 @@ namespace Toggl.iOS.Cells.Calendar
         {
             base.AwakeFromNib();
 
-            //This way the tap "goes through" the UISwitch
-            //and we only have to handle the tap event on the whole cell.
-            IsSelectedSwitch.UserInteractionEnabled = false;
+            IsSelectedSwitch.Rx()
+                .BindAction(() => SelectCalendar?.Execute(Item));
+
             FadeView.FadeRight = true;
             ContentView.InsertSeparator();
-        }
-
-        public void ToggleSwitch()
-        {
-            IsSelectedSwitch.SetState(!IsSelectedSwitch.On, animated: true);
         }
 
         protected override void UpdateView()

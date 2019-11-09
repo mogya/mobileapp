@@ -15,9 +15,16 @@ namespace Toggl.iOS
 
         public override void PerformFetch(UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
         {
-            IosDependencyContainer.Instance.BackgroundService.EnterBackgroundFetch();
-            var interactorFactory = IosDependencyContainer.Instance.InteractorFactory;
-            interactorFactory?.RunBackgroundSync()
+            var dependencyContainer = IosDependencyContainer.Instance;
+
+            dependencyContainer.BackgroundService.EnterBackgroundFetch();
+
+            // The widgets service will listen for changes to the running
+            // time entry and it will update the data in the shared database
+            // and that way the widget will show correct information after we sync.
+            dependencyContainer.WidgetsService.Start();
+
+            dependencyContainer.InteractorFactory?.RunBackgroundSync()
                 .Execute()
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);

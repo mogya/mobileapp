@@ -6,6 +6,8 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Selectable;
 using Toggl.iOS.Cells;
 using Toggl.iOS.Cells.Calendar;
+using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.ViewSources
@@ -15,30 +17,29 @@ namespace Toggl.iOS.ViewSources
     {
         private const int rowHeight = 48;
         private const int headerHeight = 48;
+        private readonly InputAction<SelectableUserCalendarViewModel> selectCalendar;
 
-        public SelectUserCalendarsTableViewSource(UITableView tableView)
+        public SelectUserCalendarsTableViewSource(UITableView tableView, InputAction<SelectableUserCalendarViewModel> selectCalendar)
             : base(ImmutableList<SectionModel<UserCalendarSourceViewModel, SelectableUserCalendarViewModel>>.Empty)
         {
+            Ensure.Argument.IsNotNull(selectCalendar, nameof(selectCalendar));
+
+            this.selectCalendar = selectCalendar;
+
             tableView.RegisterNibForCellReuse(SelectableUserCalendarViewCell.Nib, SelectableUserCalendarViewCell.Identifier);
             tableView.RegisterNibForHeaderFooterViewReuse(UserCalendarListHeaderViewCell.Nib, UserCalendarListHeaderViewCell.Identifier);
             tableView.SectionHeaderHeight = headerHeight;
             tableView.RowHeight = rowHeight;
         }
 
-        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-        {
-            base.RowSelected(tableView, indexPath);
-
-            var cell = (SelectableUserCalendarViewCell)tableView.CellAt(indexPath);
-            cell.ToggleSwitch();
-
-            tableView.DeselectRow(indexPath, true);
-        }
-
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = (BaseTableViewCell<SelectableUserCalendarViewModel>)tableView.DequeueReusableCell(
                 SelectableUserCalendarViewCell.Identifier, indexPath);
+
+            if (cell is SelectableUserCalendarViewCell selectableUserCalendarViewCell)
+                selectableUserCalendarViewCell.SelectCalendar = selectCalendar;
+
             cell.Item = ModelAt(indexPath);
             return cell;
         }

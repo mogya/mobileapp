@@ -35,8 +35,9 @@ namespace Toggl.iOS.ViewControllers.Calendar
             DescriptionLabel.Text = Resources.SelectCalendarsDescription;
             DoneButton.SetTitle(Resources.Done, UIControlState.Normal);
 
-            var source = new SelectUserCalendarsTableViewSource(TableView);
+            var source = new SelectUserCalendarsTableViewSource(TableView, ViewModel.SelectCalendar);
             TableView.Source = source;
+            TableView.AllowsSelection = false;
 
             DoneButton.Rx()
                 .BindAction(ViewModel.Save)

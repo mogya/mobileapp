@@ -192,7 +192,7 @@ namespace Toggl.iOS.Presentation.Transition
                             var firstResponderFrame =
                                 firstResponder.ConvertRectToView(firstResponder.Frame, PresentedView);
                             var newY = containerSize.Height - keyboardHeight - firstResponderFrame.Y - firstResponderFrame.Height - keyboardMargin;
-                            frame.Y = (nfloat)Clamp(newY, UIApplication.SharedApplication.StatusBarFrame.Height, frame.Y);
+                            frame.Y = (nfloat)Max(Min(newY, frame.Y), UIApplication.SharedApplication.StatusBarFrame.Height);
                         }
                     }
                 }

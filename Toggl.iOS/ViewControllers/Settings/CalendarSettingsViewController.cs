@@ -26,12 +26,13 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             var header = CalendarSettingsTableViewHeader.Create();
             UserCalendarsTableView.TableHeaderView = header;
+            UserCalendarsTableView.AllowsSelection = false;
             header.TranslatesAutoresizingMaskIntoConstraints = false;
             header.HeightAnchor.ConstraintEqualTo(tableViewHeaderHeight).Active = true;
             header.WidthAnchor.ConstraintEqualTo(UserCalendarsTableView.WidthAnchor).Active = true;
             header.SetCalendarPermissionStatus(ViewModel.PermissionGranted);
 
-            var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView);
+            var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView, ViewModel.SelectCalendar);
             UserCalendarsTableView.Source = source;
 
             ViewModel.Calendars
@@ -40,10 +41,6 @@ namespace Toggl.iOS.ViewControllers.Settings
 
             header.EnableCalendarAccessTapped
                 .Subscribe(ViewModel.RequestAccess.Inputs)
-                .DisposedBy(DisposeBag);
-
-            source.Rx().ModelSelected()
-                .Subscribe(ViewModel.SelectCalendar.Inputs)
                 .DisposedBy(DisposeBag);
         }
 

@@ -20,6 +20,9 @@ private HashSet<string> stagingTargets = new HashSet<string>
 var target = Argument("target", "Default");
 var isStaging = stagingTargets.Contains(target);
 var buildAll = Argument("buildall", Bitrise.IsRunningOnBitrise);
+var rnd = new Random();
+var formattedTimestamp = GetFormattedTimestamp();
+readonly var MAX_REVISION_NUMBER = 15;
 
 private void FormatAndroidAxml()
 {
@@ -103,7 +106,17 @@ private string GetCommitCount()
     return redirectedOutput.Last();
 }
 
-private string GetVersionNumberFromTag()
+private string GetFormattedTimestamp()
+{
+    var now = DateTime.UtcNow;
+    // we append a random value greater than 14 to the version number to not clash with the versions generated from tags
+    // the last component in the tag generated version is the revision number, so this approach gives us at least 14 revisions
+    var randomComponent = MAX_REVISION_NUMBER + rnd.Next(100 - MAX_REVISION_NUMBER);
+    
+    return now.ToString("yyMMdd") + randomComponent.ToString();
+} 
+
+private string GetVersionNumberFromTagOrTimestamp()
 {
     var platform = "";
     if (target == "Build.Release.iOS.AppStore") 
@@ -125,7 +138,12 @@ private string GetVersionNumberFromTag()
         RedirectStandardOutput = true
     }, out var redirectedOutput);
 
-    var tagName = redirectedOutput.Last();
+    
+    var tagName = redirectedOutput.DefaultIfEmpty(formattedTimestamp).Last();
+    if (tagName == formattedTimestamp)
+    {
+        return tagName;
+    }
          
     var p = Regex.Match(tagName, @"(?<platform>(android|ios))-(?<major>\d{1,2})\.(?<minor>\d{1,2})(\.(?<build>\d{1,2}))?(-(?<rev>\d{1,2}))?");
     if (!p.Success) 
@@ -136,6 +154,11 @@ private string GetVersionNumberFromTag()
     var minor = Int32.Parse(p.Groups["minor"].Value) *   10000;
     var build = string.IsNullOrEmpty(p.Groups["build"].Value) ? 0 : Int32.Parse(p.Groups["build"].Value) * 100;
     var rev = string.IsNullOrEmpty(p.Groups["rev"].Value) ? 0 : Int32.Parse(p.Groups["rev"].Value);
+    
+    if (rev >= MAX_REVISION_NUMBER)
+    {
+        Console.WriteLine($"[WARNING]: revision {rev} might result in a build version clashing with a previously used one.");
+    }
 
     return (major + minor + build + rev).ToString();
 }
@@ -300,7 +323,7 @@ private TemporaryFileTransformation GetIosInfoConfigurationTransformation()
         bundleId = "com.toggl.daneel";
         appName = "Toggl";
         iconSet = "Assets.xcassets/AppIcon.appiconset";
-        bundleVersion = GetVersionNumberFromTag();
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -338,7 +361,7 @@ private TemporaryFileTransformation GetIosSiriExtensionInfoConfigurationTransfor
     {
         bundleId = "com.toggl.daneel.SiriExtension";
         appName = "Siri Extension";
-        bundleVersion = GetVersionNumberFromTag();
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -374,7 +397,7 @@ private TemporaryFileTransformation GetIosSiriUIExtensionInfoConfigurationTransf
     {
         bundleId = "com.toggl.daneel.SiriUIExtension";
         appName = "Siri UI Extension";
-        bundleVersion = GetVersionNumberFromTag();
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -410,7 +433,7 @@ private TemporaryFileTransformation GetIosTimerWidgetExtensionInfoConfigurationT
     {
         bundleId = "com.toggl.daneel.TimerWidgetExtension";
         appName = "Toggl";
-        bundleVersion = GetVersionNumberFromTag();
+        bundleVersion = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();
@@ -532,7 +555,7 @@ private TemporaryFileTransformation GetAndroidManifestTransformation()
     {
         packageName = "com.toggl.giskard";
         appName = "Toggl";
-        versionNumber = GetVersionNumberFromTag();
+        versionNumber = GetVersionNumberFromTagOrTimestamp();
     }
 
     var filePath = GetFiles(path).Single();

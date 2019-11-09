@@ -96,8 +96,9 @@ namespace Toggl.iOS.ViewControllers
             ViewControllers.ToList()
                            .ForEach(vc =>
             {
-                if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact)
+                if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Compact && !UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
                 {
+                    // older devices render tab bar item insets weirdly
                     vc.TabBarItem.ImageInsets = new UIEdgeInsets(6, 0, -6, 0);
                 }
                 else

@@ -753,7 +753,7 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
         <value>できました!</value>
     </data>
     <data name="ThankYouForTheFeedback" xml:space="preserve">
-        <value>フィードバックありがとうございます。もし何か質問が書かれていたら、すぐお返事するようにしますね</value>
+        <value>フィードバックありがとうございます。もしフィードバックの内容が質問の場合は、すぐにお返事いたします。</value>
     </data>
     <data name="NotificationDisabledNotice" xml:space="preserve">
         <value>通知が無効になっています。通知を受け取るためには、アプリの設定から有効にしてください</value>
@@ -1249,7 +1249,7 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
         <value>{0} イベント</value>
     </data>
     <data name="SendFeedbackSuccessMessage" xml:space="preserve">
-        <value>メッセージが送信されました。フィードバックありがとうございます。もし何か質問が書かれていたら、すぐお返事するようにしますね</value>
+        <value>フィードバックありがとうございます。もしフィードバックの内容が質問の場合は、すぐにお返事いたします。</value>
     </data>
     <data name="SiriWorkflowsProductionURL" xml:space="preserve">
         <value>https://toggl-mobile.firebaseapp.com/</value>

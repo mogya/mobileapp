@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NSubstitute;
 using System;
 using System.Globalization;
@@ -301,7 +301,7 @@ namespace Toggl.Core.Tests.UI
             [Fact, LogIfTooSlow]
             public void SetsTheDateFormatCultureInfoProperlyWhenThePlatformInfoReturnsAnUnsupportedCurrentNativeLanguageCode()
             {
-                string unsupportedLanguageCode = "ja_JP";
+                string unsupportedLanguageCode = "xx_XX";
                 PlatformInfo.CurrentNativeLanguageCode.Returns(unsupportedLanguageCode);
 
                 App.LoadLocalizationConfiguration();

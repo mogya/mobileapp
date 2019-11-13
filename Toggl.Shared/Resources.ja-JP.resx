@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
     <!--
       Microsoft ResX Schema
@@ -665,12 +665,6 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
     <data name="CalendarAccessExplanation" xml:space="preserve">
         <value>Togglは、イベントを表示するためにカレンダーのアクセス権が必要です。 イベントは自分だけに表示され、レポートには表示されません</value>
     </data>
-    <data name="Welcome" xml:space="preserve">
-        <value>ようこそ</value>
-    </data>
-    <data name="GetStarted" xml:space="preserve">
-        <value>はじめましょう</value>
-    </data>
     <data name="Start" xml:space="preserve">
         <value>開始</value>
     </data>
@@ -857,9 +851,6 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
     </data>
     <data name="FilterWorkspaces" xml:space="preserve">
         <value>ワークスペースを検索</value>
-    </data>
-    <data name="ContactUs" xml:space="preserve">
-        <value>お問い合わせ</value>
     </data>
     <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
         <value>エラーが発生しました。もう一度お試しください</value>
@@ -1121,9 +1112,6 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
     </data>
     <data name="UndoDeletedTimeEntry" xml:space="preserve">
         <value>削除した記録をもとに戻す</value>
-    </data>
-    <data name="CalendarFeatureDescription" xml:space="preserve">
-        <value>カレンダー機能はデバイス上のカレンダーにリンクしているため、イベントを表示して記録に変換できます</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
         <value>または {0}</value>

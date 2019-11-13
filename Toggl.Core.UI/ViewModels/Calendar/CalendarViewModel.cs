@@ -1,28 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
-using Toggl.Core.Calendar;
 using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
-using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
-using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Navigation;
-using Toggl.Core.UI.Parameters;
-using Toggl.Core.UI.Services;
 using Toggl.Core.UI.Transformations;
-using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using Toggl.Storage.Settings;
 
 namespace Toggl.Core.UI.ViewModels.Calendar
@@ -30,394 +23,150 @@ namespace Toggl.Core.UI.ViewModels.Calendar
     [Preserve(AllMembers = true)]
     public sealed class CalendarViewModel : ViewModel
     {
+        private const int availableDayCount = 14;
+        private const string dateFormat = "dddd, MMM d";
+
         private readonly ITimeService timeService;
         private readonly ITogglDataSource dataSource;
         private readonly IUserPreferences userPreferences;
         private readonly IAnalyticsService analyticsService;
         private readonly IBackgroundService backgroundService;
         private readonly IInteractorFactory interactorFactory;
-        private readonly IOnboardingStorage onboardingStorage;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
-        private readonly ISubject<bool> shouldShowOnboardingSubject;
-        private readonly ISubject<bool> hasCalendarsLinkedSubject;
-        private readonly ISubject<bool> calendarPermissionsOnViewAppearedSubject;
-        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
+        private readonly ISubject<Unit> realoadWeekView = new Subject<Unit>();
 
-        public IObservable<bool> SettingsAreVisible { get; }
+        public IObservable<string> CurrentlyShownDateString { get; }
 
-        public IObservable<bool> ShouldShowOnboarding { get; }
+        public BehaviorRelay<DateTime> CurrentlyShownDate { get; }
 
-        public IObservable<bool> HasCalendarsLinked { get; }
+        public IObservable<ImmutableList<CalendarWeeklyViewDayViewModel>> WeekViewDays { get; }
 
-        public IObservable<TimeFormat> TimeOfDayFormat { get; }
+        public IObservable<ImmutableList<DayOfWeek>> WeekViewHeaders { get; }
 
-        public IObservable<string> TimeTrackedToday { get; }
+        public ViewAction OpenSettings { get; }
 
-        public IObservable<string> CurrentDate { get; }
-
-        public ViewAction GetStarted { get; }
-
-        public ViewAction SkipOnboarding { get; }
-
-        public ViewAction LinkCalendars { get; }
-
-        public ViewAction SelectCalendars { get; }
-
-        public InputAction<CalendarItem> OnItemTapped { get; }
-
-        public InputAction<CalendarItem> OnCalendarEventLongPressed { get; }
-
-        public InputAction<(DateTimeOffset, TimeSpan)> OnDurationSelected { get; }
-
-        public InputAction<DateTimeOffset> CreateTimeEntryAtOffset { get; }
-
-        public InputAction<CalendarItem> OnUpdateTimeEntry { get; }
-
-        public ObservableGroupedOrderedCollection<CalendarItem> CalendarItems { get; }
+        public InputAction<CalendarWeeklyViewDayViewModel> SelectDayFromWeekView { get; }
 
         public CalendarViewModel(
             ITogglDataSource dataSource,
             ITimeService timeService,
+            IRxActionFactory rxActionFactory,
             IUserPreferences userPreferences,
             IAnalyticsService analyticsService,
             IBackgroundService backgroundService,
             IInteractorFactory interactorFactory,
-            IOnboardingStorage onboardingStorage,
             ISchedulerProvider schedulerProvider,
-            IPermissionsChecker permissionsChecker,
-            INavigationService navigationService,
-            IRxActionFactory rxActionFactory)
+            INavigationService navigationService)
             : base(navigationService)
         {
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(userPreferences, nameof(userPreferences));
+            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(backgroundService, nameof(backgroundService));
             Ensure.Argument.IsNotNull(interactorFactory, nameof(interactorFactory));
-            Ensure.Argument.IsNotNull(onboardingStorage, nameof(onboardingStorage));
             Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
-            Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
-            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
 
             this.dataSource = dataSource;
             this.timeService = timeService;
+            this.rxActionFactory = rxActionFactory;
             this.userPreferences = userPreferences;
             this.analyticsService = analyticsService;
             this.backgroundService = backgroundService;
             this.interactorFactory = interactorFactory;
-            this.onboardingStorage = onboardingStorage;
             this.schedulerProvider = schedulerProvider;
-            this.permissionsChecker = permissionsChecker;
-            this.rxActionFactory = rxActionFactory;
 
-            var isCompleted = onboardingStorage.CompletedCalendarOnboarding();
-            shouldShowOnboardingSubject = new BehaviorSubject<bool>(!isCompleted);
-            hasCalendarsLinkedSubject = new BehaviorSubject<bool>(false);
-            calendarPermissionsOnViewAppearedSubject = new BehaviorSubject<bool>(false);
+            OpenSettings = rxActionFactory.FromAsync(openSettings);
+            SelectDayFromWeekView = rxActionFactory.FromAction<CalendarWeeklyViewDayViewModel>(selectDayFromWeekView);
 
-            var onboardingObservable = shouldShowOnboardingSubject
-                .AsObservable()
-                .DistinctUntilChanged();
+            var beginningOfWeekObservable = dataSource.User.Current.Select(user => user.BeginningOfWeek);
 
-            ShouldShowOnboarding = onboardingObservable.AsDriver(false, schedulerProvider);
-
-            var preferences = dataSource.Preferences.Current;
-
-            TimeOfDayFormat = preferences
-                .Select(current => current.TimeOfDayFormat)
+            WeekViewDays = beginningOfWeekObservable
+                .ReemitWhen(timeService.MidnightObservable.SelectUnit())
+                .Select(weekViewDays)
+                .Select(days => days.ToImmutableList())
                 .AsDriver(schedulerProvider);
 
-            var durationFormat = preferences.Select(current => current.DurationFormat);
-            var dateFormat = preferences.Select(current => current.DateFormat);
-            var timeTrackedToday = interactorFactory.ObserveTimeTrackedToday().Execute();
-
-            TimeTrackedToday = timeTrackedToday
-                .StartWith(TimeSpan.Zero)
-                .CombineLatest(durationFormat, DurationAndFormatToString.Convert)
+            WeekViewHeaders = beginningOfWeekObservable
+                .ReemitWhen(realoadWeekView)
+                .Select(weekViewHeaders)
+                .Select(dayOfWeekHeaders => dayOfWeekHeaders.ToImmutableList())
                 .AsDriver(schedulerProvider);
 
-            CurrentDate = timeService.CurrentDateTimeObservable
-                .Select(dateTime => dateTime.ToLocalTime().Date)
+            CurrentlyShownDate = new BehaviorRelay<DateTime>(timeService.CurrentDateTime.ToLocalTime().Date);
+
+            CurrentlyShownDateString = CurrentlyShownDate.AsObservable()
                 .DistinctUntilChanged()
-                .CombineLatest(dateFormat, (date, format) => DateTimeToFormattedString.Convert(date, format.Long))
+                .Select(date => DateTimeToFormattedString.Convert(date, dateFormat))
                 .AsDriver(schedulerProvider);
-
-            GetStarted = rxActionFactory.FromAsync(getStarted);
-            SkipOnboarding = rxActionFactory.FromAction(skipOnboarding);
-            LinkCalendars = rxActionFactory.FromAsync(() => linkCalendars(false));
-            OnItemTapped = rxActionFactory.FromAsync<CalendarItem>(handleCalendarItem);
-            OnCalendarEventLongPressed = rxActionFactory.FromAsync<CalendarItem>(handleCalendarEventLongPressed);
-
-            SettingsAreVisible = onboardingObservable
-                .SelectMany(_ => permissionsChecker.CalendarPermissionGranted)
-                .DistinctUntilChanged();
-
-            HasCalendarsLinked = userPreferences.EnabledCalendars.CombineLatest(
-                    permissionsChecker.CalendarPermissionGranted,
-                    hasCalendarsLinkedSubject.AsObservable(),
-                    calendarPermissionsOnViewAppearedSubject,
-                    hasCalendarsLinked)
-                .DistinctUntilChanged();
-
-            SelectCalendars = rxActionFactory.FromAsync(() => selectUserCalendars(false), SettingsAreVisible);
-
-            OnDurationSelected = rxActionFactory.FromAsync<(DateTimeOffset StartTime, TimeSpan Duration)>(
-                tuple => durationSelected(tuple.StartTime, tuple.Duration));
-
-            CreateTimeEntryAtOffset = rxActionFactory.FromAsync<DateTimeOffset>(createTimeEntryAtOffset);
-
-            OnUpdateTimeEntry = rxActionFactory.FromAsync<CalendarItem>(updateTimeEntry);
-
-            CalendarItems = new ObservableGroupedOrderedCollection<CalendarItem>(
-                indexKey: item => item.StartTime,
-                orderingKey: item => item.StartTime,
-                groupingKey: _ => 0);
         }
 
-        public void Init(string eventId)
+        public void RealoadWeekView()
+            => realoadWeekView.OnNext(Unit.Default);
+
+        private IEnumerable<DayOfWeek> weekViewHeaders(BeginningOfWeek beginningOfWeek)
         {
-            if (string.IsNullOrWhiteSpace(eventId))
-                return;
-
-            interactorFactory
-                .GetCalendarItemWithId(eventId)
-                .Execute()
-                .SelectMany(calendarItem =>
-                    handleCalendarItem(calendarItem).ToObservable())
-                .Subscribe()
-                .DisposedBy(disposeBag);
-        }
-
-        public override Task Initialize()
-        {
-            var dayChangedObservable = timeService
-                .MidnightObservable
-                .SelectUnit();
-
-            var selectedCalendarsChangedObservable = userPreferences
-                .EnabledCalendars
-                .SelectUnit();
-
-            var appResumedFromBackgroundObservable = backgroundService
-                .AppResumedFromBackground
-                .SelectUnit();
-
-            dataSource.TimeEntries
-                .ItemsChanged
-                .Merge(dayChangedObservable)
-                .Merge(selectedCalendarsChangedObservable)
-                .Merge(appResumedFromBackgroundObservable)
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
-                .ObserveOn(schedulerProvider.BackgroundScheduler)
-                .SelectMany(_ => reloadData())
-                .Subscribe(CalendarItems.ReplaceWith)
-                .DisposedBy(disposeBag);
-
-            selectedCalendarsChangedObservable
-                .Merge(dayChangedObservable)
-                .Merge(appResumedFromBackgroundObservable)
-                .StartWith(Unit.Default)
-                .CombineLatest(userPreferences.CalendarNotificationsEnabled, CommonFunctions.Second)
-                .SelectMany(refreshNotifications)
-                .Subscribe()
-                .DisposedBy(disposeBag);
-
-            return base.Initialize();
-        }
-
-        public override void ViewAppeared()
-        {
-            base.ViewAppeared();
-            checkCalendarPermissions();
-        }
-
-        private async Task checkCalendarPermissions()
-        {
-            var authorized = await permissionsChecker.CalendarPermissionGranted;
-            calendarPermissionsOnViewAppearedSubject.OnNext(authorized);
-        }
-
-        private bool hasCalendarsLinked(List<string> calendars, bool hasInitialCalendarPermissions, bool didLinkCalendars, bool hadPermissionsWhenAppeared)
-            => calendars != null
-               && calendars.Count > 0
-               && (hasInitialCalendarPermissions || didLinkCalendars || hadPermissionsWhenAppeared);
-
-        private IObservable<Unit> refreshNotifications(bool notificationsAreEnabled)
-            => Observable.FromAsync(async () =>
+            var currentDay = beginningOfWeek.ToDayOfWeekEnum();
+            for (int i = 0; i < 7; i++)
             {
-                await interactorFactory.UnscheduleAllNotifications().Execute();
-
-                if (!notificationsAreEnabled)
-                    return;
-
-                await interactorFactory.ScheduleEventNotificationsForNextWeek().Execute();
-            });
-
-        private async Task getStarted()
-        {
-            analyticsService.CalendarOnboardingStarted.Track();
-            await linkCalendars(true);
-
-            onboardingStorage.SetCompletedCalendarOnboarding();
-            shouldShowOnboardingSubject.OnNext(false);
-        }
-
-        private async Task linkCalendars(bool isOnboarding)
-        {
-            var calendarPermissionGranted = await View.RequestCalendarAuthorization();
-            hasCalendarsLinkedSubject.OnNext(calendarPermissionGranted);
-            if (calendarPermissionGranted)
-            {
-                await selectUserCalendars(isOnboarding);
-                var notificationPermissionGranted = await View.RequestNotificationAuthorization();
-                userPreferences.SetCalendarNotificationsEnabled(notificationPermissionGranted);
-            }
-            else
-            {
-                await Navigate<CalendarPermissionDeniedViewModel, Unit>();
+                yield return currentDay;
+                currentDay = currentDay.NextEnumValue();
             }
         }
 
-        private void skipOnboarding()
+        private IEnumerable<CalendarWeeklyViewDayViewModel> weekViewDays(BeginningOfWeek beginningOfWeek)
         {
-            onboardingStorage.SetCompletedCalendarOnboarding();
-            shouldShowOnboardingSubject.OnNext(false);
-        }
+            var now = timeService.CurrentDateTime.ToLocalTime();
+            var today = now.Date;
+            var firstAvailableDate = now.AddDays(-availableDayCount + 1).Date;
+            var firstShownDate = firstAvailableDate.BeginningOfWeek(beginningOfWeek).Date;
+            var lastShownDate = now.BeginningOfWeek(beginningOfWeek).AddDays(7).Date;
 
-        private async Task selectUserCalendars(bool isOnboarding)
-        {
-            var calendarsExist = await interactorFactory
-                .GetUserCalendars()
-                .Execute()
-                .Select(calendars => calendars.Any());
-
-            if (calendarsExist)
+            var currentDate = firstShownDate;
+            while (currentDate != lastShownDate)
             {
-                var calendarIds = await Navigate<SelectUserCalendarsViewModel, bool, string[]>(isOnboarding);
-
-                interactorFactory.SetEnabledCalendars(calendarIds).Execute();
-            }
-            else if (!isOnboarding)
-            {
-                await View.Alert(Resources.Oops, Resources.NoCalendarsFoundMessage, Resources.Ok);
+                var dateIsViewable = currentDate <= today && currentDate >= firstAvailableDate;
+                yield return new CalendarWeeklyViewDayViewModel(currentDate, currentDate == today, dateIsViewable);
+                currentDate = currentDate.AddDays(1);
             }
         }
 
-        private async Task handleCalendarItem(CalendarItem calendarItem)
+        public CalendarDayViewModel DayViewModelAt(int index)
         {
-            switch (calendarItem.Source)
-            {
-                case CalendarItemSource.TimeEntry when calendarItem.TimeEntryId.HasValue:
-                    analyticsService.EditViewOpenedFromCalendar.Track();
-                    await Navigate<EditTimeEntryViewModel, long[]>(new[] { calendarItem.TimeEntryId.Value });
-                    break;
-
-                case CalendarItemSource.Calendar:
-                    await createTimeEntryFromCalendarItem(calendarItem);
-                    break;
-            }
+            var currentDate = timeService.CurrentDateTime.ToLocalTime().Date;
+            var date = currentDate.AddDays(index);
+            return new CalendarDayViewModel(
+                date,
+                timeService,
+                dataSource,
+                rxActionFactory,
+                userPreferences,
+                analyticsService,
+                backgroundService,
+                interactorFactory,
+                schedulerProvider,
+                NavigationService);
         }
 
-        private async Task handleCalendarEventLongPressed(CalendarItem calendarItem)
+        public DateTime IndexToDate(int index)
         {
-            var runningStartedNow =
-                calendarItem
-                    .WithStartTime(timeService.CurrentDateTime)
-                    .WithDuration(null);
-
-            var options = new List<SelectOption<CalendarItem?>>
-            {
-                new SelectOption<CalendarItem?>(calendarItem, Resources.CalendarCopyEventToTimeEntry),
-                new SelectOption<CalendarItem?>(runningStartedNow, Resources.CalendarStartNow)
-            };
-
-            if (timeService.CurrentDateTime >= calendarItem.StartTime)
-            {
-                var runningStartingAtTheEventStart = calendarItem.WithDuration(null);
-                var option = new SelectOption<CalendarItem?>(runningStartingAtTheEventStart, Resources.CalendarStartWhenTheEventStarts);
-                options.Add(option);
-            }
-
-            var selectedOption = await View.SelectAction(Resources.CalendarWhatToDoWithCalendarEvent, options);
-            if (selectedOption.HasValue)
-            {
-                await createTimeEntryFromCalendarItem(selectedOption.Value);
-            }
+            var today = timeService.CurrentDateTime.ToLocalTime().Date;
+            return today.AddDays(index);
         }
 
-        private async Task createTimeEntryFromCalendarItem(CalendarItem calendarItem)
+        private Task openSettings()
+            => Navigate<SettingsViewModel>();
+
+        private void selectDayFromWeekView(CalendarWeeklyViewDayViewModel day)
         {
-            var workspace = await interactorFactory.GetDefaultWorkspace()
-                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarViewModel.handleCalendarItem")
-                .Execute();
-            var prototype = calendarItem.AsTimeEntryPrototype(workspace.Id);
-            await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarEvent).Execute();
-        }
+            CurrentlyShownDate.Accept(day.Date);
 
-        private async Task durationSelected(DateTimeOffset startTime, TimeSpan duration)
-        {
-            var workspace = await interactorFactory.GetDefaultWorkspace()
-                .TrackException<InvalidOperationException, IThreadSafeWorkspace>("CalendarViewModel.durationSelected")
-                .Execute();
-
-            var prototype = duration.AsTimeEntryPrototype(startTime, workspace.Id);
-            var timeEntry = await interactorFactory.CreateTimeEntry(prototype, TimeEntryStartOrigin.CalendarTapAndDrag).Execute();
-
-            await Navigate<EditTimeEntryViewModel, long[]>(new[] { timeEntry.Id });
-        }
-
-        private async Task createTimeEntryAtOffset(DateTimeOffset startTime)
-        {
-            var startParams = StartTimeEntryParameters
-                .ForCalendarTapAndDrag(startTime);
-
-            await Navigate<StartTimeEntryViewModel, StartTimeEntryParameters>(startParams);
-        }
-
-        private async Task updateTimeEntry(CalendarItem calendarItem)
-        {
-            if (!calendarItem.IsEditable() || calendarItem.TimeEntryId == null)
-                return;
-
-            var timeEntry = await interactorFactory.GetTimeEntryById(calendarItem.TimeEntryId.Value).Execute();
-
-            var dto = new DTOs.EditTimeEntryDto
-            {
-                Id = timeEntry.Id,
-                Description = timeEntry.Description,
-                StartTime = calendarItem.StartTime,
-                StopTime = calendarItem.EndTime,
-                ProjectId = timeEntry.ProjectId,
-                TaskId = timeEntry.TaskId,
-                Billable = timeEntry.Billable,
-                WorkspaceId = timeEntry.WorkspaceId,
-                TagIds = timeEntry.TagIds
-            };
-
-            var duration = calendarItem.Duration.HasValue
-                ? calendarItem.Duration.Value.TotalSeconds
-                : (timeService.CurrentDateTime - calendarItem.StartTime.LocalDateTime).TotalSeconds;
-
-            if (timeEntry.Duration != duration)
-            {
-                analyticsService.TimeEntryChangedFromCalendar.Track(CalendarChangeEvent.Duration);
-            }
-
-            if (timeEntry.Start != calendarItem.StartTime)
-            {
-                analyticsService.TimeEntryChangedFromCalendar.Track(CalendarChangeEvent.StartTime);
-            }
-
-            await interactorFactory.UpdateTimeEntry(dto).Execute();
-        }
-
-        private IObservable<IEnumerable<CalendarItem>> reloadData()
-        {
-            return interactorFactory.GetCalendarItemsForDate(timeService.CurrentDateTime.ToLocalTime().Date).Execute();
+            var daysSinceToday = (timeService.CurrentDateTime.ToLocalTime().Date - day.Date).Days;
+            var dayOfWeek = day.Date.DayOfWeek.ToString();
+            analyticsService.CalendarWeeklyDatePickerSelectionChanged.Track(daysSinceToday, dayOfWeek);
         }
     }
 }

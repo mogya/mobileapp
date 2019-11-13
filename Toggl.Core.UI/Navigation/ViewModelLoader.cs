@@ -322,26 +322,13 @@ namespace Toggl.Core.UI.Navigation
                 return new CalendarViewModel(
                     dependencyContainer.DataSource,
                     dependencyContainer.TimeService,
+                    dependencyContainer.RxActionFactory,
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(SelectUserCalendarsViewModel))
-            {
-                return new SelectUserCalendarsViewModel(
-                    dependencyContainer.UserPreferences,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.NavigationService);
             }
 
             if (viewModelType == typeof(ReportsViewModel))
@@ -372,7 +359,8 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.PermissionsChecker);
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(LicensesViewModel))
@@ -411,7 +399,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.UserPreferences,
                     dependencyContainer.AnalyticsService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService,
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.PermissionsChecker,

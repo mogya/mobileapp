@@ -1,12 +1,14 @@
 using System;
 using System.Globalization;
-using Toggl.Shared;
 using static System.FormattableString;
 
 namespace Toggl.Shared.Extensions
 {
     public static class TimeSpanExtensions
     {
+        public static TimeSpan Positive(this TimeSpan duration)
+            => duration < TimeSpan.Zero ? duration.Negate() : duration;
+        
         public static string ToFormattedString(this TimeSpan duration, DurationFormat format)
         {
             switch (format)

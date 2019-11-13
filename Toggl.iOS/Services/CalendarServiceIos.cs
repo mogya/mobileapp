@@ -12,7 +12,7 @@ namespace Toggl.iOS.Services
 {
     public sealed class CalendarServiceIos : PermissionAwareCalendarService
     {
-        private EKEventStore eventStore => new EKEventStore();
+        private EKEventStore eventStore = new EKEventStore();
 
         public CalendarServiceIos(IPermissionsChecker permissionsChecker)
             : base(permissionsChecker)

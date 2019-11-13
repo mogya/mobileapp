@@ -122,6 +122,8 @@ namespace Toggl.iOS.Cells.Calendar
             BackgroundColor = ColorAssets.TableBackground;
             DescriptionLabel.Text = Item.Description;
             DescriptionLabel.TextColor = textColor(color);
+            BottomLine.Hidden = Item.Source != CalendarItemSource.Calendar;
+            BottomLine.BackgroundColor = color;
 
             updateIcon(color);
             updateConstraints();

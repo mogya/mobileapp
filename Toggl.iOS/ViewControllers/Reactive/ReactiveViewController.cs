@@ -81,7 +81,7 @@ namespace Toggl.iOS.ViewControllers
             ViewModel?.ViewDestroyed();
         }
 
-        public Task<bool> DismissFromNavigationController()
+        public virtual Task<bool> DismissFromNavigationController()
             => ViewModel.CloseWithDefaultResult();
 
         public void ViewcontrollerWasPopped()

@@ -208,6 +208,20 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent<int> TimerWidgetSizeChanged { get; }
 
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarEventContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarNewTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarExistingTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarContextualMenuActionType> CalendarRunningTimeEntryContextualMenu { get; }
+
+        public IAnalyticsEvent<CalendarTimeEntryCreatedType, int, string> CalendarTimeEntryCreated { get; }
+
+        public IAnalyticsEvent<int, string> CalendarWeeklyDatePickerSelectionChanged { get; }
+
+        public IAnalyticsEvent<CalendarSwipeDirection, int, string> CalendarSingleSwipe { get; }
+
         protected BaseAnalyticsService()
         {
             Login = new AnalyticsEvent<AuthenticationMethod>(this, nameof(Login), "AuthenticationMethod");
@@ -307,7 +321,14 @@ namespace Toggl.Core.Analytics
             PushInitiatedSyncFetch = new AnalyticsEvent<string>(this, nameof(PushInitiatedSyncFetch), "NumberOfEntitiesFetched");
             PushNotificationSyncStarted = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncStarted), "Source");
             PushNotificationSyncFinished = new AnalyticsEvent<string>(this, nameof(PushNotificationSyncFinished), "Source");
+            CalendarWeeklyDatePickerSelectionChanged = new AnalyticsEvent<int, string>(this, nameof(CalendarWeeklyDatePickerSelectionChanged), "DaysSinceToday", "DayOfWeek");
+            CalendarSingleSwipe = new AnalyticsEvent<CalendarSwipeDirection, int, string>(this, nameof(CalendarSingleSwipe), "SwipeDirection", "DaysSinceToday", "DayOfWeek");
             PushNotificationSyncFailed = new AnalyticsEvent<string, string, string, string>(this, nameof(PushNotificationSyncFailed), "Source", "Type", "Message", "StackTrace");
+            CalendarEventContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarEventContextualMenu), "SelectedOption");
+            CalendarNewTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarNewTimeEntryContextualMenu), "SelectedOption");
+            CalendarExistingTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarExistingTimeEntryContextualMenu), "SelectedOption");
+            CalendarRunningTimeEntryContextualMenu = new AnalyticsEvent<CalendarContextualMenuActionType>(this, nameof(CalendarRunningTimeEntryContextualMenu), "SelectedOption");
+            CalendarTimeEntryCreated = new AnalyticsEvent<CalendarTimeEntryCreatedType, int, string>(this, nameof(CalendarTimeEntryCreated), "Type", "DaysSinceToday", "DayOfTheWeek");
         }
 
         public void TrackAnonymized(Exception exception)

@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
@@ -30,7 +32,6 @@ namespace Toggl.iOS.ViewControllers.Settings
             header.TranslatesAutoresizingMaskIntoConstraints = false;
             header.HeightAnchor.ConstraintEqualTo(tableViewHeaderHeight).Active = true;
             header.WidthAnchor.ConstraintEqualTo(UserCalendarsTableView.WidthAnchor).Active = true;
-            header.SetCalendarPermissionStatus(ViewModel.PermissionGranted);
 
             var source = new SelectUserCalendarsTableViewSource(UserCalendarsTableView, ViewModel.SelectCalendar);
             UserCalendarsTableView.Source = source;
@@ -39,9 +40,19 @@ namespace Toggl.iOS.ViewControllers.Settings
                 .Subscribe(UserCalendarsTableView.Rx().ReloadSections(source))
                 .DisposedBy(DisposeBag);
 
+            ViewModel.PermissionGranted
+                .Subscribe(header.SetCalendarPermissionStatus)
+                .DisposedBy(DisposeBag);
+
             header.EnableCalendarAccessTapped
                 .Subscribe(ViewModel.RequestAccess.Inputs)
                 .DisposedBy(DisposeBag);
+
+            source.Rx().ModelSelected()
+                .Subscribe(ViewModel.SelectCalendar.Inputs)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.RequestCalendarPermissionsIfNeeded.Execute();
         }
 
         public override void DidMoveToParentViewController(UIViewController parent)
@@ -53,6 +64,8 @@ namespace Toggl.iOS.ViewControllers.Settings
                 ViewModel.Save.Execute();
             }
         }
+
+        public override Task<bool> DismissFromNavigationController()
+            => Task.FromResult(true);
     }
 }
-

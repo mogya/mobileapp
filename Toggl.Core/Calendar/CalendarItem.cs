@@ -19,6 +19,12 @@ namespace Toggl.Core.Calendar
         public DateTimeOffset? EndTime => StartTime + Duration;
 
         public string Description { get; }
+        
+        public string Project { get; }
+        
+        public string Task { get; }
+        
+        public string Client { get; }
 
         public string Color { get; }
 
@@ -37,7 +43,10 @@ namespace Toggl.Core.Calendar
             CalendarIconKind iconKind,
             string color = ColorHelper.NoProject,
             long? timeEntryId = null,
-            string calendarId = "")
+            string calendarId = "",
+            string project = "",
+            string task = "",
+            string client = "")
         {
             Id = id;
             Source = source;
@@ -48,6 +57,9 @@ namespace Toggl.Core.Calendar
             TimeEntryId = timeEntryId;
             CalendarId = calendarId;
             IconKind = iconKind;
+            Project = project;
+            Task = task;
+            Client = client;
         }
 
         private CalendarItem(IThreadSafeTimeEntry timeEntry)
@@ -59,7 +71,10 @@ namespace Toggl.Core.Calendar
                 timeEntry.Description,
                 CalendarIconKind.None,
                 timeEntry.Project?.Color ?? ColorHelper.NoProject,
-                timeEntry.Id)
+                timeEntry.Id,
+                project: timeEntry.Project?.Name,
+                task: timeEntry.Task?.Name,
+                client: timeEntry.Project?.Client?.Name)
         {
             switch (timeEntry.SyncStatus)
             {
@@ -87,7 +102,10 @@ namespace Toggl.Core.Calendar
                 this.IconKind,
                 this.Color,
                 this.TimeEntryId,
-                this.CalendarId);
+                this.CalendarId,
+                this.Project,
+                this.Task,
+                this.Client);
 
         public CalendarItem WithDuration(TimeSpan? duration)
             => new CalendarItem(
@@ -99,6 +117,9 @@ namespace Toggl.Core.Calendar
                 this.IconKind,
                 this.Color,
                 this.TimeEntryId,
-                this.CalendarId);
+                this.CalendarId,
+                this.Project,
+                this.Task,
+                this.Client);
     }
 }

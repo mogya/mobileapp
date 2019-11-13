@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.DataSources.Interfaces;
@@ -10,10 +11,11 @@ using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Interactors
 {
-    internal class StopTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
+    internal class StopTimeEntryInteractor : IInteractor<Task<IThreadSafeTimeEntry>>
     {
         private readonly DateTimeOffset stopTime;
         private readonly TimeEntryStopOrigin origin;
@@ -33,7 +35,6 @@ namespace Toggl.Core.Interactors
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(analyticsService, nameof(analyticsService));
             Ensure.Argument.IsNotNull(origin, nameof(origin));
-
             this.stopTime = stopTime;
             this.dataSource = dataSource;
             this.timeService = timeService;
@@ -41,15 +42,21 @@ namespace Toggl.Core.Interactors
             this.origin = origin;
         }
 
-        public IObservable<IThreadSafeTimeEntry> Execute()
-            => dataSource.GetAll(te => te.IsDeleted == false && te.Duration == null, includeInaccessibleEntities: true)
-                .Select(timeEntries => timeEntries.SingleOrDefault() ?? throw new NoRunningTimeEntryException())
-                .SelectMany(timeEntry => timeEntry
+        public Task<IThreadSafeTimeEntry> Execute()
+            => Task.Run(async () =>
+            {
+                var timeEntries = await dataSource
+                    .GetAll(te => te.IsDeleted == false && te.Duration == null, includeInaccessibleEntities: true);
+                var timeEntry = timeEntries.SingleOrDefault() ??
+                                throw new NoRunningTimeEntryException();
+                var updatedTimeEntry = await timeEntry
                     .With((long)(stopTime - timeEntry.Start).TotalSeconds)
                     .UpdatedAt(timeService.CurrentDateTime)
-                    .Apply(dataSource.Update))
-                .Do(notifyTimeEntryStopped)
-                .Do(() => { analyticsService.TimeEntryStopped.Track(origin); });
+                    .Apply(dataSource.Update);
+                notifyTimeEntryStopped(updatedTimeEntry);
+                analyticsService.TimeEntryStopped.Track(origin);
+                return updatedTimeEntry;
+            });
 
         private void notifyTimeEntryStopped(IThreadSafeTimeEntry timeEntry)
         {

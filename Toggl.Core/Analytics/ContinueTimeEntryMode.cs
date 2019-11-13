@@ -6,5 +6,6 @@
         SingleTimeEntryContinueButton = TimeEntryStartOrigin.SingleTimeEntryContinueButton,
         TimeEntriesGroupSwipe = TimeEntryStartOrigin.TimeEntriesGroupSwipe,
         TimeEntriesGroupContinueButton = TimeEntryStartOrigin.TimeEntriesGroupContinueButton,
+        CalendarContextualMenu = TimeEntryStartOrigin.CalendarEvent
     }
 }

@@ -18,6 +18,7 @@ using System.Reactive.Subjects;
 using Toggl.Core.Extensions;
 using Toggl.Core.Sync;
 using System.Collections.Generic;
+using System.Reactive.Threading.Tasks;
 
 namespace Toggl.Core.UI.ViewModels
 {
@@ -136,7 +137,7 @@ namespace Toggl.Core.UI.ViewModels
             var timeEntry = interactorFactory
                 .StartSuggestion(suggestion)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+                .ToObservable();
 
             analyticsService.SuggestionStarted.Track(suggestion.ProviderType);
 

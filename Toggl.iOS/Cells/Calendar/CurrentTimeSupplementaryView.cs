@@ -17,5 +17,12 @@ namespace Toggl.iOS.Cells.Calendar
         protected CurrentTimeSupplementaryView(IntPtr handle) : base(handle)
         {
         }
+
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
+
+            UserInteractionEnabled = false;
+        }
     }
 }

@@ -23,13 +23,14 @@ namespace Toggl.Core.UI.ViewModels.Settings
         private readonly IPermissionsChecker permissionsChecker;
         private readonly IRxActionFactory rxActionFactory;
 
-        private bool calendarListVisible = false;
-        private ISubject<bool> calendarListVisibleSubject = new BehaviorSubject<bool>(false);
+        private BehaviorSubject<bool> calendarListVisibleSubject = new BehaviorSubject<bool>(false);
+        private BehaviorSubject<bool> permissionGrantedSubject = new BehaviorSubject<bool>(false);
 
-        public bool PermissionGranted { get; private set; }
+        public IObservable<bool> PermissionGranted { get; }
         public IObservable<bool> CalendarListVisible { get; }
 
         public ViewAction RequestAccess { get; }
+        public ViewAction RequestCalendarPermissionsIfNeeded { get; }
         public ViewAction TogglCalendarIntegration { get; }
 
         public CalendarSettingsViewModel(
@@ -39,31 +40,35 @@ namespace Toggl.Core.UI.ViewModels.Settings
             IAnalyticsService analyticsService,
             INavigationService navigationService,
             IRxActionFactory rxActionFactory,
-            IPermissionsChecker permissionsChecker)
+            IPermissionsChecker permissionsChecker,
+            ISchedulerProvider schedulerProvider)
             : base(userPreferences, interactorFactory, onboardingStorage, analyticsService, navigationService, rxActionFactory)
         {
             Ensure.Argument.IsNotNull(permissionsChecker, nameof(permissionsChecker));
+            Ensure.Argument.IsNotNull(schedulerProvider, nameof(schedulerProvider));
 
             this.permissionsChecker = permissionsChecker;
 
             RequestAccess = rxActionFactory.FromAction(requestAccess);
-            TogglCalendarIntegration = rxActionFactory.FromAsync(togglCalendarIntegration);
+            TogglCalendarIntegration = rxActionFactory.FromAsync(toggleCalendarIntegration);
+            RequestCalendarPermissionsIfNeeded = rxActionFactory.FromAsync(requestCalendarPermissionsIfNeeded);
 
-            CalendarListVisible = calendarListVisibleSubject.AsObservable().DistinctUntilChanged();
+            CalendarListVisible = calendarListVisibleSubject.AsObservable();
+            PermissionGranted = permissionGrantedSubject.AsObservable().DistinctUntilChanged().AsDriver(schedulerProvider);
         }
 
         public override async Task Initialize(bool forceItemSelection)
         {
-            PermissionGranted = await permissionsChecker.CalendarPermissionGranted;
+            permissionGrantedSubject.OnNext(await permissionsChecker.CalendarPermissionGranted);
 
-            if (!PermissionGranted)
+            if (!permissionGrantedSubject.Value)
             {
                 UserPreferences.SetEnabledCalendars();
             }
 
             await base.Initialize(forceItemSelection);
 
-            calendarListVisible = PermissionGranted && SelectedCalendarIds.Any();
+            var calendarListVisible = permissionGrantedSubject.Value;
             calendarListVisibleSubject.OnNext(calendarListVisible);
         }
 
@@ -75,7 +80,7 @@ namespace Toggl.Core.UI.ViewModels.Settings
 
         protected override void Done()
         {
-            if (!calendarListVisible)
+            if (!calendarListVisibleSubject.Value)
                 SelectedCalendarIds.Clear();
 
             UserPreferences.SetEnabledCalendars(SelectedCalendarIds.ToArray());
@@ -87,25 +92,33 @@ namespace Toggl.Core.UI.ViewModels.Settings
             View.OpenAppSettings();
         }
 
-        private async Task togglCalendarIntegration()
+        private async Task requestCalendarPermissionsIfNeeded()
         {
+            var authorized = await permissionsChecker.CalendarPermissionGranted;
+            if (!authorized)
+            {
+                authorized = await View.RequestCalendarAuthorization();
+                if (!authorized)
+                    await Navigate<CalendarPermissionDeniedViewModel, Unit>();
+
+                ReloadCalendars();
+                permissionGrantedSubject.OnNext(authorized);
+            }
+        }
+
+        private async Task toggleCalendarIntegration()
+        {
+            var calendarListVisible = calendarListVisibleSubject.Value;
+
             if (calendarListVisible)
             {
                 calendarListVisible = false;
             }
             else
             {
+                await requestCalendarPermissionsIfNeeded();
                 var authorized = await permissionsChecker.CalendarPermissionGranted;
-                if (!authorized)
-                {
-                    authorized = await View.RequestCalendarAuthorization();
-                    if (!authorized)
-                        await Navigate<CalendarPermissionDeniedViewModel, Unit>();
-
-                    calendarListVisible = await permissionsChecker.CalendarPermissionGranted;
-                    ReloadCalendars();
-                }
-                else
+                if (authorized)
                 {
                     calendarListVisible = true;
                 }

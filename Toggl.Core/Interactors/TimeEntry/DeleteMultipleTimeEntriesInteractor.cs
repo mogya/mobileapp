@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.DataSources.Interfaces;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Shared;
@@ -9,7 +10,7 @@ using Toggl.Storage.Models;
 
 namespace Toggl.Core.Interactors
 {
-    internal sealed class DeleteMultipleTimeEntriesInteractor : IInteractor<IObservable<Unit>>
+    internal sealed class DeleteMultipleTimeEntriesInteractor : IInteractor<Task>
     {
         private readonly long[] ids;
         private readonly IObservableDataSource<IThreadSafeTimeEntry, IDatabaseTimeEntry> dataSource;
@@ -28,9 +29,11 @@ namespace Toggl.Core.Interactors
             this.interactorFactory = interactorFactory;
         }
 
-        public IObservable<Unit> Execute()
-            => interactorFactory.GetMultipleTimeEntriesById(ids).Execute()
-                .SelectMany(dataSource.DeleteAll)
-                .SelectUnit();
+        public Task Execute()
+            => Task.Run(async () =>
+            {
+                var timeEntriesToDelete = await interactorFactory.GetMultipleTimeEntriesById(ids).Execute(); 
+                await dataSource.DeleteAll(timeEntriesToDelete);
+            });
     }
 }

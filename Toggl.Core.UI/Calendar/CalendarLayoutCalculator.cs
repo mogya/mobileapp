@@ -13,9 +13,13 @@ namespace Toggl.Core.UI.Calendar
 {
     public sealed class CalendarLayoutCalculator
     {
+        private const long NanosecondPerSecond = 10000000;
+        private const long maxGapDuration = 2 * 60 * 60 * NanosecondPerSecond;
+
         private static readonly TimeSpan offsetFromNow = TimeSpan.FromMinutes(7);
         private static readonly List<CalendarItemLayoutAttributes> emptyAttributes = new List<CalendarItemLayoutAttributes>();
         private readonly ITimeService timeService;
+        private readonly TimeSpan minimumDurationForUIPurposes = TimeSpan.FromMinutes(15);
 
         public CalendarLayoutCalculator(ITimeService timeService)
         {
@@ -39,6 +43,57 @@ namespace Toggl.Core.UI.Calendar
             return attributes;
         }
 
+        public List<CalendarItemLayoutAttributes> CalculateTwoHoursOrLessGapsLayoutAttributes(IList<CalendarItem> calendarItems)
+        {
+            if (calendarItems.None())
+                return emptyAttributes;
+
+            var now = timeService.CurrentDateTime;
+            var dayStart = (DateTimeOffset)calendarItems[0].StartTime.LocalDateTime.Date;
+            var dayEnd = dayStart.AddDays(1).AddTicks(-1);
+            var nextGapStart = dayStart;
+            var gaps = new List<(DateTimeOffset, TimeSpan)>();
+
+            DateTimeOffset? lastTeEndTime = null;
+
+            foreach (var te in calendarItems)
+            {
+                if (!lastTeEndTime.HasValue || te.EndTime.HasValue && te.EndTime > lastTeEndTime)
+                {
+                    lastTeEndTime = te.EndTime;
+                }
+
+                var startOfGap = nextGapStart;
+
+                if (te.StartTime < startOfGap)
+                {
+                    var teEnd = te.EndTime ?? now;
+                    if (teEnd > nextGapStart)
+                        nextGapStart = teEnd;
+
+                    continue;
+                }
+
+                var durationOfGap = te.StartTime - startOfGap;
+
+                if (durationOfGap.Ticks == 0)
+                    continue;
+
+                gaps.Add((startOfGap, durationOfGap));
+                nextGapStart = te.EndTime ?? now;
+            }
+
+            if (lastTeEndTime.HasValue && lastTeEndTime < dayEnd)
+            {
+                gaps.Add((lastTeEndTime.Value, dayEnd - lastTeEndTime.Value));
+            }
+
+            return gaps
+                .Where(gap => gap.Item2.Ticks <= maxGapDuration)
+                .Select(gap => new CalendarItemLayoutAttributes(gap.Item1.LocalDateTime, gap.Item2, 1, 0))
+                .ToList();
+        }
+
         /// <summary>
         /// Aggregates the indexed calendar items into buckets. Each bucket contains the sequence of overlapping items.
         /// The items in a bucket don't overlap all with each other, but cannot overlap with items in other buckets.
@@ -58,7 +113,7 @@ namespace Toggl.Core.UI.Calendar
 
             var now = timeService.CurrentDateTime;
             var group = buckets.Last();
-            var maxEndTime = group.Max(i => i.Item.EndTime(now, offsetFromNow));
+            var maxEndTime = group.Max(i => endTime(i.Item, now));
             if (indexedItem.Item.StartTime.LocalDateTime < maxEndTime)
                 group.Add(indexedItem);
             else
@@ -136,7 +191,7 @@ namespace Toggl.Core.UI.Calendar
             var now = timeService.CurrentDateTime;
             var column = columns.FirstOrDefault(c =>
             {
-                var index = c.FindLastIndex(elem => elem.Item.EndTime(now, offsetFromNow) <= item.Item.StartTime.LocalDateTime);
+                var index = c.FindLastIndex(elem => endTime(elem.Item, now) <= item.Item.StartTime.LocalDateTime);
                 if (index < 0)
                 {
                     return false;
@@ -146,7 +201,7 @@ namespace Toggl.Core.UI.Calendar
                     positionToInsert = c.Count;
                     return true;
                 }
-                if (c[index + 1].Item.StartTime.LocalDateTime >= item.Item.EndTime(now, offsetFromNow))
+                if (c[index + 1].Item.StartTime.LocalDateTime >= endTime(item.Item, now))
                 {
                     positionToInsert += 1;
                     return true;
@@ -155,6 +210,14 @@ namespace Toggl.Core.UI.Calendar
             });
 
             return (column, positionToInsert);
+        }
+
+        private DateTimeOffset endTime(CalendarItem calendarItem, DateTimeOffset now)
+        {
+            var duration = calendarItem.Duration(now, offsetFromNow);
+            return duration <= minimumDurationForUIPurposes
+                ? calendarItem.StartTime.LocalDateTime + minimumDurationForUIPurposes
+                : calendarItem.EndTime(now, offsetFromNow);
         }
 
         private CalendarItemLayoutAttributes attributesForItem(

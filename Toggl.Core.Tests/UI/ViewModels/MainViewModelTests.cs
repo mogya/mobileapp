@@ -513,7 +513,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory
                     .StopTimeEntry(Arg.Any<DateTimeOffset>(), Arg.Any<TimeEntryStopOrigin>())
                     .Execute()
-                    .Returns(Observable.Throw<IThreadSafeTimeEntry>(new Exception()));
+                    .Returns(ThreadingTask.FromException<IThreadSafeTimeEntry>(new Exception()));
 
                 var errors = TestScheduler.CreateObserver<Exception>();
                 ViewModel.StopTimeEntry.Errors.Subscribe(errors);

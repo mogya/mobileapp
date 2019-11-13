@@ -1750,7 +1750,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .ConfirmDestructiveAction(Arg.Any<ActionType>(), Arg.Any<object>())
                     .Returns(trueObservable);
 
-                var unitObservable = Observable.Return(Unit.Default);
+                var unitObservable = Task.FromResult(Unit.Default);
                 InteractorFactory
                     .DeleteTimeEntry(Arg.Any<long>())
                     .Execute()

@@ -2,7 +2,10 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Toggl.Core.Exceptions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
@@ -38,7 +41,7 @@ namespace Toggl.Core.Tests.Interactors
         [Fact, LogIfTooSlow]
         public async Task SetsTheDeletedFlag()
         {
-            await interactor.Execute().LastOrDefaultAsync();
+            await interactor.Execute();
 
             await DataSource.Received().TimeEntries.Update(Arg.Is<IThreadSafeTimeEntry>(te => te.IsDeleted == true));
         }
@@ -46,7 +49,7 @@ namespace Toggl.Core.Tests.Interactors
         [Fact, LogIfTooSlow]
         public async Task SetsTheSyncNeededStatus()
         {
-            await interactor.Execute().LastOrDefaultAsync();
+            await interactor.Execute();
 
             await DataSource.Received().TimeEntries.Update(Arg.Is<IThreadSafeTimeEntry>(te => te.SyncStatus == SyncStatus.SyncNeeded));
         }
@@ -57,7 +60,7 @@ namespace Toggl.Core.Tests.Interactors
             var newNow = new DateTimeOffset(2018, 09, 01, 11, 22, 33, TimeSpan.Zero);
             TimeService.CurrentDateTime.Returns(newNow);
 
-            await interactor.Execute().LastOrDefaultAsync();
+            await interactor.Execute();
 
             await DataSource.Received().TimeEntries.Update(Arg.Is<IThreadSafeTimeEntry>(te => te.At == newNow));
         }
@@ -65,20 +68,9 @@ namespace Toggl.Core.Tests.Interactors
         [Fact, LogIfTooSlow]
         public async Task UpdatesTheCorrectTimeEntry()
         {
-            await interactor.Execute().LastOrDefaultAsync();
+            await interactor.Execute();
 
             await DataSource.Received().TimeEntries.Update(Arg.Is<IThreadSafeTimeEntry>(te => te.Id == timeEntry.Id));
-        }
-
-        [Fact, LogIfTooSlow]
-        public void EmitsSingleElementBeforeCompleting()
-        {
-            var observer = Substitute.For<IObserver<Unit>>();
-
-            interactor.Execute().Subscribe(observer);
-
-            observer.Received(1).OnNext(Arg.Any<Unit>());
-            observer.Received(1).OnCompleted();
         }
 
         [Fact, LogIfTooSlow]
@@ -99,11 +91,10 @@ namespace Toggl.Core.Tests.Interactors
                 .Execute()
                 .Returns(timeEntryObservable);
             DataSource.TimeEntries.Update(Arg.Any<IThreadSafeTimeEntry>()).Returns(errorObservable);
-            var observer = Substitute.For<IObserver<Unit>>();
 
-            interactor.Execute().Subscribe(observer);
-
-            observer.Received().OnError(Arg.Any<DatabaseOperationException<IDatabaseTimeEntry>>());
+            Func<Task> action = async () => await interactor.Execute();
+            
+            action.Should().Throw<DatabaseOperationException<IDatabaseTimeEntry>>();
         }
 
         [Fact, LogIfTooSlow]
@@ -111,13 +102,12 @@ namespace Toggl.Core.Tests.Interactors
         {
             var otherTimeEntry = Substitute.For<IThreadSafeTimeEntry>();
             otherTimeEntry.Id.Returns(12);
-            var observer = Substitute.For<IObserver<Unit>>();
             DataSource.TimeEntries.Update(Arg.Any<IThreadSafeTimeEntry>())
                 .Returns(Observable.Throw<IThreadSafeTimeEntry>(new DatabaseOperationException<IDatabaseTimeEntry>(new Exception())));
 
-            interactor.Execute().Subscribe(observer);
-
-            observer.Received().OnError(Arg.Any<DatabaseOperationException<IDatabaseTimeEntry>>());
+            Func<Task> action = async () => await interactor.Execute();
+            
+            action.Should().Throw<DatabaseOperationException<IDatabaseTimeEntry>>();
         }
     }
 }

@@ -48,6 +48,8 @@ namespace Toggl.Droid.Services
                 return;
             }
 
+            dependencyContainer.WidgetsService.Start();
+
             var shouldHandlePushNotifications = dependencyContainer
                 .RemoteConfigService
                 .GetPushNotificationsConfiguration()

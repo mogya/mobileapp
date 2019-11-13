@@ -123,16 +123,15 @@ namespace Toggl.iOS.ViewControllers
 
             sections.Add(timerDefaultsSection);
 
-            if (ViewModel.CalendarSettingsEnabled)
-            {
-                var calendarSection = new SettingSection(Resources.Calendar, new ISettingRow[]
-                {
-                    new NavigationRow(Resources.CalendarSettingsTitle, ViewModel.OpenCalendarSettings),
-                    new NavigationRow(Resources.SmartReminders, ViewModel.OpenNotificationSettings),
-                });
 
-                sections.Add(Observable.Return(calendarSection));
-            }
+            var calendarSection = new SettingSection(Resources.Calendar, new ISettingRow[]
+            {
+                new NavigationRow(Resources.CalendarSettingsTitle, ViewModel.OpenCalendarSettings),
+                new NavigationRow(Resources.SmartReminders, ViewModel.OpenNotificationSettings),
+            });
+
+            sections.Add(Observable.Return(calendarSection));
+
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {

@@ -19,11 +19,4 @@
         tools:title="Calendar"
         android:icon="@drawable/calendar_light"
         android:title=""/>
-
-    <item
-        android:id="@+id/MainTabSettinsItem"
-        tools:title="Settings"
-        android:icon="@drawable/settings_light"
-        android:title=""/>
-
 </menu>

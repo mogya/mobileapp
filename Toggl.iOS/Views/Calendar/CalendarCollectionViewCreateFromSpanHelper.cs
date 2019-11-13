@@ -2,13 +2,15 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core.Helper;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
+using Constants = Toggl.Core.Helper.Constants;
+using Math = System.Math;
 
 namespace Toggl.iOS.Views.Calendar
 {
@@ -22,11 +24,8 @@ namespace Toggl.iOS.Views.Calendar
 
         private CGPoint firstPoint;
 
-        private TimeSpan? previousDuration;
-
-        private readonly ISubject<(DateTimeOffset, TimeSpan)> createFromSpanSuject = new Subject<(DateTimeOffset, TimeSpan)>();
-
-        public IObservable<(DateTimeOffset, TimeSpan)> CreateFromSpan => createFromSpanSuject.AsObservable();
+        private TimeSpan previousDuration;
+        private DateTimeOffset previousStart;
 
         private List<DateTimeOffset> allItemsStartAndEndTime;
 
@@ -93,8 +92,6 @@ namespace Toggl.iOS.Views.Calendar
                     break;
 
                 case UIGestureRecognizerState.Cancelled:
-                    dataSource.RemoveItemView();
-                    dataSource.StopEditing();
                     break;
             }
         }
@@ -107,16 +104,35 @@ namespace Toggl.iOS.Views.Calendar
             firstPoint = point;
             LastPoint = point;
             var startTime = Layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
-            dataSource.InsertItemView(startTime, defaultDuration);
+            var duration = defaultDuration;
+            var teGaps = dataSource.GapsBetweenTimeEntriesOf2HoursOrLess();
+            if (teGaps.Any())
+            {
+                foreach (var gap in teGaps)
+                {
+                    if (startTime > gap.StartTime && startTime < gap.StartTime + gap.Duration)
+                    {
+                        duration = gap.Duration;
+                        startTime = gap.StartTime;
+                        break;
+                    }
+                }
+            }
+
+            dataSource.InsertItemView(startTime, duration);
             impactFeedback.ImpactOccurred();
             selectionFeedback.Prepare();
-            previousDuration = defaultDuration;
+            previousDuration = duration;
+            previousStart = startTime;
         }
 
         private bool isDraggingDown(CGPoint point) => firstPoint.Y < point.Y;
 
         private void longPressChanged(CGPoint point)
         {
+            if (Math.Sqrt(Math.Pow(point.X - firstPoint.X, 2) + Math.Pow(point.Y - firstPoint.Y, 2)) < 30)
+                return;
+            
             LastPoint = point;
 
             DateTimeOffset startTime;
@@ -151,31 +167,12 @@ namespace Toggl.iOS.Views.Calendar
             {
                 selectionFeedback.SelectionChanged();
                 previousDuration = duration;
+                previousStart = startTime;
             }
         }
 
         private void longPressEnded(CGPoint point)
         {
-            previousDuration = null;
-            LastPoint = point;
-
-            DateTimeOffset startTime;
-            DateTimeOffset endTime;
-
-            if (firstPoint.Y < point.Y)
-            {
-                startTime = Layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
-                endTime = Layout.DateAtPoint(LastPoint).RoundUpToClosestQuarter();
-            }
-            else
-            {
-                startTime = Layout.DateAtPoint(LastPoint).RoundDownToClosestQuarter();
-                endTime = Layout.DateAtPoint(firstPoint).RoundDownToClosestQuarter();
-            }
-
-            var duration = endTime - startTime;
-            createFromSpanSuject.OnNext((startTime, duration));
-
             dataSource.StopEditing();
             StopAutoScroll();
 

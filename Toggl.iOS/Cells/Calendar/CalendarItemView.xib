@@ -17,6 +17,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="381" height="38"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dp3-Ip-39O">
+                        <rect key="frame" x="0.0" y="36" width="381" height="2"/>
+                        <color key="backgroundColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="MzS-6j-lmV"/>
+                        </constraints>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="icCalendarSmall" translatesAutoresizingMaskIntoConstraints="NO" id="BRg-DN-wNT">
                         <rect key="frame" x="5" y="3.5" width="14" height="14"/>
                         <constraints>
@@ -61,14 +68,17 @@
                     </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" red="0.86420355900000001" green="0.7443847656" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="CellBackground"/>
             <constraints>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="baseline" secondItem="sob-Bq-eUc" secondAttribute="firstBaseline" id="20g-ZE-uFH"/>
                 <constraint firstItem="sob-Bq-eUc" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="24" id="5hY-Qw-D80"/>
                 <constraint firstAttribute="trailing" secondItem="EdB-CQ-dXu" secondAttribute="trailing" constant="8" id="BdH-Gs-onQ"/>
                 <constraint firstItem="ftH-hb-JkM" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="8" id="Bxu-MG-OxF"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sob-Bq-eUc" secondAttribute="bottom" constant="6" id="Cbs-P9-Q2X"/>
+                <constraint firstItem="Dp3-Ip-39O" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" id="NcS-09-n0f"/>
                 <constraint firstAttribute="bottom" secondItem="ftH-hb-JkM" secondAttribute="top" constant="4" id="QGa-uA-Ast"/>
+                <constraint firstAttribute="bottom" secondItem="Dp3-Ip-39O" secondAttribute="bottom" id="RQu-Hc-Ufz"/>
+                <constraint firstAttribute="trailing" secondItem="Dp3-Ip-39O" secondAttribute="trailing" id="Zuu-yo-a3m"/>
                 <constraint firstAttribute="trailing" secondItem="sob-Bq-eUc" secondAttribute="trailing" constant="6" id="a5G-aI-edH"/>
                 <constraint firstAttribute="top" secondItem="EdB-CQ-dXu" secondAttribute="bottom" constant="-4" id="apn-Rs-dhc"/>
                 <constraint firstItem="BRg-DN-wNT" firstAttribute="leading" secondItem="cZE-iV-UFb" secondAttribute="leading" constant="5" id="fNB-5f-4hR"/>
@@ -88,6 +98,7 @@
             </variation>
             <connections>
                 <outlet property="BottomDragIndicator" destination="ftH-hb-JkM" id="qab-cG-Hu5"/>
+                <outlet property="BottomLine" destination="Dp3-Ip-39O" id="8ff-Da-xef"/>
                 <outlet property="CalendarIconBaselineConstraint" destination="20g-ZE-uFH" id="o5h-5z-VYe"/>
                 <outlet property="CalendarIconCenterVerticallyConstraint" destination="y9Z-2d-x6z" id="dki-E5-yRN"/>
                 <outlet property="CalendarIconHeightConstrarint" destination="5iW-EI-Uvb" id="Wpr-Cp-VKp"/>
@@ -106,7 +117,7 @@
     <resources>
         <image name="icCalendarSmall" width="10" height="11"/>
         <namedColor name="CellBackground">
-            <color red="0.10980392247438431" green="0.10980392247438431" blue="0.11764705926179886" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

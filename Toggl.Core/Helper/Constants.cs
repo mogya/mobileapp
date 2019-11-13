@@ -25,6 +25,6 @@ namespace Toggl.Core.Helper
 
         public static TimeSpan UndoTime => TimeSpan.FromSeconds(5);
 
-        public static TimeSpan CalendarItemViewDefaultDuration => TimeSpan.FromMinutes(15);
+        public static TimeSpan CalendarItemViewDefaultDuration => TimeSpan.FromMinutes(30);
     }
 }

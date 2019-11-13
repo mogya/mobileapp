@@ -1,9 +1,5 @@
 ﻿using FluentAssertions;
-using NSubstitute;
 using System;
-using System.Linq;
-using System.Reactive.Linq;
-using Toggl.Core.Suggestions;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.UI.ViewModels;
 using Xunit;
@@ -116,23 +112,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
-            }
-        }
-
-        public sealed class TheTabsProperty : MainTabViewModelTest
-        {
-            [Theory]
-            [InlineData(Platform.Daneel, false)]
-            [InlineData(Platform.Giskard, true)]
-            public void ShouldContainTheSettingsViewModelBasedOntheRemoteConfigService(Platform platform, bool includesSettings)
-            {
-                PlatformInfo.Platform.Returns(platform);
-
-                var viewModel = CreateViewModel();
-
-                var expectedTabCount = 3 + (includesSettings ? 1 : 0);
-
-                viewModel.Tabs.Count().Should().Be(expectedTabCount);
             }
         }
     }

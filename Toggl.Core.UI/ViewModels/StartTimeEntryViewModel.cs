@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Autocomplete;
@@ -495,7 +496,7 @@ namespace Toggl.Core.UI.ViewModels
 
             return interactorFactory.CreateTimeEntry(timeEntry, origin)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler);
+                .ToObservable();
         }
 
         private void onParsedQuery(QueryInfo parsedQuery)

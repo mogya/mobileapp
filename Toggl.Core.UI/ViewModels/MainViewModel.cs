@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
@@ -446,7 +447,7 @@ namespace Toggl.Core.UI.ViewModels
             return interactorFactory
                 .StopTimeEntry(TimeService.CurrentDateTime, origin)
                 .Execute()
-                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .ToObservable()
                 .Do(syncManager.InitiatePushSync)
                 .SelectUnit();
         }

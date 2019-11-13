@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using Accord;
 using Toggl.Core.Analytics;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
@@ -46,6 +48,7 @@ namespace Toggl.Core.Interactors
             return interactorFactory
                 .ContinueTimeEntry(timeEntryPrototype, continueMode)
                 .Execute()
+                .ToObservable()
                 .Do(_ => trackContinueEvent());
         }
 

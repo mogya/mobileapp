@@ -155,5 +155,19 @@ namespace Toggl.Droid.Extensions
 
             throw new ArgumentOutOfRangeException(nameof(type));
         }
+
+        public static void SetQFlags(this Activity activity)
+        {
+            if (QApis.AreAvailable)
+            {
+                var uiOptions = SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutStable;
+                if (activity.Resources.GetBoolean(Resource.Boolean.is_light_theme))
+                {
+                    uiOptions |= SystemUiFlags.LightNavigationBar;
+                    uiOptions |= SystemUiFlags.LightStatusBar;
+                }
+                activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility) (int) uiOptions;
+            }
+        }
     }
 }

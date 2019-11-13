@@ -57,7 +57,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserPreferences,
                     AnalyticsService,
                     InteractorFactory,
-                    OnboardingStorage,
                     NavigationService,
                     RxActionFactory,
                     PermissionsChecker,
@@ -80,7 +79,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useAnalyticsService,
                 bool useInteractorFactory,
                 bool useplatformInfo,
-                bool useOnboardingStorage,
                 bool useNavigationService,
                 bool useRxActionFactory,
                 bool usePermissionsChecker,
@@ -91,7 +89,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var platformInfo = useplatformInfo ? PlatformInfo : null;
                 var userPreferences = useUserPreferences ? UserPreferences : null;
                 var analyticsService = useAnalyticsService ? AnalyticsService : null;
-                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
                 var navigationService = useNavigationService ? NavigationService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var rxActionFactory = useRxActionFactory ? RxActionFactory : null;
@@ -106,7 +103,6 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         userPreferences,
                         analyticsService,
                         interactorFactory,
-                        onboardingStorage,
                         navigationService,
                         rxActionFactory,
                         permissionsService,

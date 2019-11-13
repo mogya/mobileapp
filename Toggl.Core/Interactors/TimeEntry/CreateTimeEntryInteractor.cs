@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
@@ -9,10 +10,11 @@ using Toggl.Core.Sync;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Interactors
 {
-    internal sealed class CreateTimeEntryInteractor : IInteractor<IObservable<IThreadSafeTimeEntry>>
+    internal sealed class CreateTimeEntryInteractor : IInteractor<Task<IThreadSafeTimeEntry>>
     {
         private readonly TimeSpan? duration;
         private readonly IIdProvider idProvider;
@@ -54,14 +56,18 @@ namespace Toggl.Core.Interactors
             this.syncManager = syncManager;
         }
 
-        public IObservable<IThreadSafeTimeEntry> Execute()
-            => dataSource.User.Current
-                .FirstAsync()
-                .Select(userFromPrototype)
-                .SelectMany(dataSource.TimeEntries.Create)
-                .Do(notifyOfNewTimeEntryIfPossible)
-                .Do(syncManager.InitiatePushSync)
-                .Track(StartTimeEntryEvent.With(origin), analyticsService);
+        public Task<IThreadSafeTimeEntry> Execute()
+            => Task.Run(async () =>
+            {
+                var currentUser = await dataSource.User.Get();
+                var timeEntryPrototype = userFromPrototype(currentUser);    
+                var createdTimeEntry = await dataSource.TimeEntries.Create(timeEntryPrototype);
+                notifyOfNewTimeEntryIfPossible(createdTimeEntry);
+                syncManager.InitiatePushSync();
+                var startTimeEntryEvent = StartTimeEntryEvent.With(origin).Invoke(createdTimeEntry);
+                analyticsService.Track(startTimeEntryEvent);
+                return createdTimeEntry;
+            });
 
         private TimeEntry userFromPrototype(IThreadSafeUser user)
             => idProvider.GetNextIdentifier()

@@ -1,188 +1,302 @@
+﻿using System;
+using System.Linq;
+using Foundation;
+using Toggl.Core.Analytics;
 using CoreGraphics;
-using System;
+using System.Collections.Immutable;
 using System.Reactive.Linq;
-using Toggl.Core;
-using Toggl.Core.UI.Extensions;
+using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
-using Toggl.iOS.Presentation;
-using Toggl.iOS.Views.Calendar;
 using Toggl.iOS.ViewSources;
-using Toggl.Shared;
 using Toggl.Shared.Extensions;
+using Toggl.Shared.Extensions.Reactive;
 using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IScrollableToTop
+    public sealed partial class CalendarViewController : ReactiveViewController<CalendarViewModel>, IUIPageViewControllerDataSource, IUIPageViewControllerDelegate
     {
-        private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
-        private const double middleOfTheDay = 12;
+        private const int weekViewHeight = 44;
+        private const int maxAllowedPageIndex = 0;
+        private const int minAllowedPageIndex = -13;
+        private const int weekViewHeaderFontSize = 12;
 
-        private readonly UIImageView titleImage = new UIImageView(UIImage.FromBundle("togglLogo"));
-        private readonly ITimeService timeService;
+        private readonly BehaviorRelay<bool> contextualMenuVisible = new BehaviorRelay<bool>(false);
+        private readonly BehaviorRelay<string> timeTrackedOnDay = new BehaviorRelay<string>("");
+        private readonly BehaviorRelay<int> currentPageRelay = new BehaviorRelay<int>(0);
+        private readonly UIPageViewController pageViewController;
+        private readonly UILabel[] weekViewHeaderLabels;
+        private readonly UICollectionViewFlowLayout weekViewCollectionViewLayout;
 
-        private CalendarCollectionViewLayout layout;
-        private CalendarCollectionViewSource dataSource;
-        private CalendarCollectionViewEditItemHelper editItemHelper;
-        private CalendarCollectionViewCreateFromSpanHelper createFromSpanHelper;
-        private CalendarCollectionViewZoomHelper zoomHelper;
+        private CalendarWeeklyViewDayCollectionViewSource weekViewCollectionViewSource;
+        private DateTime currentlyShownDate;
 
-        private readonly UIButton settingsButton = new UIButton(new CGRect(0, 0, 40, 50));
-
-        public CalendarViewController(CalendarViewModel viewModel)
-            : base(viewModel, nameof(CalendarViewController))
+        public CalendarViewController(CalendarViewModel calendarViewModel)
+            : base(calendarViewModel, nameof(CalendarViewController))
         {
-            timeService = IosDependencyContainer.Instance.TimeService;
+            pageViewController = new UIPageViewController(UIPageViewControllerTransitionStyle.Scroll, UIPageViewControllerNavigationOrientation.Horizontal);
+            weekViewHeaderLabels = Enumerable.Range(0, 7)
+                .Select(_ => new UILabel
+                {
+                    TextAlignment = UITextAlignment.Center,
+                    TranslatesAutoresizingMaskIntoConstraints = false,
+                    Font = UIFont.SystemFontOfSize(weekViewHeaderFontSize, UIFontWeight.Medium),
+                    TextColor = ColorAssets.CalendarHeaderLabel
+                })
+                .ToArray();
+
+            weekViewCollectionViewLayout= new UICollectionViewFlowLayout
+            {
+                ScrollDirection = UICollectionViewScrollDirection.Horizontal,
+                MinimumLineSpacing = 0
+            };
+        }
+
+        public override void LoadView()
+        {
+            base.LoadView();
+            setupWeekViewHeaderLabels();
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            ExtendedNavbarView.BackgroundColor = NavigationController.NavigationBar.BackgroundColor;
-            var separator = ExtendedNavbarView.InsertSeparator();
-            separator.BackgroundColor = ColorAssets.OpaqueSeparator;
-            TimeTrackedTodayLabel.Font = TimeTrackedTodayLabel.Font.GetMonospacedDigitFont();
+            ExtendedLayoutIncludesOpaqueBars = true;
 
-            TitleLabel.Text = Resources.Welcome;
-            DescriptionLabel.Text = Resources.CalendarFeatureDescription;
-            GetStartedButton.SetTitle(Resources.GetStarted, UIControlState.Normal);
+            weekViewCollectionViewSource = new CalendarWeeklyViewDayCollectionViewSource(WeekViewCollectionView);
+            currentlyShownDate = ViewModel.CurrentlyShownDate.Value;
 
-            settingsButton.SetImage(UIImage.FromBundle("icSettings"), UIControlState.Normal);
+            setupViews();
 
-            ViewModel
-                .ShouldShowOnboarding
-                .FirstAsync()
-                .Subscribe(
-                    shouldShowOnboarding => OnboardingView.Alpha = shouldShowOnboarding ? 1 : 0)
+            ViewModel.WeekViewDays
+                .Subscribe(weekViewCollectionViewSource.UpdateItems)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.ShouldShowOnboarding
-                .Subscribe(OnboardingView.Rx().IsVisibleWithFade())
+            ViewModel.WeekViewHeaders
+                .Subscribe(updateWeeklyViewHeaderLabelTexts)
                 .DisposedBy(DisposeBag);
 
-            GetStartedButton.Rx()
-                .BindAction(ViewModel.GetStarted)
+            weekViewCollectionViewSource.DaySelected
+                .Subscribe(ViewModel.SelectDayFromWeekView.Inputs)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.TimeTrackedToday
-                .Subscribe(TimeTrackedTodayLabel.Rx().Text())
+            ViewModel.CurrentlyShownDate
+                .Subscribe(weekViewCollectionViewSource.UpdateCurrentlySelectedDate)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.CurrentDate
-                .Subscribe(CurrentDateLabel.Rx().Text())
+            ViewModel.CurrentlyShownDate
+                .Subscribe(updateCurrentlyShownViewController)
                 .DisposedBy(DisposeBag);
 
-            dataSource = new CalendarCollectionViewSource(
-                timeService,
-                CalendarCollectionView,
-                ViewModel.TimeOfDayFormat,
-                ViewModel.CalendarItems);
-
-            layout = new CalendarCollectionViewLayout(timeService, dataSource);
-
-            editItemHelper = new CalendarCollectionViewEditItemHelper(CalendarCollectionView, timeService, dataSource, layout);
-            createFromSpanHelper = new CalendarCollectionViewCreateFromSpanHelper(CalendarCollectionView, dataSource, layout);
-            zoomHelper = new CalendarCollectionViewZoomHelper(CalendarCollectionView, layout);
-
-            CalendarCollectionView.SetCollectionViewLayout(layout, false);
-            CalendarCollectionView.Delegate = dataSource;
-            CalendarCollectionView.DataSource = dataSource;
-            CalendarCollectionView.ContentInset = new UIEdgeInsets(20, 0, 20, 0);
-
-            dataSource.ItemTapped
-                .Subscribe(ViewModel.OnItemTapped.Inputs)
+            ViewModel.CurrentlyShownDateString
+                .Subscribe(SelectedDateLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
 
-            settingsButton.Rx()
-                .BindAction(ViewModel.SelectCalendars)
+            SettingsButton.Rx()
+                .BindAction(ViewModel.OpenSettings)
                 .DisposedBy(DisposeBag);
 
-            editItemHelper.EditCalendarItem
-                .Subscribe(ViewModel.OnUpdateTimeEntry.Inputs)
+            contextualMenuVisible
+                .Select(CommonFunctions.Invert)
+                .Subscribe(setPageViewControllerEnabled)
                 .DisposedBy(DisposeBag);
 
-            editItemHelper.LongPressCalendarEvent
-                .Subscribe(ViewModel.OnCalendarEventLongPressed.Inputs)
+            contextualMenuVisible
+                .Subscribe(contextualMenuVisible => WeekViewCollectionView.UserInteractionEnabled = !contextualMenuVisible)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.SettingsAreVisible
-                .Subscribe(settingsButton.Rx().IsVisible())
+            contextualMenuVisible
+                .Subscribe(toggleTabBar)
                 .DisposedBy(DisposeBag);
 
-            createFromSpanHelper.CreateFromSpan
-                .Subscribe(ViewModel.OnDurationSelected.Inputs)
+            timeTrackedOnDay
+                .Subscribe(DailyTrackedTimeLabel.Rx().Text())
                 .DisposedBy(DisposeBag);
-
-            CalendarCollectionView.LayoutIfNeeded();
-            View.BackgroundColor = ColorAssets.TableBackground;
         }
 
-        public override void ViewWillAppear(bool animated)
+        private void toggleTabBar(bool hidden)
         {
-            base.ViewWillAppear(animated);
-
-            NavigationItem.TitleView = titleImage;
-            NavigationItem.RightBarButtonItems = new[]
-            {
-                new UIBarButtonItem(settingsButton)
-            };
-
-            layout.InvalidateCurrentTimeLayout();
+            TabBarController.TabBar.Hidden = hidden;
         }
 
-        public override void ViewDidAppear(bool animated)
+        private void setupViews()
         {
-            base.ViewDidAppear(animated);
+            DailyTrackedTimeLabel.Font = DailyTrackedTimeLabel.Font.GetMonospacedDigitFont();
 
-            if (CalendarCollectionView.ContentSize.Height == 0)
+            pageViewController.DataSource = this;
+            pageViewController.Delegate = this;
+            pageViewController.View.Frame = DayViewContainer.Bounds;
+            DayViewContainer.AddSubview(pageViewController.View);
+            pageViewController.DidMoveToParentViewController(this);
+
+            var viewControllers = new[] { viewControllerAtIndex(0) };
+            viewControllers[0].SetGoodScrollPoint();
+            pageViewController.SetViewControllers(viewControllers, UIPageViewControllerNavigationDirection.Forward, false, null);
+
+            WeekViewCollectionView.Source = weekViewCollectionViewSource;
+            WeekViewCollectionView.ShowsHorizontalScrollIndicator = false;
+            WeekViewCollectionView.CollectionViewLayout = weekViewCollectionViewLayout;
+            WeekViewCollectionView.DecelerationRate = UIScrollView.DecelerationRateFast;
+        }
+
+        private void setPageViewControllerEnabled(bool enabled)
+        {
+            pageViewController.DataSource = enabled ? this : null;
+            pageViewController.Delegate = enabled ? this : null;
+        }
+
+        private void updateCurrentlyShownViewController(DateTime newDate)
+        {
+            if (newDate == currentlyShownDate)
                 return;
 
-            selectGoodScrollPoint(timeService.CurrentDateTime.LocalDateTime.TimeOfDay);
+            var direction = newDate > currentlyShownDate
+                ? UIPageViewControllerNavigationDirection.Forward
+                : UIPageViewControllerNavigationDirection.Reverse;
+            currentlyShownDate = newDate;
+
+            var today = IosDependencyContainer.Instance.TimeService.CurrentDateTime.ToLocalTime().Date;
+            var index = (newDate - today).Days;
+
+            var currentViewController = pageViewController.ViewControllers[0] as CalendarDayViewController;
+            var newViewController = viewControllerAtIndex(index);
+            if (currentViewController != null)
+                newViewController.SetScrollOffset(currentViewController.ScrollOffset);
+            pageViewController.SetViewControllers(new[] {newViewController},  direction, true, null);
+            currentPageRelay.Accept(index);
         }
 
-        public void ScrollToTop()
+        public override void ViewDidLayoutSubviews()
         {
-            CalendarCollectionView?.SetContentOffset(CGPoint.Empty, true);
+            base.ViewDidLayoutSubviews();
+
+            updateWeekViewHeaderWidthConstraints();
+            weekViewCollectionViewSource.UpdateCurrentlySelectedDate(ViewModel.CurrentlyShownDate.Value);
+            ViewModel.RealoadWeekView();
         }
 
-        private void selectGoodScrollPoint(TimeSpan timeOfDay)
+        public UIViewController GetPreviousViewController(UIPageViewController pageViewController, UIViewController referenceViewController)
         {
-            var frameHeight =
-                CalendarCollectionView.Frame.Height
-                    - CalendarCollectionView.ContentInset.Top
-                    - CalendarCollectionView.ContentInset.Bottom;
-            var hoursOnScreen = frameHeight / (CalendarCollectionView.ContentSize.Height / 24);
-            var centeredHour = calculateCenteredHour(timeOfDay.TotalHours, hoursOnScreen);
+            var referenceTag = referenceViewController.View.Tag;
+            if (referenceTag == minAllowedPageIndex)
+                return null;
 
-            var offsetY = (centeredHour / 24) * CalendarCollectionView.ContentSize.Height - (frameHeight / 2);
-            var scrollPointY = offsetY.Clamp(0, CalendarCollectionView.ContentSize.Height - frameHeight);
-            var offset = new CGPoint(0, scrollPointY);
-            CalendarCollectionView.SetContentOffset(offset, false);
+            return viewControllerAtIndex(referenceTag - 1);
         }
 
-        private static double calculateCenteredHour(double currentHour, double hoursOnScreen)
+        public UIViewController GetNextViewController(UIPageViewController pageViewController, UIViewController referenceViewController)
         {
-            var hoursPerHalfOfScreen = hoursOnScreen / 2;
-            var minimumOffset = hoursOnScreen * minimumOffsetOfCurrentTimeIndicatorFromScreenEdge;
+            var referenceTag = referenceViewController.View.Tag;
+            if (referenceTag == maxAllowedPageIndex)
+                return null;
 
-            var center = (currentHour + middleOfTheDay) / 2;
+            return viewControllerAtIndex(referenceTag + 1);
+        }
 
-            if (currentHour < center - hoursPerHalfOfScreen + minimumOffset)
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        {
+            pageViewController.ViewControllers.ForEach(viewController => viewController.ViewWillTransitionToSize(toSize, coordinator));
+        }
+
+        [Export("pageViewController:willTransitionToViewControllers:")]
+        public void WillTransition(UIPageViewController pageViewController, UIViewController[] pendingViewControllers)
+        {
+            var pendingCalendarDayViewController = pendingViewControllers.FirstOrDefault() as CalendarDayViewController;
+            if (pendingCalendarDayViewController == null)
+                return;
+
+            var currentCalendarDayViewController = pageViewController.ViewControllers.FirstOrDefault() as CalendarDayViewController;
+            if (currentCalendarDayViewController == null) return;
+
+            pendingCalendarDayViewController.SetScrollOffset(currentCalendarDayViewController.ScrollOffset);
+        }
+
+        private CalendarDayViewController viewControllerAtIndex(nint index)
+        {
+            var viewModel = ViewModel.DayViewModelAt((int) index);
+            var viewController = new CalendarDayViewController(viewModel, currentPageRelay, timeTrackedOnDay, contextualMenuVisible);
+            viewController.View.Tag = index;
+            return viewController;
+        }
+
+        [Export("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:")]
+        public void DidFinishAnimating(UIPageViewController pageViewController, bool finished, UIViewController[] previousViewControllers, bool completed)
+        {
+            if (!completed) return;
+
+            var newIndex = pageViewController.ViewControllers.FirstOrDefault()?.View?.Tag;
+            if (newIndex == null) return;
+
+            var newDate = ViewModel.IndexToDate((int)newIndex.Value);
+
+            currentlyShownDate = newDate;
+            currentPageRelay.Accept((int)newIndex);
+            ViewModel.CurrentlyShownDate.Accept(newDate);
+
+            var previousIndex = previousViewControllers.FirstOrDefault()?.View?.Tag;
+            if (previousIndex == null) return;
+            var swipeDirection = previousIndex > newIndex
+                ? CalendarSwipeDirection.Left
+                : CalendarSwipeDirection.Rignt;
+            var daysSinceToday = (int)newIndex.Value;
+            var dayOfWeek = ViewModel.IndexToDate((int)newIndex.Value).DayOfWeek.ToString();
+            IosDependencyContainer.Instance.AnalyticsService.CalendarSingleSwipe.Track(swipeDirection, daysSinceToday, dayOfWeek);
+        }
+
+        private void setupWeekViewHeaderLabels()
+        {
+            foreach (var dayHeader in weekViewHeaderLabels)
             {
-                // the current time indicator would be too close to the top edge of the screen
-                return currentHour - minimumOffset + hoursPerHalfOfScreen;
+                WeekViewDayHeaderContainer.AddSubview(dayHeader);
+                dayHeader.TopAnchor.ConstraintEqualTo(WeekViewDayHeaderContainer.TopAnchor).Active = true;
+                dayHeader.BottomAnchor.ConstraintEqualTo(WeekViewDayHeaderContainer.BottomAnchor).Active = true;
             }
 
-            if (currentHour > center + hoursPerHalfOfScreen - minimumOffset)
-            {
-                // the current time indicator would be too close to the bottom edge of the screen
-                return currentHour + minimumOffset - hoursPerHalfOfScreen;
-            }
+            weekViewHeaderLabels.First().LeadingAnchor.ConstraintEqualTo(WeekViewDayHeaderContainer.LeadingAnchor).Active = true;
+            weekViewHeaderLabels.Last().TrailingAnchor.ConstraintEqualTo(WeekViewDayHeaderContainer.TrailingAnchor).Active = true;
 
-            return center;
+            for (int i = 1; i < 7; i++)
+            {
+                var previousDayHeader = weekViewHeaderLabels[i - 1];
+                var currentDayHeader = weekViewHeaderLabels[i];
+                previousDayHeader.TrailingAnchor.ConstraintEqualTo(currentDayHeader.LeadingAnchor).Active = true;
+            }
         }
+
+        private void updateWeekViewHeaderWidthConstraints()
+        {
+            var targetWidth = WeekViewContainer.Frame.Width / 7;
+            weekViewCollectionViewLayout.ItemSize = new CGSize(targetWidth, weekViewHeight);
+            foreach (var label in weekViewHeaderLabels)
+            {
+                var widthConstraint = label.Constraints.FirstOrDefault(constraint => constraint.FirstAttribute == NSLayoutAttribute.Width);
+                if (widthConstraint == null)
+                {
+                    label.WidthAnchor.ConstraintEqualTo(targetWidth).Active = true;
+                    continue;
+                }
+
+                widthConstraint.Constant = targetWidth;
+                label.SetNeedsLayout();
+            }
+        }
+
+        private void updateWeeklyViewHeaderLabelTexts(IImmutableList<DayOfWeek> headers)
+        {
+            if (headers.Count != 7)
+                throw new ArgumentException($"The count {nameof(headers)} must be 7 (it was {headers.Count})");
+
+            for (int i = 0; i < 7; i++)
+                weekViewHeaderLabels[i].Text = textForDayHeader(headers[i]);
+        }
+
+        private string textForDayHeader(DayOfWeek dayOfWeek)
+            => TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
+                ? dayOfWeek.FullName()
+                : dayOfWeek.Initial();
+
     }
 }

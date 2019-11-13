@@ -7,6 +7,7 @@ using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Mocks;
+using Toggl.Core.Tests.TestExtensions;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
 
@@ -94,7 +95,7 @@ namespace Toggl.Core.Tests.Interactors.TimeEntry
             InteractorFactory
                 .ContinueTimeEntry(Arg.Any<ITimeEntryPrototype>(), Arg.Any<ContinueTimeEntryMode>())
                 .Execute()
-                .Returns(Observable.Return(createdTimeEntry));
+                .ReturnsTaskOf(createdTimeEntry);
 
             var interactor = new ContinueTimeEntryFromMainLogInteractor(
                 InteractorFactory,

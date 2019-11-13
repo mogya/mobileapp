@@ -13,69 +13,85 @@ namespace Toggl.iOS.ViewControllers
 	partial class CalendarViewController
 	{
 		[Outlet]
-		UIKit.UICollectionView CalendarCollectionView { get; set; }
+		UIKit.UILabel DailyTrackedTimeLabel { get; set; }
 
 		[Outlet]
-		UIKit.UILabel CurrentDateLabel { get; set; }
+		UIKit.NSLayoutConstraint DailyTrackedTimeLeadingConstraint { get; set; }
 
 		[Outlet]
-		UIKit.UILabel DescriptionLabel { get; set; }
+		UIKit.UIView DayViewContainer { get; set; }
 
 		[Outlet]
-		UIKit.UIView ExtendedNavbarView { get; set; }
+		UIKit.UILabel SelectedDateLabel { get; set; }
 
 		[Outlet]
-		UIKit.UIButton GetStartedButton { get; set; }
+		UIKit.UIButton SettingsButton { get; set; }
 
 		[Outlet]
-		UIKit.UIView OnboardingView { get; set; }
+		UIKit.NSLayoutConstraint SettingsButtonTrailingConstraint { get; set; }
 
 		[Outlet]
-		UIKit.UILabel TimeTrackedTodayLabel { get; set; }
+		UIKit.UICollectionView WeekViewCollectionView { get; set; }
 
 		[Outlet]
-		UIKit.UILabel TitleLabel { get; set; }
+		UIKit.UIView WeekViewContainer { get; set; }
 
+		[Outlet]
+		UIKit.NSLayoutConstraint WeekViewContainerWidthConstraint { get; set; }
+
+		[Outlet]
+		UIKit.UIView WeekViewDayHeaderContainer { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (CalendarCollectionView != null) {
-				CalendarCollectionView.Dispose ();
-				CalendarCollectionView = null;
+			if (DailyTrackedTimeLabel != null) {
+				DailyTrackedTimeLabel.Dispose ();
+				DailyTrackedTimeLabel = null;
 			}
 
-			if (DescriptionLabel != null) {
-				DescriptionLabel.Dispose ();
-				DescriptionLabel = null;
+			if (DailyTrackedTimeLeadingConstraint != null) {
+				DailyTrackedTimeLeadingConstraint.Dispose ();
+				DailyTrackedTimeLeadingConstraint = null;
 			}
 
-			if (GetStartedButton != null) {
-				GetStartedButton.Dispose ();
-				GetStartedButton = null;
+			if (DayViewContainer != null) {
+				DayViewContainer.Dispose ();
+				DayViewContainer = null;
 			}
 
-			if (OnboardingView != null) {
-				OnboardingView.Dispose ();
-				OnboardingView = null;
+			if (SelectedDateLabel != null) {
+				SelectedDateLabel.Dispose ();
+				SelectedDateLabel = null;
 			}
 
-			if (TitleLabel != null) {
-				TitleLabel.Dispose ();
-				TitleLabel = null;
+			if (SettingsButton != null) {
+				SettingsButton.Dispose ();
+				SettingsButton = null;
 			}
 
-			if (ExtendedNavbarView != null) {
-				ExtendedNavbarView.Dispose ();
-				ExtendedNavbarView = null;
+			if (SettingsButtonTrailingConstraint != null) {
+				SettingsButtonTrailingConstraint.Dispose ();
+				SettingsButtonTrailingConstraint = null;
 			}
 
-			if (TimeTrackedTodayLabel != null) {
-				TimeTrackedTodayLabel.Dispose ();
-				TimeTrackedTodayLabel = null;
+			if (WeekViewCollectionView != null) {
+				WeekViewCollectionView.Dispose ();
+				WeekViewCollectionView = null;
 			}
 
-			if (CurrentDateLabel != null) {
-				CurrentDateLabel.Dispose ();
-				CurrentDateLabel = null;
+			if (WeekViewContainer != null) {
+				WeekViewContainer.Dispose ();
+				WeekViewContainer = null;
+			}
+
+			if (WeekViewContainerWidthConstraint != null) {
+				WeekViewContainerWidthConstraint.Dispose ();
+				WeekViewContainerWidthConstraint = null;
+			}
+
+			if (WeekViewDayHeaderContainer != null) {
+				WeekViewDayHeaderContainer.Dispose ();
+				WeekViewDayHeaderContainer = null;
 			}
 		}
 	}

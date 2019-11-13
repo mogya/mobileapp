@@ -407,6 +407,27 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="SundayInitial" xml:space="preserve">
         <value>S</value>
     </data>
+    <data name="Monday" xml:space="preserve">
+        <value>Monday</value>
+    </data>
+    <data name="Tuesday" xml:space="preserve">
+        <value>Tuesday</value>
+    </data>
+    <data name="Wednesday" xml:space="preserve">
+        <value>Wednesday</value>
+    </data>
+    <data name="Thursday" xml:space="preserve">
+        <value>Thursday</value>
+    </data>
+    <data name="Friday" xml:space="preserve">
+        <value>Friday</value>
+    </data>
+    <data name="Saturday" xml:space="preserve">
+        <value>Saturday</value>
+    </data>
+    <data name="Sunday" xml:space="preserve">
+        <value>Sunday</value>
+    </data>
     <data name="Help" xml:space="preserve">
         <value>Help</value>
     </data>
@@ -663,12 +684,6 @@ understand and agree to Toggl's</value>
     <data name="CalendarAccessExplanation" xml:space="preserve">
         <value>Toggl needs access to your calendar in order to display events. Events are visible to you only and won’t appear in Reports.</value>
     </data>
-    <data name="Welcome" xml:space="preserve">
-        <value>Welcome</value>
-    </data>
-    <data name="GetStarted" xml:space="preserve">
-        <value>Get started</value>
-    </data>
     <data name="Start" xml:space="preserve">
         <value>Start</value>
     </data>
@@ -856,9 +871,6 @@ Use them to add keywords to your time entries.</value>
     <data name="FilterWorkspaces" xml:space="preserve">
         <value>Filter workspaces</value>
     </data>
-    <data name="ContactUs" xml:space="preserve">
-        <value>Contact us</value>
-    </data>
     <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
         <value>Something went wrong. Please try again</value>
     </data>
@@ -866,7 +878,9 @@ Use them to add keywords to your time entries.</value>
         <value>Send</value>
     </data>
     <data name="FeedbackFieldPlaceholder" xml:space="preserve">
-        <value>Let us know what you think. Send us your feedback and questions.</value>
+        <value>Let us know what you think. Send us your feedback and questions.
+
+PS. Our customer support team currently operates in English only. Sorry for any inconvenience!</value>
     </data>
     <data name="FeedbackHint" xml:space="preserve">
         <value>Your message</value>
@@ -966,6 +980,9 @@ Use them to add keywords to your time entries.</value>
     </data>
     <data name="EditingTwentyFourHoursFormat">
         <value>HH:mm</value>
+    </data>
+    <data name="CalendarToolbarDateFormat">
+        <value>dddd, MMM d</value>
     </data>
     <data name="SiriShortcuts" xml:space="preserve">
         <value>Siri Shortcuts</value>
@@ -1119,9 +1136,6 @@ Open app to track time.</value>
     </data>
     <data name="UndoDeletedTimeEntry" xml:space="preserve">
         <value>Undo deleted time entry</value>
-    </data>
-    <data name="CalendarFeatureDescription" xml:space="preserve">
-        <value>Calendar feature links to calendars on your device so that you can see events and turn these to time entries.</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
         <value>or {0}</value>
@@ -1307,6 +1321,9 @@ to project members</value>
     </data>
     <data name="No" xml:space="preserve">
         <value>No</value>
+    </data>
+    <data name="Now" xml:space="preserve">
+        <value>now</value>
     </data>
     <data name="LoginToTrack" xml:space="preserve">
         <value>Log in to track time</value>

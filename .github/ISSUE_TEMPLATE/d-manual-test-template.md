@@ -209,22 +209,17 @@ about: A manual testing checklist that can be assigned to a release to track the
 ## Testing app restriction UI
 
 - [ ] Check that all the non-permanent error screens are showing correctly (long-press on About in Android or the navigation bar in iOS)
-  - [ ] Token reset error
-  - [ ] No workspace error
-  - [ ] No default workspace error
-  - [ ] Outdated client error
-  - [ ] Outdated API error
+- [ ] Token reset error
+- [ ] No workspace error
+- [ ] No default workspace error
+- [ ] Outdated client error
+- [ ] Outdated API error
 - [ ] Check that all the permanent error screens are showing correctly
-  - [ ] Permanent outdated client error
-    - [ ] Make sure that after this choice, the app requires reinstall/update
-  - [ ] Permanent outdated API error
-    - [ ] Make sure that after this choice, the app requires reinstall/update
+- [ ] Permanent outdated client error
+- [ ] Make sure that after this choice, the app requires reinstall/update
+- [ ] Permanent outdated API error
+- [ ] Make sure that after this choice, the app requires reinstall/update
 
-    ### Test that the UI is appearing as intended and report any issues
+### Test that the UI is appearing as intended and report any issues
 
-- [ ] All of the UI tests are passing
 - [ ] Check this after testing the app if no UI errors/glitches have occurred
-
-## Test that the UI is appearing as intended and report any issues
-
-- [ ] Check this after testing app if no UI errors/glitches have occurred

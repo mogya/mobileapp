@@ -19,7 +19,6 @@ namespace Toggl.iOS.Presentation
             typeof(NoWorkspaceViewModel),
             typeof(PasteFromClipboardViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
-            typeof(SelectUserCalendarsViewModel),
             typeof(TermsOfServiceViewModel),
         };
 

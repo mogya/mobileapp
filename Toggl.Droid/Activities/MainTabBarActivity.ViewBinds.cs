@@ -1,5 +1,6 @@
 ﻿using Android.Support.Design.Widget;
 using Android.Views;
+using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities
 {
@@ -10,6 +11,7 @@ namespace Toggl.Droid.Activities
         protected override void InitializeViews()
         {
             navigationView = FindViewById<BottomNavigationView>(Resource.Id.MainTabBarBottomNavigationView);
+            navigationView.FitBottomInset();
 
             var menu = navigationView.Menu;
             var timerTab = menu.FindItem(Resource.Id.MainTabTimerItem);
@@ -20,9 +22,6 @@ namespace Toggl.Droid.Activities
 
             var calendarTab = menu.FindItem(Resource.Id.MainTabCalendarItem);
             calendarTab.SetTitle(Shared.Resources.Calendar);
-
-            var settingsTab = menu.FindItem(Resource.Id.MainTabSettinsItem);
-            settingsTab.SetTitle(Shared.Resources.Settings);
         }
     }
 }

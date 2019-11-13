@@ -1,7 +1,8 @@
-// WARNING
+﻿// WARNING
 //
-// This file has been generated automatically by Visual Studio to store outlets and
-// actions made in the UI designer. If it is removed, they will be lost.
+// This file has been generated automatically by Rider IDE
+//   to store outlets and actions made in Xcode.
+// If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -14,6 +15,9 @@ namespace Toggl.iOS.Cells.Calendar
 	{
 		[Outlet]
 		UIKit.UIView BottomDragIndicator { get; set; }
+
+		[Outlet]
+		UIKit.UIView BottomLine { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint CalendarIconBaselineConstraint { get; set; }
@@ -50,14 +54,19 @@ namespace Toggl.iOS.Cells.Calendar
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (DescriptionLabelLeadingConstraint != null) {
-				DescriptionLabelLeadingConstraint.Dispose ();
-				DescriptionLabelLeadingConstraint = null;
-			}
-
 			if (BottomDragIndicator != null) {
 				BottomDragIndicator.Dispose ();
 				BottomDragIndicator = null;
+			}
+
+			if (CalendarIconBaselineConstraint != null) {
+				CalendarIconBaselineConstraint.Dispose ();
+				CalendarIconBaselineConstraint = null;
+			}
+
+			if (CalendarIconCenterVerticallyConstraint != null) {
+				CalendarIconCenterVerticallyConstraint.Dispose ();
+				CalendarIconCenterVerticallyConstraint = null;
 			}
 
 			if (CalendarIconHeightConstrarint != null) {
@@ -85,19 +94,14 @@ namespace Toggl.iOS.Cells.Calendar
 				DescriptionLabel = null;
 			}
 
-			if (TopDragIndicator != null) {
-				TopDragIndicator.Dispose ();
-				TopDragIndicator = null;
+			if (DescriptionLabelBottomConstraint != null) {
+				DescriptionLabelBottomConstraint.Dispose ();
+				DescriptionLabelBottomConstraint = null;
 			}
 
-			if (CalendarIconBaselineConstraint != null) {
-				CalendarIconBaselineConstraint.Dispose ();
-				CalendarIconBaselineConstraint = null;
-			}
-
-			if (CalendarIconCenterVerticallyConstraint != null) {
-				CalendarIconCenterVerticallyConstraint.Dispose ();
-				CalendarIconCenterVerticallyConstraint = null;
+			if (DescriptionLabelLeadingConstraint != null) {
+				DescriptionLabelLeadingConstraint.Dispose ();
+				DescriptionLabelLeadingConstraint = null;
 			}
 
 			if (DescriptionLabelTopConstraint != null) {
@@ -105,10 +109,16 @@ namespace Toggl.iOS.Cells.Calendar
 				DescriptionLabelTopConstraint = null;
 			}
 
-			if (DescriptionLabelBottomConstraint != null) {
-				DescriptionLabelBottomConstraint.Dispose ();
-				DescriptionLabelBottomConstraint = null;
+			if (TopDragIndicator != null) {
+				TopDragIndicator.Dispose ();
+				TopDragIndicator = null;
 			}
+
+			if (BottomLine != null) {
+				BottomLine.Dispose ();
+				BottomLine = null;
+			}
+
 		}
 	}
 }

@@ -40,7 +40,7 @@ using Toggl.Droid.Services;
 
 namespace Toggl.Droid.Fragments
 {
-    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToTop
+    public sealed partial class MainFragment : ReactiveTabFragment<MainViewModel>, IScrollableToStart
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
@@ -226,7 +226,7 @@ namespace Toggl.Droid.Fragments
             setupOnboardingSteps();
         }
 
-        public void ScrollToTop()
+        public void ScrollToStart()
         {
             mainRecyclerView?.SmoothScrollToPosition(0);
         }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+using Microsoft.Reactive.Testing;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
         public abstract class CalendarSettingsViewModelTest : BaseViewModelTests<CalendarSettingsViewModel, bool, string[]>
         {
             protected override CalendarSettingsViewModel CreateViewModel()
-                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, OnboardingStorage, AnalyticsService, NavigationService, RxActionFactory, PermissionsChecker);
+                => new CalendarSettingsViewModel(UserPreferences, InteractorFactory, OnboardingStorage, AnalyticsService, NavigationService, RxActionFactory, PermissionsChecker, SchedulerProvider);
         }
 
         public sealed class TheConstructor : CalendarSettingsViewModelTest
@@ -36,7 +37,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useAnalyticsService,
                 bool useNavigationService,
                 bool useRxActionFactory,
-                bool usePermissionsChecker)
+                bool usePermissionsChecker,
+                bool useSchedulerProvider)
             {
                 Action tryingToConstructWithEmptyParameters =
                     () => new CalendarSettingsViewModel(
@@ -46,26 +48,44 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         useAnalyticsService ? AnalyticsService : null,
                         useNavigationService ? NavigationService : null,
                         useRxActionFactory ? RxActionFactory : null,
-                        usePermissionsChecker ? PermissionsChecker : null
+                        usePermissionsChecker ? PermissionsChecker : null,
+                        useSchedulerProvider ? SchedulerProvider : null
                     );
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
             }
         }
 
-        public sealed class ThePermissionGrantedProperty : CalendarSettingsViewModelTest
+        public sealed class ThePermissionGrantedObservable : CalendarSettingsViewModelTest
         {
             [Theory]
             [InlineData(true)]
             [InlineData(false)]
-            public async Task GetsInitialisedToTheProperValue(bool permissionGranted)
+            public async Task EmitsTheProperValue(bool permissionGranted)
             {
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.PermissionGranted.Subscribe(observer);
+
                 UserPreferences.EnabledCalendarIds().Returns(new List<string>());
                 PermissionsChecker.CalendarPermissionGranted.Returns(Observable.Return(permissionGranted));
 
                 await ViewModel.Initialize(false);
 
-                ViewModel.PermissionGranted.Should().Be(permissionGranted);
+                TestScheduler.Start();
+
+                if (permissionGranted)
+                {
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, false),
+                        ReactiveTest.OnNext(2, true)
+                    );
+                }
+                else
+                {
+                    observer.Messages.AssertEqual(
+                        ReactiveTest.OnNext(1, false)
+                    );
+                }
             }
         }
 

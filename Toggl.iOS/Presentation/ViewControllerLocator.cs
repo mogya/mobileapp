@@ -70,8 +70,6 @@ namespace Toggl.iOS.Presentation
                     return new SelectProjectViewController(vm);
                 case SelectTagsViewModel vm:
                     return new SelectTagsViewController(vm);
-                case SelectUserCalendarsViewModel vm:
-                    return new SelectUserCalendarsViewController(vm);
                 case SendFeedbackViewModel vm:
                     return new SendFeedbackViewController(vm);
                 case SettingsViewModel vm:
@@ -106,6 +104,11 @@ namespace Toggl.iOS.Presentation
             => GetViewController(viewModel).Apply(wrapInNavigationController);
 
         private static UIViewController wrapInNavigationController(UIViewController viewController)
-            => new ReactiveNavigationController(viewController);
+        {
+            if (viewController is CalendarViewController)
+                return viewController;
+
+            return  new ReactiveNavigationController(viewController);
+        }
     }
 }

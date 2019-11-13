@@ -1,48 +1,41 @@
+using System;
+using System.Linq;
+using Android.Support.Constraints;
 using Android.Support.Design.Widget;
+using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
-using Toggl.Droid.Views;
+using Toggl.Droid.Extensions;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
 {
     public partial class CalendarFragment
     {
-        private View headerCalendarEventsView;
-        private View headerTimeEntriesView;
-        private TextView headerDayTextView;
-        private TextView headerWeekdayTextView;
-        private TextView headerCalendarEventsTextView;
-        private TextView headerTimeEntriesTextView;
-        private TextView headerCalendarEventsLabel;
-        private TextView headerCalendarTimeEntriesLabel;
-        private Button headerLinkCalendarsButton;
-        private CalendarRecyclerView calendarRecyclerView;
-        private ViewStub onboardingViewStub;
+        private TextView headerTimeEntriesDurationTextView;
+        private TextView headerDateTextView;
+        private LockableViewPager calendarViewPager;
+        private ViewPager calendarWeekStripePager;
+        private ConstraintLayout calendarWeekStripeLabelsContainer;
+        private TextView[] calendarWeekStripeHeaders;
         private AppBarLayout appBarLayout;
-        private View onboardingView;
-        private TextView onboardingTitleView;
-        private TextView onboardingMessageView;
-        private Button getStartedButton;
-        private TextView skipButton;
+        private Toolbar toolbar;
 
         protected override void InitializeViews(View view)
         {
-            headerCalendarEventsView = view.FindViewById(Resource.Id.HeaderCalendarEventsView);
-            headerTimeEntriesView = view.FindViewById(Resource.Id.HeaderTimeEntriesView);
-            headerDayTextView = view.FindViewById<TextView>(Resource.Id.Day);
-            headerWeekdayTextView = view.FindViewById<TextView>(Resource.Id.Weekday);
-            headerCalendarEventsTextView = view.FindViewById<TextView>(Resource.Id.HeaderCalendarEventsTextView);
-            headerCalendarEventsLabel = view.FindViewById<TextView>(Resource.Id.HeaderCalendarEventsLabel);
-            headerCalendarTimeEntriesLabel = view.FindViewById<TextView>(Resource.Id.CalendarHeaderTimeEntriesLabel);
-            headerTimeEntriesTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesTextView);
-            headerLinkCalendarsButton = view.FindViewById<Button>(Resource.Id.HeaderLinkCalendarsButton);
-            calendarRecyclerView = view.FindViewById<CalendarRecyclerView>(Resource.Id.calendarRecyclerView);
-            onboardingViewStub = view.FindViewById<ViewStub>(Resource.Id.OnboardingViewStub);
+            headerDateTextView = view.FindViewById<TextView>(Resource.Id.HeaderDateTextView);
+            headerTimeEntriesDurationTextView = view.FindViewById<TextView>(Resource.Id.HeaderTimeEntriesDurationTextView);
             appBarLayout = view.FindViewById<AppBarLayout>(Resource.Id.HeaderView);
+            calendarViewPager = view.FindViewById<LockableViewPager>(Resource.Id.Pager);
+            calendarWeekStripePager = view.FindViewById<ViewPager>(Resource.Id.WeekStripePager);
+            calendarWeekStripeLabelsContainer = view.FindViewById<ConstraintLayout>(Resource.Id.CalendarWeekStripeLabels);
+            calendarWeekStripeHeaders = calendarWeekStripeLabelsContainer.GetChildren().Cast<TextView>().ToArray();
+                
+            if (calendarWeekStripeHeaders.Length != NumberOfDaysInTheWeek) {
+                throw new ArgumentOutOfRangeException($"Week headers should contain exactly {NumberOfDaysInTheWeek} text views");
+            }
             
-            headerCalendarEventsLabel.Text = Shared.Resources.CalendarEvents;
-            headerCalendarTimeEntriesLabel.Text = Shared.Resources.TimeEntries;
-            headerLinkCalendarsButton.Text = Shared.Resources.LinkCalendars;
+            toolbar = view.FindViewById<Toolbar>(Resource.Id.Toolbar);
         }
     }
 }

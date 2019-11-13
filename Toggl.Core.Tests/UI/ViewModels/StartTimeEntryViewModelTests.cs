@@ -1255,7 +1255,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public async Task ExecutesTheCreateTimeEntryInteractor()
             {
-                var mockedInteractor = Substitute.For<IInteractor<IObservable<IThreadSafeTimeEntry>>>();
+                var mockedInteractor = Substitute.For<IInteractor<Task<IThreadSafeTimeEntry>>>();
                 InteractorFactory.CreateTimeEntry(Arg.Any<ITimeEntryPrototype>(), TimeEntryStartOrigin.Timer).Returns(mockedInteractor);
 
                 ViewModel.Done.Execute(Unit.Default);

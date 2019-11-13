@@ -2,17 +2,20 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core;
 using Toggl.Core.Calendar;
 using Toggl.Core.Extensions;
 using Toggl.Core.Helper;
+using Toggl.Core.Services;
 using Toggl.Core.UI.Extensions;
 using Toggl.iOS.Cells.Calendar;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
+using Toggl.Shared.Extensions;
 using UIKit;
 
 namespace Toggl.iOS.Views.Calendar
@@ -29,13 +32,13 @@ namespace Toggl.iOS.Views.Calendar
 
         private static readonly TimeSpan defaultDuration = Constants.CalendarItemViewDefaultDuration;
 
+        private readonly CompositeDisposable disposeBag = new CompositeDisposable();
         private readonly ITimeService timeService;
         private readonly CalendarCollectionViewSource dataSource;
 
-        private UILongPressGestureRecognizer longPressGestureRecognizer;
-        private UIPanGestureRecognizer panGestureRecognizer;
-        private UITapGestureRecognizer tapGestureRecognizer;
+        private readonly UIPanGestureRecognizer panGestureRecognizer;
 
+        private CalendarItem originalCalendarItem;
         private CalendarItem calendarItem;
         private List<DateTimeOffset> allItemsStartAndEndTime;
 
@@ -52,37 +55,36 @@ namespace Toggl.iOS.Views.Calendar
         private DateTimeOffset? previousStartTime;
         private DateTimeOffset? previousEndTime;
 
-        private readonly ISubject<CalendarItem> editCalendarItemSuject = new Subject<CalendarItem>();
-        private readonly ISubject<CalendarItem> longPressCalendarEventSubject = new Subject<CalendarItem>();
+        private readonly ISubject<CalendarItem> itemUpdatedSubject = new Subject<CalendarItem>();
 
-        private IDisposable scalingEndedSubscription;
+        public IObservable<CalendarItem> ItemUpdated  => itemUpdatedSubject.AsObservable();
 
-        public IObservable<CalendarItem> EditCalendarItem => editCalendarItemSuject.AsObservable();
-        public IObservable<CalendarItem> LongPressCalendarEvent => longPressCalendarEventSubject.AsObservable();
+        public InputAction<CalendarItem?> StartEditingItem { get; }
 
         public CalendarCollectionViewEditItemHelper(
             UICollectionView CollectionView,
             ITimeService timeService,
+            IRxActionFactory rxActionFactory,
             CalendarCollectionViewSource dataSource,
             CalendarCollectionViewLayout Layout) : base(CollectionView, Layout)
         {
+            Ensure.Argument.IsNotNull(rxActionFactory, nameof(rxActionFactory));
             Ensure.Argument.IsNotNull(timeService, nameof(timeService));
             Ensure.Argument.IsNotNull(dataSource, nameof(dataSource));
 
             this.timeService = timeService;
             this.dataSource = dataSource;
 
-            longPressGestureRecognizer = new UILongPressGestureRecognizer(onLongPress);
-            longPressGestureRecognizer.Delegate = this;
-            CollectionView.AddGestureRecognizer(longPressGestureRecognizer);
+            StartEditingItem = rxActionFactory.FromAction<CalendarItem?>(startEditingItem);
 
-            panGestureRecognizer = new UIPanGestureRecognizer(onPan);
-            panGestureRecognizer.Delegate = this;
+            panGestureRecognizer = new UIPanGestureRecognizer(onPan)
+            {
+                Delegate = this
+            };
 
-            tapGestureRecognizer = new UITapGestureRecognizer(onTap);
-            tapGestureRecognizer.Delegate = this;
-
-            scalingEndedSubscription = Layout.ScalingEnded.Subscribe(onLayoutScalingEnded);
+            Layout.ScalingEnded
+                .Subscribe(onLayoutScalingEnded)
+                .DisposedBy(disposeBag);
         }
 
         public CalendarCollectionViewEditItemHelper(IntPtr handle) : base(handle)
@@ -93,50 +95,57 @@ namespace Toggl.iOS.Views.Calendar
         {
             base.Dispose(disposing);
             if (!disposing) return;
-            scalingEndedSubscription.Dispose();
+            disposeBag.Dispose();
         }
 
-        [Export("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:")]
-        public bool ShouldRecognizeSimultaneously(UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer)
+        private void startEditingItem(CalendarItem? calendarItem)
         {
-            if (gestureRecognizer == longPressGestureRecognizer)
-                return otherGestureRecognizer is UILongPressGestureRecognizer;
-            else
-                return false;
+            if (isActive)
+                stopEditingCurrentCell();
+
+            if (calendarItem == null)
+                return;
+
+            if (!calendarItem.Value.IsEditable())
+                return;
+
+            allItemsStartAndEndTime = dataSource.AllItemsStartAndEndTime();
+
+            this.calendarItem = calendarItem.Value;
+            originalCalendarItem = this.calendarItem;
+
+            dataSource.StartEditing(this.calendarItem);
+            itemUpdatedSubject.OnNext(this.calendarItem);
+            becomeActive();
+
+            selectionFeedback.Prepare();
+        }
+
+        public void DiscardChanges()
+        {
+            if (!isActive)
+                return;
+
+            if (string.IsNullOrEmpty(originalCalendarItem.Id))
+                return;
+
+            itemUpdatedSubject.OnNext(originalCalendarItem);
         }
 
         [Export("gestureRecognizer:shouldReceiveTouch:")]
         public bool ShouldReceiveTouch(UIGestureRecognizer gestureRecognizer, UITouch touch)
         {
-            if (gestureRecognizer == longPressGestureRecognizer)
+            if (gestureRecognizer == panGestureRecognizer)
             {
+                if (!isActive)
+                    return true;
+
                 var point = touch.LocationInView(CollectionView);
                 var thereIsAnItemAtPoint = dataSource.CalendarItemAtPoint(point) != null;
-                var isNotEditing = dataSource.IsEditing == false;
-
-                return thereIsAnItemAtPoint && isNotEditing;
+                return thereIsAnItemAtPoint;
             }
 
             return true;
-        }
-
-        private void onLongPress(UILongPressGestureRecognizer gesture)
-        {
-            var point = gesture.LocationInView(CollectionView);
-
-            switch (gesture.State)
-            {
-                case UIGestureRecognizerState.Began:
-                    longPressBegan(point);
-                    break;
-
-                case UIGestureRecognizerState.Changed:
-                    longPressChanged(point);
-                    break;
-                case UIGestureRecognizerState.Ended:
-                    longPressEnded();
-                    break;
-            }
         }
 
         private void onPan(UIPanGestureRecognizer gesture)
@@ -157,67 +166,6 @@ namespace Toggl.iOS.Views.Calendar
                     panEnded();
                     break;
             }
-        }
-
-        private void onTap(UITapGestureRecognizer gesture)
-        {
-            stopEditingCurrentCell();
-            impactFeedback.ImpactOccurred();
-        }
-
-        private void longPressBegan(CGPoint point)
-        {
-            if (dataSource.IsEditing || isActive)
-                return;
-
-            allItemsStartAndEndTime = dataSource.AllItemsStartAndEndTime();
-
-            var itemAtPoint = dataSource.CalendarItemAtPoint(point);
-            if (!itemAtPoint.HasValue)
-                return;
-
-            calendarItem = itemAtPoint.Value;
-
-            if (calendarItem.Source == CalendarItemSource.Calendar)
-            {
-                longPressCalendarEventSubject.OnNext(calendarItem);
-                return;
-            }
-
-            if (!calendarItem.IsEditable())
-                return;
-
-            var itemIndexPath = CollectionView.IndexPathForItemAtPoint(point);
-            dataSource.StartEditing(itemIndexPath);
-            becomeActive();
-
-            var startPoint = Layout.PointAtDate(calendarItem.StartTime.ToLocalTime());
-            firstPoint = point;
-            LastPoint = point;
-            previousPoint = point;
-            verticalOffset = firstPoint.Y - startPoint.Y;
-
-            impactFeedback.ImpactOccurred();
-            selectionFeedback.Prepare();
-        }
-
-        private void longPressChanged(CGPoint point)
-        {
-            onCurrentPointChanged(point);
-            changeOffset(point);
-            previousPoint = point;
-        }
-
-        private void longPressEnded()
-        {
-            previousStartTime = previousEndTime = null;
-
-            StopAutoScroll();
-            onCurrentPointChanged(null);
-            if (!isActive)
-                return;
-
-            CollectionView.RemoveGestureRecognizer(longPressGestureRecognizer);
         }
 
         private void panBegan(CGPoint point)
@@ -300,7 +248,7 @@ namespace Toggl.iOS.Views.Calendar
             calendarItem = calendarItem
                 .WithStartTime(newStartTime);
 
-            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
+            itemUpdatedSubject.OnNext(calendarItem);
 
             if (previousStartTime != newStartTime)
             {
@@ -341,7 +289,7 @@ namespace Toggl.iOS.Views.Calendar
                 .WithStartTime(newStartTime)
                 .WithDuration(newDuration);
 
-            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
+            itemUpdatedSubject.OnNext(calendarItem);
 
             if (previousStartTime != newStartTime)
             {
@@ -366,7 +314,6 @@ namespace Toggl.iOS.Views.Calendar
                 return;
 
             LastPoint = point;
-            var now = timeService.CurrentDateTime;
 
             var newEndTime = NewEndTimeWithDynamicDuration(point, allItemsStartAndEndTime);
 
@@ -378,7 +325,7 @@ namespace Toggl.iOS.Views.Calendar
             calendarItem = calendarItem
                 .WithDuration(newDuration);
 
-            dataSource.UpdateItemView(calendarItem.StartTime, calendarItem.Duration(now));
+            itemUpdatedSubject.OnNext(calendarItem);
 
             if (previousEndTime != newEndTime)
             {
@@ -398,15 +345,12 @@ namespace Toggl.iOS.Views.Calendar
         {
             isActive = true;
             CollectionView.AddGestureRecognizer(panGestureRecognizer);
-            CollectionView.AddGestureRecognizer(tapGestureRecognizer);
         }
 
         private void resignActive()
         {
             isActive = false;
-            CollectionView.AddGestureRecognizer(longPressGestureRecognizer);
             CollectionView.RemoveGestureRecognizer(panGestureRecognizer);
-            CollectionView.RemoveGestureRecognizer(tapGestureRecognizer);
         }
 
         private void onCurrentPointChanged(CGPoint? currentPoint)
@@ -438,11 +382,10 @@ namespace Toggl.iOS.Views.Calendar
             stopEditingCurrentCellIfNotVisible();
         }
 
-        private void stopEditingCurrentCell()
+        public void stopEditingCurrentCell()
         {
             resignActive();
             dataSource.StopEditing();
-            editCalendarItemSuject.OnNext(calendarItem);
         }
 
         private void stopEditingCurrentCellIfNotVisible()

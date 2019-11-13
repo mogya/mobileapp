@@ -23,6 +23,19 @@ namespace Toggl.iOS.Extensions
         public static readonly UIColor CustomGray6 = UIColor.FromName("CustomGray6");
         public static readonly UIColor Spider = UIColor.FromName("Spider");
 
+        public static readonly UIColor CalendarDeleteAction = UIColor.FromName("CalendarDeleteAction");
+        public static readonly UIColor CalendarEditAction = UIColor.FromName("CalendarEditAction");
+        public static readonly UIColor CalendarSaveAction = UIColor.FromName("CalendarSaveAction");
+        public static readonly UIColor CalendarContinueAction = UIColor.FromName("CalendarContinueAction");
+        public static readonly UIColor CalendarDiscardAction = UIColor.FromName("CalendarDiscardAction");
+        public static readonly UIColor CalendarStopAction = UIColor.FromName("CalendarStopAction");
+        public static readonly UIColor CalendarCopyAction = UIColor.FromName("CalendarCopyAction");
+        public static readonly UIColor CalendarStartAction = UIColor.FromName("CalendarStartAction");
+
+        public static readonly UIColor CalendarSelectedTodayBackground = UIColor.FromName("CalendarSelectedTodayBackground");
+        public static readonly UIColor CalendarUnavailableDayText = UIColor.FromName("CalendarUnavailableDayText");
+        public static readonly UIColor CalendarUnselectedTodayText = UIColor.FromName("CalendarUnselectedTodayText");
+        public static readonly UIColor CalendarHeaderLabel = UIColor.FromName("CalendarHeaderLabel");
 
         public static readonly UIColor LightishGreen = UIColor.FromRGB(76, 217, 100);
     }

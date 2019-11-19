@@ -1,6 +1,5 @@
-﻿using Android.Support.V7.Widget;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Widget;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
 using static Toggl.Droid.Resource.Id;
 

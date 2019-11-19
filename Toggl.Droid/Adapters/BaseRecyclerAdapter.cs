@@ -1,14 +1,12 @@
 ﻿using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Util;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Droid.Adapters.DiffingStrategies;
 using Toggl.Droid.ViewHolders;

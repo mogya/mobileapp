@@ -2,7 +2,7 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Support.V4.Content;
+using AndroidX.Core.Content;
 using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions

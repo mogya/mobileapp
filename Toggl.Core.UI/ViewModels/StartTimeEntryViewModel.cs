@@ -15,6 +15,7 @@ using Toggl.Core.DataSources;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Search;
 using Toggl.Core.Services;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
@@ -98,6 +99,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<IImmutableList<SectionModel<string, AutocompleteSuggestion>>> Suggestions { get; }
         public IObservable<string> DisplayedTime { get; }
 
+        private DefaultTimeEntrySearchEngine searchEngine = new DefaultTimeEntrySearchEngine();
+
         public StartTimeEntryViewModel(
             ITimeService timeService,
             ITogglDataSource dataSource,
@@ -160,7 +163,7 @@ namespace Toggl.Core.UI.ViewModels
                 .ObserveOn(schedulerProvider.BackgroundScheduler);
 
             Suggestions = Observable.Merge(queryByText, queryByType)
-                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query).Execute())
+                .SelectMany(query => interactorFactory.GetAutocompleteSuggestions(query, searchEngine).Execute())
                 .Select(items => items.ToList()) // This is line is needed for now to read objects from realm .ObserveOn(schedulerProvider.BackgroundScheduler)
                 .Select(filter)
                 .Select(group)
@@ -173,6 +176,12 @@ namespace Toggl.Core.UI.ViewModels
         public override async Task Initialize(StartTimeEntryParameters parameter)
         {
             await base.Initialize(parameter);
+
+            interactorFactory.GetAllTimeEntriesVisibleToTheUser()
+                .Execute()
+                .SubscribeOn(schedulerProvider.BackgroundScheduler)
+                .Subscribe(entries => searchEngine.SetInitialData(entries.ToImmutableList()))
+                .DisposedBy(disposeBag);
 
             this.parameter = parameter;
             startTime = parameter.StartTime;

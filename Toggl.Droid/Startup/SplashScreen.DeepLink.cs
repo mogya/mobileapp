@@ -1,8 +1,8 @@
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
 using System;
 using System.Reactive;
+using AndroidX.Core.App;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;

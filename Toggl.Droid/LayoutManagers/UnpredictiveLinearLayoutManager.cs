@@ -1,8 +1,8 @@
 using System;
 using Android.Content;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Util;
+using AndroidX.RecyclerView.Widget;
 
 namespace Toggl.Droid.LayoutManagers
 {

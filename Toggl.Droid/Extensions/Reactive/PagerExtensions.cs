@@ -1,8 +1,7 @@
-using Android.Support.V4.View;
 using System;
 using System.Reactive.Linq;
+using AndroidX.ViewPager.Widget;
 using Toggl.Core.UI.Reactive;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Extensions.Reactive
 {

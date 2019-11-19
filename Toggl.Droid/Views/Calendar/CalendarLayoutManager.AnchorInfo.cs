@@ -1,5 +1,5 @@
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 
 namespace Toggl.Droid.Views.Calendar
 {

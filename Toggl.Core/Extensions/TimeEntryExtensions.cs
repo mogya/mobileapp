@@ -80,6 +80,18 @@ namespace Toggl.Core.Extensions
                 timeEntry.TagIds.ToArray(),
                 timeEntry.Billable);
 
+
+        public static ITimeEntryPrototype AsRunningTimeEntryPrototype(this IThreadSafeTimeEntry timeEntry, DateTimeOffset now)
+            => new TimeEntryPrototype(
+                timeEntry.WorkspaceId,
+                timeEntry.Description,
+                null,
+                now,
+                timeEntry.Project?.Id,
+                timeEntry.Task?.Id,
+                timeEntry.TagIds.ToArray(),
+                timeEntry.Billable);
+
         private sealed class TimeEntryPrototype : ITimeEntryPrototype
         {
             public long WorkspaceId { get; }

@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Support.V4.App;
+using AndroidX.Core.App;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.Extensions;

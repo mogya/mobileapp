@@ -1,4 +1,3 @@
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
 using Android.Content;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters

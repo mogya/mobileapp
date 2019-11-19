@@ -1,13 +1,17 @@
 using NSubstitute;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Toggl.Core.Autocomplete;
 using Toggl.Core.Autocomplete.Span;
+using Toggl.Core.Autocomplete.Suggestions;
 using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
+using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Search;
 using Toggl.Core.Tests.Autocomplete;
 using Xunit;
 
@@ -24,6 +28,13 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
 
             protected IInteractorFactory InteractorFactory { get; } = Substitute.For<IInteractorFactory>();
 
+            private ISearchEngine<IThreadSafeTimeEntry> setupMockSearchEngine(ImmutableList<IThreadSafeTimeEntry> timeEntries = null)
+            {
+                var engine = Substitute.For<ISearchEngine<IThreadSafeTimeEntry>>();
+                engine.SetInitialData(timeEntries);
+                return engine;
+            }
+
             [Theory, LogIfTooSlow]
             [InlineData("Nothing")]
             [InlineData("Testing Toggl mobile apps")]
@@ -31,15 +42,12 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
             {
                 var textFieldInfo = TextFieldInfo.Empty(1)
                     .ReplaceSpans(new QueryTextSpan(description, 0));
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
-                InteractorFactory
-                    .Received()
-                    .GetTimeEntriesAutocompleteSuggestions(Arg.Is<IList<string>>(
-                        words => words.SequenceEqual(description.SplitToQueryWords()))
-                    );
+                await searchEngine.Received().Get(Arg.Is(description));
             }
 
             [Theory, LogIfTooSlow]
@@ -51,14 +59,12 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
                 var actualDescription = $"{description} @{description}";
                 var textFieldInfo = TextFieldInfo.Empty(1)
                     .ReplaceSpans(new QueryTextSpan(actualDescription, 0));
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
-                InteractorFactory
-                    .Received()
-                    .GetTimeEntriesAutocompleteSuggestions(Arg.Is<IList<string>>(
-                        words => words.SequenceEqual(actualDescription.SplitToQueryWords())));
+                await searchEngine.Received().Get(Arg.Is(actualDescription));
             }
 
             [Fact, LogIfTooSlow]
@@ -69,14 +75,12 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
                     new QueryTextSpan(description, description.Length),
                     new ProjectSpan(ProjectId, ProjectName, ProjectColor)
                 );
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
-                InteractorFactory
-                    .Received()
-                    .GetTimeEntriesAutocompleteSuggestions(Arg.Is<IList<string>>(
-                        words => words.SequenceEqual(description.SplitToQueryWords())));
+                await searchEngine.Received().Get(Arg.Is(description));
             }
 
             [Theory, LogIfTooSlow]
@@ -87,8 +91,9 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
                 var actualDescription = $"{description} @{description}";
                 var textFieldInfo = TextFieldInfo.Empty(1)
                     .ReplaceSpans(new QueryTextSpan(actualDescription, description.Length + 2));
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
                 InteractorFactory
@@ -105,8 +110,9 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
                 var actualDescription = $"{description} #{description}";
                 var textFieldInfo = TextFieldInfo.Empty(1)
                     .ReplaceSpans(new QueryTextSpan(actualDescription, description.Length + 2));
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
                 InteractorFactory
@@ -119,8 +125,9 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
             public async Task DoesNotUseInteractorsWhenTheSarchStringIsEmpty()
             {
                 var textFieldInfo = TextFieldInfo.Empty(1).ReplaceSpans(new QueryTextSpan());
+                var searchEngine = setupMockSearchEngine();
 
-                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo));
+                var interactor = new GetAutocompleteSuggestions(InteractorFactory, QueryInfo.ParseFieldInfo(textFieldInfo), searchEngine);
                 await interactor.Execute();
 
                 InteractorFactory
@@ -129,9 +136,7 @@ namespace Toggl.Core.Tests.Interactors.AutocompleteSuggestions
                 InteractorFactory
                     .DidNotReceive()
                     .GetProjectsAutocompleteSuggestions(Arg.Any<IList<string>>());
-                InteractorFactory
-                    .DidNotReceive()
-                    .GetTimeEntriesAutocompleteSuggestions(Arg.Any<IList<string>>());
+                await searchEngine.DidNotReceive().Get(Arg.Any<string>());
             }
         }
     }

@@ -1,10 +1,12 @@
-using Android.Arch.Lifecycle;
-using Android.Support.Constraints;
-using Android.Support.V7.Widget;
 using Firebase.Provider;
 using Newtonsoft.Json.Converters;
 using System;
-using V4Space = Android.Support.V4.Widget.Space;
+using AndroidX.AppCompat.Widget;
+using AndroidX.CardView.Widget;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.Legacy.Widget;
+using AndroidX.Lifecycle;
+using Google.Android.Material.Internal;
 
 namespace Toggl.Droid
 {
@@ -43,11 +45,11 @@ namespace Toggl.Droid
             title = new DialogTitle(null, null);
             title = new DialogTitle(null, null, 0);
         }
-        public void Include(V4Space space)
+        public void Include(Space space)
         {
-            space = new V4Space(null);
-            space = new V4Space(null, null);
-            space = new V4Space(null, null, 0);
+            space = new Space(null);
+            space = new Space(null, null);
+            space = new Space(null, null, 0);
         }
         public void Include(ButtonBarLayout layout)
         {
@@ -92,6 +94,11 @@ namespace Toggl.Droid
         {
             var proccessLifecycleOwner = ProcessLifecycleOwner.Get();
             var initializer = new ProcessLifecycleOwnerInitializer();
+        }
+
+        public void Include(BaselineLayout baselineLayout)
+        {
+            var baseLine = new BaselineLayout(null, null, 0);
         }
     }
 }

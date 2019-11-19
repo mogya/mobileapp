@@ -1,9 +1,7 @@
-﻿
-using Android.Support.Design.Widget;
-using Android.Views;
+﻿using Android.Views;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
+using Google.Android.Material.BottomNavigation;
 using Toggl.Core.UI.Reactive;
 
 namespace Toggl.Droid.Extensions.Reactive

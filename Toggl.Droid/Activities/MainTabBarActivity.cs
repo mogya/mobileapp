@@ -18,7 +18,7 @@ using Toggl.Droid.Fragments;
 using Toggl.Droid.Helper;
 using Toggl.Droid.Presentation;
 using Toggl.Shared.Extensions;
-using Fragment = Android.Support.V4.App.Fragment;
+using Fragment = AndroidX.Fragment.App.Fragment;
 
 namespace Toggl.Droid.Activities
 {

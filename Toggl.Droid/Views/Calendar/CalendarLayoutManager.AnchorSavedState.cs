@@ -1,9 +1,9 @@
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Java.Interop;
 using System;
+using AndroidX.RecyclerView.Widget;
 using Object = Java.Lang.Object;
 
 namespace Toggl.Droid.Views.Calendar

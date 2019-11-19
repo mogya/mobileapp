@@ -1,10 +1,10 @@
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.Constraints;
 using Android.Views;
 using Android.Widget;
 using System;
 using System.Reactive.Subjects;
+using AndroidX.ConstraintLayout.Widget;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;

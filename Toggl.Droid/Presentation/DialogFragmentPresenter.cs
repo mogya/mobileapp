@@ -1,14 +1,12 @@
-using Android.Support.V7.App;
 using System;
 using System.Collections.Generic;
+using AndroidX.AppCompat.App;
+using AndroidX.Fragment.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
 using Toggl.Droid.Fragments;
-using DialogFragment = Android.Support.V4.App.DialogFragment;
-using Fragment = Android.Support.V4.App.Fragment;
-using FragmentManager = Android.Support.V4.App.FragmentManager;
 
 namespace Toggl.Droid.Presentation
 {

@@ -1,9 +1,9 @@
 ﻿using Android.OS;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Immutable;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;

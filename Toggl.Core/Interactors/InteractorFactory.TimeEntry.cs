@@ -27,28 +27,8 @@ namespace Toggl.Core.Interactors
                 prototype.Duration,
                 origin);
 
-        public IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode)
-            => new CreateTimeEntryInteractor(
-                idProvider,
-                timeService,
-                dataSource,
-                analyticsService,
-                prototype,
-                syncManager,
-                timeService.CurrentDateTime,
-                null,
-                (TimeEntryStartOrigin)continueMode);
-
-        public IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype,
-            ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast)
-            => new ContinueTimeEntryFromMainLogInteractor(
-                this,
-                analyticsService,
-                prototype,
-                continueMode,
-                indexInLog,
-                dayInLog,
-                daysInThePast);
+        public IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(long timeEntryId, ContinueTimeEntryMode continueMode)
+            => new ContinueTimeEntryInteractor(this, timeService, (TimeEntryStartOrigin)continueMode, timeEntryId);
 
         public IInteractor<Task<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion)
             => new CreateTimeEntryInteractor(
@@ -60,9 +40,9 @@ namespace Toggl.Core.Interactors
                 syncManager,
                 timeService.CurrentDateTime,
                 null,
-            TimeEntryStartOrigin.Suggestion);
+                TimeEntryStartOrigin.Suggestion);
 
-        public IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry()
+        public IInteractor<Task<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry()
             => new ContinueMostRecentTimeEntryInteractor(
                 idProvider,
                 timeService,

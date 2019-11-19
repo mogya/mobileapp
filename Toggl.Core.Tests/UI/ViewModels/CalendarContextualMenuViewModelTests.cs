@@ -711,8 +711,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 continueAction.MenuItemAction.Execute();
 
-                var continuePrototype = Arg.Is<ITimeEntryPrototype>(prot =>
-                    prot.WorkspaceId == mockWorkspace.Id);
+                var continuePrototype = Arg.Is(stoppedTimeEntryId);
 
                 TestScheduler.Start();
                 InteractorFactory.Received().ContinueTimeEntry(continuePrototype, ContinueTimeEntryMode.CalendarContextualMenu);

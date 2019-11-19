@@ -10,6 +10,7 @@ using Toggl.Shared;
 using UIKit;
 using UserNotifications;
 using Firebase.CloudMessaging;
+using Google.SignIn;
 
 namespace Toggl.iOS
 {
@@ -25,13 +26,16 @@ namespace Toggl.iOS
                 += (sender, certificate, chain, sslPolicyErrors) => true;
 #endif
 
-            #if !DEBUG
-                Firebase.Core.App.Configure();
-            #endif
+#if !DEBUG
+            Firebase.Core.App.Configure();
+            Messaging.SharedInstance.Delegate = this;
+#endif
 
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
-            Messaging.SharedInstance.Delegate = this;
+
+            var googleServiceDictionary = NSDictionary.FromFile("GoogleService-Info.plist");
+            SignIn.SharedInstance.ClientId = googleServiceDictionary["CLIENT_ID"].ToString();
 
             initializeAnalytics();
 
@@ -77,8 +81,7 @@ namespace Toggl.iOS
             }
 
 #if USE_ANALYTICS
-            var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
-            return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
+            return SignIn.SharedInstance.HandleUrl(url);
 #endif
 
             return false;

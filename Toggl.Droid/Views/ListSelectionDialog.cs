@@ -1,9 +1,8 @@
 ﻿using Android.Content;
-using Android.Support.V7.App;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
+using AndroidX.AppCompat.App;
 using Toggl.Core.UI.Views;
 using Activity = Android.App.Activity;
 

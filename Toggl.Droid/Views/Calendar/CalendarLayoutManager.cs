@@ -1,9 +1,9 @@
 using Android.OS;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using System;
 using System.Collections.Generic;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.Helper;
 using Toggl.Droid.Adapters.Calendar;
 

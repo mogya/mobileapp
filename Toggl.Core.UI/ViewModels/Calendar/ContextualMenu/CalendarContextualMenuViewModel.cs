@@ -380,10 +380,9 @@ namespace Toggl.Core.UI.ViewModels.Calendar.ContextualMenu
             if (!calendarItem.TimeEntryId.HasValue)
                 return;
 
-            var timeEntry = await interactorFactory.GetTimeEntryById(calendarItem.TimeEntryId.Value).Execute();
-
-            var prototype = timeEntry.AsTimeEntryPrototype();
-            await interactorFactory.ContinueTimeEntry(prototype, ContinueTimeEntryMode.CalendarContextualMenu).Execute();
+            await interactorFactory
+                .ContinueTimeEntry(calendarItem.TimeEntryId.Value, ContinueTimeEntryMode.CalendarContextualMenu)
+                .Execute();
 
             closeMenuWithCommittedChanges();
         }

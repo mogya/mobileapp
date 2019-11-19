@@ -1,13 +1,12 @@
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.App;
 using Android.Views;
 using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
+using AndroidX.Fragment.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.Views;
 

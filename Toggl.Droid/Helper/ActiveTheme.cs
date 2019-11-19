@@ -1,4 +1,4 @@
-﻿using Android.Support.V7.App;
+﻿using AndroidX.AppCompat.App;
 
 namespace Toggl.Droid.Helper
 {

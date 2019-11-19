@@ -81,12 +81,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
     </LinearLayout>
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
             android:id="@+id/ReportsCalendarFragmentViewPager"
             android:minHeight="225dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ReportsCalendarFragmentShortcuts"
             android:scrollbars="vertical"
             android:layout_marginTop="16dp"

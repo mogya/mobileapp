@@ -27,9 +27,9 @@ namespace Toggl.Networking.ApiClients
         public Task<List<IWorkspace>> GetAll()
             => SendRequest<Workspace, IWorkspace>(endPoints.Get, AuthHeader);
 
-        public Task<IWorkspace> GetById(long id)
-            => SendRequest<Workspace>(endPoints.GetById(id), AuthHeader)
-                .Upcast<IWorkspace, Workspace>();
+        public async Task<IWorkspace> GetById(long id)
+            => await SendRequest<Workspace>(endPoints.GetById(id), AuthHeader)
+                .ConfigureAwait(false);
 
         public async Task<IWorkspace> Create(IWorkspace workspace)
         {

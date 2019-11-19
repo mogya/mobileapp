@@ -17,8 +17,8 @@
         {
             Id = id;
             Name = name;
-            IsSelected = false;
             SourceName = sourceName;
+            IsSelected = false;
         }
 
         public UserCalendar(

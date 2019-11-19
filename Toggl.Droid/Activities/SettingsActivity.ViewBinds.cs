@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
+using AndroidX.Core.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Core.Sync;
 using static Toggl.Core.Sync.PresentableSyncStatus;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace Toggl.Droid.Activities
 {

@@ -1,21 +1,19 @@
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using System;
 using System.Collections.Immutable;
-using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core;
 using Toggl.Core.Helper;
 using Toggl.Core.UI.Helper;
 using Toggl.Droid.Extensions;
 using Toggl.Shared;
-using Color = Android.Graphics.Color;
 
 namespace Toggl.Droid.Views
 {

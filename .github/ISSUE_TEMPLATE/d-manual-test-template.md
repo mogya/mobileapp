@@ -136,12 +136,40 @@ about: A manual testing checklist that can be assigned to a release to track the
 
 ## Testing Calendar Integration
 - [ ] Are calendar entries showing correctly?
-- [ ] Create an entry from a calendar entry
-- [ ] Edit the entry by adjusting the start time of the entry (is this reflected on the calendar page?)
-- [ ] Edit the entry by adjusting the end time (is this reflected on the calendar page?)
-- [ ] Adjust the time of the calendar entry from your calendar to earlier on the current day (is this reflected?)
-- [ ] Delete the calendar entry from your calendar (is this reflected?)
-- [ ] Move the calendar entry from your calendar to another day (is this reflected?)
+- [ ] Create a time entry from a calendar event
+- [ ] Edit the entry by adjusting the start time of the entry from the edit view (is this reflected on the calendar page?)
+- [ ] Edit the entry by adjusting the end time from the edit view (is this reflected on the calendar page?)
+- [ ] Adjust the time of a time entry from your calendar to earlier on the current day (is this reflected in the log view?)
+- [ ] Delete a time entry from your calendar (is this reflected in the log view?)
+- [ ] Move a time entry from your calendar to another day (is this reflected in the log view?)
+- [ ] Calendar allows to view days that are 14 days in the past
+- [ ] Future days are not viewable
+- [ ] Days longer than 14 days ago are not viewable
+- [ ] Swiping left/right on the calendar view changes the day
+  - [ ] The week view at the top is updated correctly
+- [ ] Week view respects the beginning of week setting
+- [ ] The tracked time label on the top left corner shows the correct time tracked for currently shown day
+- [ ] The settings button opens app settings
+- [ ] Swiping left/right in the week view changes the whole week
+ - [ ] The same day of week from the newly shown week gets selected
+- [ ] Tapping a stopped time entry brings up the contextual menu with the following actions: Delete, Edit, Save, Continue
+  - [ ] All the actions work as they should
+- [ ] Tapping a running time entry brings up the contextual menu with the following actions: Discard, Edit, Save, Stop
+  - [ ] All the actions work as they should
+- [ ] Tapping a calendar event brings up a contextual menu with actions: Copy as a time entry, Start
+  - [ ] All the actions work as they should
+- [ ] The contextual menu can be dismissed with the `x` button on the left side or a tap on an empty space in the calendar
+- [ ] Stopped time entries can be edited in the calendar UI
+  - [ ] Edits are saved and reflected in the main log as well
+- [ ] Trying to close the contextual menu after making some edits brings up a confirmation dialog
+- [ ] Tapping & holding creates a new entry & opens contextual menu with actions: Discard, Edit, Save
+  - [ ] The entry can be edited in the calendar UI
+  - [ ] All the actions work as they should
+- [ ] All of the above points work on iPad as well (no UI glitches or weirdness occurs)
+- [ ] Switching between portrait and landscape on iPad works as expected
+- [ ] Enabling/disabling linked calendars in the settings works as expected
+- [ ] Calendar looks fine in dark mode
+
 
 ## Testing Siri Integration
 - [ ] Test adding simple shortcuts from Siri Shortcuts section (like start, stop or show reports)

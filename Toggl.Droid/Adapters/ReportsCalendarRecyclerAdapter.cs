@@ -2,8 +2,8 @@
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Droid.Extensions;

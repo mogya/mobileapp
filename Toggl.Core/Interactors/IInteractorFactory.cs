@@ -10,6 +10,7 @@ using Toggl.Core.DTOs;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Reports;
+using Toggl.Core.Search;
 using Toggl.Core.Suggestions;
 using Toggl.Shared;
 using Toggl.Shared.Models.Reports;
@@ -25,11 +26,9 @@ namespace Toggl.Core.Interactors
 
         IInteractor<Task<IThreadSafeTimeEntry>> StartSuggestion(Suggestion suggestion);
 
-        IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode);
+        IInteractor<Task<IThreadSafeTimeEntry>> ContinueTimeEntry(long timeEntryId, ContinueTimeEntryMode continueMode);
 
-        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueTimeEntryFromMainLog(ITimeEntryPrototype prototype, ContinueTimeEntryMode continueMode, int indexInLog, int dayInLog, int daysInThePast);
-
-        IInteractor<IObservable<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
+        IInteractor<Task<IThreadSafeTimeEntry>> ContinueMostRecentTimeEntry();
 
         IInteractor<Task<IThreadSafeTimeEntry>> UpdateTimeEntry(EditTimeEntryDto dto);
 
@@ -122,10 +121,7 @@ namespace Toggl.Core.Interactors
         #region Autocomplete Suggestions
 
         IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetAutocompleteSuggestions(
-            QueryInfo queryInfo);
-
-        IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetTimeEntriesAutocompleteSuggestions(
-            IList<string> wordsToQuery);
+            QueryInfo queryInfo, ISearchEngine<IThreadSafeTimeEntry> searchEngine);
 
         IInteractor<IObservable<IEnumerable<AutocompleteSuggestion>>> GetTagsAutocompleteSuggestions(
             IList<string> wordsToQuery);

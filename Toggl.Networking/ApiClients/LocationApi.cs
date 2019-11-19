@@ -21,7 +21,8 @@ namespace Toggl.Networking.ApiClients
             this.endPoints = endPoints.Location;
         }
 
-        public Task<ILocation> Get()
-            => SendRequest<Location>(endPoints.Get, AuthHeader).Upcast<ILocation, Location>();
+        public async Task<ILocation> Get()
+            => await SendRequest<Location>(endPoints.Get, AuthHeader)
+                .ConfigureAwait(false);
     }
 }

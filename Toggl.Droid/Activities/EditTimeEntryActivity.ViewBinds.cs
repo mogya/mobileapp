@@ -1,9 +1,10 @@
-﻿using Android.Support.Constraints;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
+using AndroidX.CardView.Widget;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.Core.Widget;
+using AndroidX.RecyclerView.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Extensions;
 using static Toggl.Droid.Resource.Id;

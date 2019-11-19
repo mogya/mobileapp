@@ -1,8 +1,6 @@
 ﻿using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.View;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,8 @@ using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
+using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager.Widget;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels.ReportsCalendar;
 using Toggl.Droid.Views;

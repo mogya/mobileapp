@@ -178,7 +178,7 @@ namespace Toggl.iOS.ViewControllers
 # if DEBUG
             recognizer = new UILongPressGestureRecognizer(recognizer =>
             {
-                if (recognizer.State != UIGestureRecognizerState.Recognized)
+                if (recognizer.State != UIGestureRecognizerState.Began)
                     return;
 
                 showErrorTriggeringView();

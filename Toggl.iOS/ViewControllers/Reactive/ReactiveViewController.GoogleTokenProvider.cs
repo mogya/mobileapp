@@ -9,7 +9,7 @@ using UIKit;
 
 namespace Toggl.iOS.ViewControllers
 {
-    public abstract partial class ReactiveViewController<TViewModel> : ISignInDelegate, ISignInUIDelegate
+    public abstract partial class ReactiveViewController<TViewModel> : ISignInDelegate
     {
         private const int cancelErrorCode = -5;
 
@@ -25,7 +25,7 @@ namespace Toggl.iOS.ViewControllers
                 SignIn.SharedInstance.SignOutUser();
 
             SignIn.SharedInstance.Delegate = this;
-            SignIn.SharedInstance.UIDelegate = this;
+            SignIn.SharedInstance.PresentingViewController = this;
             SignIn.SharedInstance.SignInUser();
             loggingIn = true;
 

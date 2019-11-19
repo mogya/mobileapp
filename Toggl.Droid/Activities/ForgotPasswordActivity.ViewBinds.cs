@@ -1,5 +1,5 @@
-using Android.Support.Design.Widget;
 using Android.Widget;
+using Google.Android.Material.TextField;
 using Toggl.Droid.Extensions;
 
 namespace Toggl.Droid.Activities

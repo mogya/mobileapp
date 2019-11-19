@@ -1,9 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
-using Android.Support.V7.Widget;
 using System;
-using System.Linq;
+using AndroidX.RecyclerView.Widget;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.Presentation;

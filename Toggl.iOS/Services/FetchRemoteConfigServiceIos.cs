@@ -12,8 +12,9 @@ namespace Toggl.iOS.Services
         
         public FetchRemoteConfigServiceIos()
         {
-            var remoteConfig = RemoteConfig.SharedInstance;
-            remoteConfig.SetDefaults(plistFileName: remoteConfigDefaultsFileName);
+#if !DEBUG
+            RemoteConfig.SharedInstance.SetDefaults(plistFileName: remoteConfigDefaultsFileName);
+#endif
         }
 
         public void FetchRemoteConfigData(Action onFetchSucceeded, Action<Exception> onFetchFailed)

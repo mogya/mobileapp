@@ -1,16 +1,15 @@
 using System;
 using Android.App;
-using Android.Arch.Lifecycle;
 using Android.Content;
 using Android.Runtime;
 using Android.Views.Accessibility;
+using AndroidX.Lifecycle;
 using Java.Interop;
 using Toggl.Core;
 using Toggl.Core.UI;
 using Toggl.Droid.BroadcastReceivers;
-using Toggl.Droid.Extensions;
 using Toggl.Droid.Helper;
-using static Android.Support.V7.App.AppCompatDelegate;
+using static AndroidX.AppCompat.App.AppCompatDelegate;
 
 namespace Toggl.Droid
 {
@@ -86,7 +85,7 @@ namespace Toggl.Droid
         }
 
         [Export]
-        [Lifecycle.Event.OnStart]
+        [OnStart]
         public void OnEnterForeground()
         {
             IsInForeground = true;
@@ -95,12 +94,24 @@ namespace Toggl.Droid
         }
 
         [Export]
-        [Lifecycle.Event.OnStop]
+        [OnStop]
         public void OnEnterBackground()
         {
             IsInForeground = false;
             var backgroundService = AndroidDependencyContainer.Instance?.BackgroundService;
             backgroundService?.EnterBackground();
+        }
+        
+        [Preserve]
+        [Annotation("androidx.lifecycle.OnLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_START)")]
+        public class OnStartAttribute : Attribute
+        {
+        }
+
+        [Preserve]
+        [Annotation("androidx.lifecycle.OnLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)")]
+        public class OnStopAttribute : Attribute
+        {
         }
 
         public override void OnTrimMemory(TrimMemory level)

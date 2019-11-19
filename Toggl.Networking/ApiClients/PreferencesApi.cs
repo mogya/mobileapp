@@ -20,9 +20,9 @@ namespace Toggl.Networking.ApiClients
             this.serializer = serializer;
         }
 
-        public Task<IPreferences> Get()
-            => SendRequest<Preferences>(endPoints.Get, AuthHeader)
-                .Upcast<IPreferences, Preferences>();
+        public async Task<IPreferences> Get()
+            => await SendRequest<Preferences>(endPoints.Get, AuthHeader)
+                .ConfigureAwait(false);
 
         public async Task<IPreferences> Update(IPreferences preferences)
         {

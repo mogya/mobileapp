@@ -1,8 +1,6 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.Runtime;
-using Android.Support.V4.App;
+using AndroidX.Core.App;
 using Toggl.Droid.Extensions;
 using static Toggl.Droid.Services.JobServicesConstants;
 

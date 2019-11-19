@@ -29,15 +29,17 @@ namespace Toggl.Networking.ApiClients
             this.serializer = serializer;
         }
 
-        public Task<IUser> Get()
-            => SendRequest<User>(endPoints.Get, AuthHeader).Upcast<IUser, User>();
+        public async Task<IUser> Get()
+            => await SendRequest<User>(endPoints.Get, AuthHeader)
+                .ConfigureAwait(false);
 
-        public Task<IUser> GetWithGoogle()
-            => SendRequest<User>(endPoints.GetWithGoogle, AuthHeader).Upcast<IUser, User>();
+        public async Task<IUser> GetWithGoogle()
+            => await SendRequest<User>(endPoints.GetWithGoogle, AuthHeader)
+                .ConfigureAwait(false);
 
-        public Task<IUser> Update(IUser user)
-            => SendRequest(endPoints.Put, AuthHeader, user as User ?? new User(user), SerializationReason.Post)
-            .Upcast<IUser, User>();
+        public async Task<IUser> Update(IUser user)
+            => await SendRequest(endPoints.Put, AuthHeader, user as User ?? new User(user), SerializationReason.Post)
+                .ConfigureAwait(false);
 
         public Task<string> ResetPassword(Email email)
         {
@@ -83,7 +85,7 @@ namespace Toggl.Networking.ApiClients
             }
         }
 
-        public Task<IUser> SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
+        public async Task<IUser> SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
         {
             Ensure.Argument.IsNotNull(googleToken, nameof(googleToken));
             var parameters = new GoogleSignUpParameters
@@ -99,8 +101,8 @@ namespace Toggl.Networking.ApiClients
             };
 
             var json = serializer.Serialize(parameters, SerializationReason.Post);
-            return SendRequest<User>(endPoints.PostWithGoogle, new HttpHeader[0], json)
-                .Upcast<IUser, User>();
+            return await SendRequest<User>(endPoints.PostWithGoogle, new HttpHeader[0], json)
+                .ConfigureAwait(false);
         }
 
         [Preserve(AllMembers = true)]

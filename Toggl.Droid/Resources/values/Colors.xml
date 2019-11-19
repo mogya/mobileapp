@@ -40,14 +40,14 @@
   <!--Calendar page-->
   <color name="calendarHeaderBackground">#FF959595</color>
   <color name="currentHourColor">#FF328FFF</color>
-  <color name="contextualMenuDiscardIconOverlay">#3dE1E3E2</color>
-  <color name="contextualMenuEditIconOverlay">#3d0595d7</color>
-  <color name="contextualMenuSaveIconOverlay">#51dca509</color>
-  <color name="contextualMenuCopyIconOverlay">#3dad5de0</color>
-  <color name="contextualMenuStartIconOverlay">#3d4cd964</color>
-  <color name="contextualMenuStopIconOverlay">#3de02020</color>
-  <color name="contextualMenuDeleteIconOverlay">#3de02020</color>
-  <color name="contextualMenuContinueIconOverlay">#3d4cd964</color>
+  <color name="contextualMenuDiscardIconOverlay">#E0E0E0</color>
+  <color name="contextualMenuEditIconOverlay">#C3E6F6</color>
+  <color name="contextualMenuSaveIconOverlay">#F3E2B0</color>
+  <color name="contextualMenuCopyIconOverlay">#ECD8F8</color>
+  <color name="contextualMenuStartIconOverlay">#D4F6DA</color>
+  <color name="contextualMenuStopIconOverlay">#F8CACA</color>
+  <color name="contextualMenuDeleteIconOverlay">#F8CACA</color>
+  <color name="contextualMenuContinueIconOverlay">#D4F6DA</color>
 
   <!-- Start Time entry page-->
   <color name="billable">#FF328FFF</color>
@@ -63,5 +63,8 @@
   <!--Placeholder time entry -->
   <color name="halfTransparentPurple">#8FC56BFF</color>
   <color name="halfTransparentBlue">#8F06AAF5</color>
+  
+  <!-- Hex percentages -->
+  <color name="black40percent">#65000000</color>
 
 </resources>

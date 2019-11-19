@@ -40,7 +40,14 @@ namespace Toggl.iOS.Views
             get => base.Text;
             set
             {
+                // Overriding the Text property will place the cursor at the end
+                // of the new text. We don't want to control the position of the
+                // cursor ourselves, so we'll simply remember the cursor position
+                // before we overwrite the text and then we restore it.
+                var originalSelectedRange = SelectedRange;
                 base.Text = value;
+                SelectedRange = originalSelectedRange;
+
                 updatePlaceholderVisibility();
             }
         }

@@ -28,12 +28,12 @@ namespace Toggl.Networking.ApiClients
         public Task<List<IProject>> GetAllSince(DateTimeOffset threshold)
             => SendRequest<Project, IProject>(endPoints.GetSince(threshold, includeArchived: true), AuthHeader);
 
-        public Task<IProject> Create(IProject project)
+        public async Task<IProject> Create(IProject project)
         {
             var endPoint = endPoints.Post(project.WorkspaceId);
             var projectCopy = project as Project ?? new Project(project);
-            return SendRequest(endPoint, AuthHeader, projectCopy, SerializationReason.Post)
-                .Upcast<IProject, Project>();
+            return await SendRequest(endPoint, AuthHeader, projectCopy, SerializationReason.Post)
+                .ConfigureAwait(false);
         }
 
         public Task<List<IProject>> Search(long workspaceId, long[] projectIds)

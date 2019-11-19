@@ -1,6 +1,6 @@
-using Android.Support.V7.Widget;
 using System.Reactive;
 using System.Reactive.Subjects;
+using AndroidX.RecyclerView.Widget;
 
 namespace Toggl.Droid.ViewHelpers
 {

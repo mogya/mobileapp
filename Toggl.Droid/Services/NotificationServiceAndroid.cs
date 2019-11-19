@@ -1,12 +1,12 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reactive;
 using System.Reactive.Linq;
+using AndroidX.Core.App;
 using Toggl.Core.Services;
 using Toggl.Droid.BroadcastReceivers;
 using Toggl.Droid.Extensions;

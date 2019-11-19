@@ -2,11 +2,11 @@ using Android;
 using Android.Content;
 using Android.Content.PM;
 using Android.Provider;
-using Android.Support.V4.Content;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AndroidX.Core.Content;
 using Toggl.Droid.Helper;
 
 namespace Toggl.Droid.Extensions

@@ -7,10 +7,10 @@
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/Toolbar"
         style="@style/ToolbarStyle" />
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TokenResetPasswordLayout"
         tools:hint="Password"
         app:hintEnabled="false"
@@ -20,7 +20,7 @@
         android:layout_marginRight="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/TokenResetPassword"
             android:lines="1"
             android:maxLines="1"
@@ -35,7 +35,7 @@
             android:background="@android:color/transparent"
             android:layout_height="30dp"
             android:layout_width="match_parent" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <ProgressBar
         android:id="@+id/TokenResetProgressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true" />
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/TokenResetDoneButton"
         app:elevation="4dp"
         app:borderWidth="0dp"

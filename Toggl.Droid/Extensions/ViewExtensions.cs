@@ -1,22 +1,13 @@
-﻿using System;
-using Android.Animation;
+using System;
 using Android.Content;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Views.InputMethods;
 using System.Collections.Generic;
 using System.Linq;
-using Toggl.Shared;
-using Color = Toggl.Shared.Color;
 using AndroidColor = Android.Graphics.Color;
-using Android.App;
-using Android.Util;
+using AndroidX.Core.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Droid.Helper;
-using Toggl.Droid.Views.Calendar;
 
 namespace Toggl.Droid.Extensions
 {

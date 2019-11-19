@@ -10,7 +10,7 @@
     android:focusableInTouchMode="true"
     android:importantForAutofill="noExcludeDescendants"
     android:orientation="vertical">
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/AppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,7 +23,7 @@
             android:paddingBottom="16dp"
             android:background="@color/background"
             >
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/Toolbar"
                 style="@style/ToolbarStyle"
                 android:layout_height="match_parent" />
@@ -50,40 +50,40 @@
                 android:textCursorDrawable="@drawable/EditTextCursor"
                 android:textSize="19sp" />
         </FrameLayout>
-    </android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.NestedScrollView
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/ScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="top"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/SingleTimeEntryModeViews"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:constraint_referenced_ids="GroupCount,GroupDuration,TimeMiddleGuide,TimeIcon,StartTimeButton,StartTime,StartDate,StartTimeLabel,StopTimeButton,StopTime,StopDate,StopTimeButton,EditStopTimeLabel,TimeBottomBorder,DurationButton,Duration,DurationLabel,DurationBottomBorder" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/TimeEntriesGroupModeViews"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:constraint_referenced_ids="GroupCount,GroupDuration" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/BillableRelatedViews"
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:constraint_referenced_ids="BillableIcon,ToggleBillableButton,BillableLabel,BillableSwitch,BillableBottomBorder" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/StoppedTimeEntryStopTimeElements"
                 android:visibility="visible"
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
 
             <!-- ERROR MESSAGE -->
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/ErrorContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="4dp">
@@ -151,8 +151,8 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ErrorTitle"
                         tools:text="This time entry cant be saved and is rather large. Definitely multilined at best. This should really be big." />
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/GroupCount"
@@ -274,12 +274,12 @@
                 app:layout_constraintTop_toTopOf="@+id/TagsIcon"
                 tools:text="Add tags" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TagsRecyclerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-				android:focusableInTouchMode="true"
-				android:clickable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
                 app:layout_constraintLeft_toRightOf="@id/TagsIcon"
                 app:layout_constraintTop_toTopOf="@+id/TagsIcon"
                 app:layout_constraintBottom_toBottomOf="@+id/TagsIcon" />
@@ -551,6 +551,6 @@
                 android:layout_marginLeft="56dp"
                 android:background="@color/separator"
                 app:layout_constraintTop_toBottomOf="@id/DeleteLabel" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

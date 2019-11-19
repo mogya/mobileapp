@@ -20,6 +20,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Interactors.AutocompleteSuggestions;
 using Toggl.Core.Models.Interfaces;
+using Toggl.Core.Search;
 using Toggl.Core.Tests.Generators;
 using Toggl.Core.Tests.Mocks;
 using Toggl.Core.Tests.TestExtensions;
@@ -155,7 +156,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             public void SetsTheDateAccordingToTheDateParameterReceived(string placeholder)
             {
                 var parameter = new StartTimeEntryParameters(DateTimeOffset.Now, placeholder, TimeSpan.Zero, null);
-                ViewModel.Initialize(parameter);
+                ViewModel.Initialize(parameter).Wait();
 
                 ViewModel.PlaceholderText.Should().Be(placeholder);
             }
@@ -326,7 +327,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var projectSuggestion = new ProjectSuggestion(project);
 
                     InteractorFactory
-                        .GetAutocompleteSuggestions(Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Projects))
+                        .GetAutocompleteSuggestions(
+                            Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Projects),
+                            Arg.Any<DefaultTimeEntrySearchEngine>())
                         .Execute()
                         .Returns(Observable.Return(new ProjectSuggestion[] { projectSuggestion }));
 
@@ -438,7 +441,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     tag.Name.Returns(TagName);
                     var tagSuggestion = new TagSuggestion(tag);
 
-                    InteractorFactory.GetAutocompleteSuggestions(Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Tags))
+                    InteractorFactory.GetAutocompleteSuggestions(
+                        Arg.Is<QueryInfo>(info => info.SuggestionType == AutocompleteSuggestionType.Tags),
+                        Arg.Any<DefaultTimeEntrySearchEngine>())
                         .Execute()
                         .Returns(Observable.Return(new TagSuggestion[] { tagSuggestion }));
 
@@ -796,12 +801,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 var suggestions = ProjectSuggestion.FromProjects(Enumerable.Empty<IThreadSafeProject>());
 
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Is<QueryInfo>(info => info.Text.Contains("@")))
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Is<QueryInfo>(info => info.Text.Contains("@")),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(Observable.Return(suggestions));
 
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Is<QueryInfo>(
-                        arg => arg.SuggestionType == AutocompleteSuggestionType.Projects))
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Is<QueryInfo>(arg => arg.SuggestionType == AutocompleteSuggestionType.Projects),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(Observable.Return(suggestions));
 
@@ -869,7 +877,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var projectSuggestions = ProjectSuggestion.FromProjects(projects);
                 var chosenProject = projectSuggestions.First();
                 DataSource.Projects.GetAll().Returns(Observable.Return(projects));
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(Observable.Return(projectSuggestions));
                 await ViewModel.Initialize(DefaultParameter);
@@ -894,7 +904,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var projects = createProjects(5);
                 var projectSuggestions = ProjectSuggestion.FromProjects(projects);
                 var chosenProject = projectSuggestions.First();
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(Observable.Return(projectSuggestions));
 
@@ -1005,7 +1017,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 tag.Name.Returns(TagName);
                 var suggestions = TagSuggestion.FromTags(new[] { tag });
 
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Is<QueryInfo>(info => info.Text.Contains("#")))
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Is<QueryInfo>(info => info.Text.Contains("#")),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(Observable.Return(suggestions));
             }
@@ -1833,7 +1847,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 suggestions.AddRange(getProjectSuggestions(1, 10));
                 suggestions.AddRange(getProjectSuggestions(10, 54));
                 var suggestionsObservable = Observable.Return(suggestions);
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(suggestionsObservable);
 
@@ -1887,7 +1903,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         new TimeEntrySuggestion(timeEntryA),
                         new TimeEntrySuggestion(timeEntryB)
                     });
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(suggestions);
 
@@ -1917,7 +1935,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 suggestions.Add(getProjectSuggestion(33, 1));
                 suggestions.Add(getProjectSuggestion(10, 1));
                 var suggestionsObservable = Observable.Return(suggestions);
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(suggestionsObservable);
 
@@ -1943,7 +1963,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     new MockTask { Id = 3, WorkspaceId = 0, ProjectId = 3, Name = "Task3" }
                 }));
                 var suggestionsObservable = Observable.Return(suggestions);
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>())
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
                     .Execute()
                     .Returns(suggestionsObservable);
 
@@ -1973,10 +1995,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("abc #def")]
             public async Task DoesNotChangeSuggestionsWhenOnlyTheCursorMovesForward(string text)
             {
-                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None));
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>()).Returns(interactor);
+                var searchEngine = Substitute.For<ISearchEngine<IThreadSafeTimeEntry>>();
+                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None), searchEngine);
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
+                    .Returns(interactor);
 
-                ViewModel.Initialize(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter).Wait();
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, text.Length));
 
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(text, 0));
@@ -1990,13 +2016,17 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("abc #def")]
             public async Task ChangesSuggestionsWhenTheCursorMovesBackBehindTheOldCursorPosition(string text)
             {
-                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None));
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Any<QueryInfo>()).Returns(interactor);
+                var searchEngine = Substitute.For<ISearchEngine<IThreadSafeTimeEntry>>();
+                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None), searchEngine);
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Any<QueryInfo>(),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
+                    .Returns(interactor);
 
                 ViewModel.Suggestions.Subscribe();
 
                 var extendedText = text + "x";
-                ViewModel.Initialize(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter).Wait();
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(extendedText, text.Length));
                 ViewModel.OnTextFieldInfoFromView(new QueryTextSpan(extendedText, 0));
 
@@ -2011,12 +2041,16 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [InlineData("abc #def")]
             public async Task ChangesSuggestionsWhenTheCursorMovesBeforeTheQuerySymbolAndUserStartsTyping(string text)
             {
-                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None));
-                InteractorFactory.GetAutocompleteSuggestions(Arg.Is<QueryInfo>(query => query.Text.StartsWith("x"))).Returns(interactor);
+                var searchEngine = Substitute.For<ISearchEngine<IThreadSafeTimeEntry>>();
+                var interactor = Substitute.For<GetAutocompleteSuggestions>(InteractorFactory, new QueryInfo("", AutocompleteSuggestionType.None), searchEngine);
+                InteractorFactory.GetAutocompleteSuggestions(
+                    Arg.Is<QueryInfo>(query => query.Text.StartsWith("x")),
+                    Arg.Any<DefaultTimeEntrySearchEngine>())
+                    .Returns(interactor);
 
                 ViewModel.Suggestions.Subscribe();
 
-                ViewModel.Initialize(DefaultParameter);
+                ViewModel.Initialize(DefaultParameter).Wait();
                 ViewModel.SetTextSpans.ExecuteSequentally(
                     ImmutableList.Create<ISpan>(new QueryTextSpan(text, text.Length)),
                     ImmutableList.Create<ISpan>(new QueryTextSpan(text, 0))

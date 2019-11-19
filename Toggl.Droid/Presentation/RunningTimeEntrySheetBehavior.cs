@@ -1,8 +1,8 @@
 ﻿using Android.Content;
 using Android.Runtime;
-using Android.Support.Design.Animation;
-using Android.Support.Design.Transformation;
 using Android.Util;
+using Google.Android.Material.Animation;
+using Google.Android.Material.Transformation;
 
 namespace Toggl.Droid.Presentation
 {

@@ -51,14 +51,14 @@ namespace Toggl.Networking.ApiClients
             {
                 var deleteEndpoint = endPoints.Delete(timeEntry.WorkspaceId, timeEntry.Id);
                 await SendRequest<ITimeEntry>(deleteEndpoint, AuthHeader)
-                    .ConfigureAwait(false);   
+                    .ConfigureAwait(false);
             }
             catch (NotFoundException)
             {
             }
         }
 
-        private Task<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
+        private async Task<ITimeEntry> pushTimeEntry(Endpoint endPoint, ITimeEntry timeEntry, SerializationReason reason)
         {
             var timeEntryCopy = timeEntry as TimeEntry ?? new TimeEntry(timeEntry);
             if (reason == SerializationReason.Post)
@@ -66,8 +66,8 @@ namespace Toggl.Networking.ApiClients
                 timeEntryCopy.CreatedWith = userAgent.ToString();
             }
 
-            return SendRequest(endPoint, AuthHeader, timeEntryCopy, reason)
-                .Upcast<ITimeEntry, TimeEntry>();
+            return await SendRequest(endPoint, AuthHeader, timeEntryCopy, reason)
+                .ConfigureAwait(false);
         }
     }
 }

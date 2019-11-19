@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Android.Support.Constraints;
-using Android.Support.Design.Widget;
-using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
+using AndroidX.ConstraintLayout.Widget;
+using AndroidX.ViewPager.Widget;
+using Google.Android.Material.AppBar;
 using Toggl.Droid.Extensions;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace Toggl.Droid.Fragments
 {

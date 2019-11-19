@@ -1,6 +1,4 @@
 ﻿using Android.OS;
-using Android.Support.V7.App;
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Reactive.Linq;

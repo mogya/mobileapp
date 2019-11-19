@@ -409,6 +409,27 @@
     <data name="SundayInitial" xml:space="preserve">
         <value>日</value>
     </data>
+    <data name="Monday" xml:space="preserve">
+        <value>Monday</value>
+    </data>
+    <data name="Tuesday" xml:space="preserve">
+        <value>Tuesday</value>
+    </data>
+    <data name="Wednesday" xml:space="preserve">
+        <value>Wednesday</value>
+    </data>
+    <data name="Thursday" xml:space="preserve">
+        <value>Thursday</value>
+    </data>
+    <data name="Friday" xml:space="preserve">
+        <value>Friday</value>
+    </data>
+    <data name="Saturday" xml:space="preserve">
+        <value>Saturday</value>
+    </data>
+    <data name="Sunday" xml:space="preserve">
+        <value>Sunday</value>
+    </data>
     <data name="Help" xml:space="preserve">
         <value>ヘルプ</value>
     </data>
@@ -960,6 +981,9 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
     <data name="EditingTwentyFourHoursFormat">
         <value>HH:mm</value>
     </data>
+    <data name="CalendarToolbarDateFormat">
+        <value>dddd, MMM d</value>
+    </data>
     <data name="SiriShortcuts" xml:space="preserve">
         <value>Siri のショートカット</value>
     </data>
@@ -1295,6 +1319,9 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
     </data>
     <data name="No" xml:space="preserve">
         <value>いいえ</value>
+    </data>
+    <data name="Now" xml:space="preserve">
+        <value>now</value>
     </data>
     <data name="LoginToTrack" xml:space="preserve">
         <value>時間を記録するためにログイン</value>

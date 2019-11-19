@@ -410,25 +410,25 @@
         <value>日</value>
     </data>
     <data name="Monday" xml:space="preserve">
-        <value>Monday</value>
+        <value>月曜日</value>
     </data>
     <data name="Tuesday" xml:space="preserve">
-        <value>Tuesday</value>
+        <value>火曜日</value>
     </data>
     <data name="Wednesday" xml:space="preserve">
-        <value>Wednesday</value>
+        <value>水曜日</value>
     </data>
     <data name="Thursday" xml:space="preserve">
-        <value>Thursday</value>
+        <value>木曜日</value>
     </data>
     <data name="Friday" xml:space="preserve">
-        <value>Friday</value>
+        <value>金曜日</value>
     </data>
     <data name="Saturday" xml:space="preserve">
-        <value>Saturday</value>
+        <value>土曜日</value>
     </data>
     <data name="Sunday" xml:space="preserve">
-        <value>Sunday</value>
+        <value>日曜日</value>
     </data>
     <data name="Help" xml:space="preserve">
         <value>ヘルプ</value>
@@ -1321,7 +1321,7 @@ Togglの規約とプライバシーポリシーを理解し同意したことに
         <value>いいえ</value>
     </data>
     <data name="Now" xml:space="preserve">
-        <value>now</value>
+        <value>今</value>
     </data>
     <data name="LoginToTrack" xml:space="preserve">
         <value>時間を記録するためにログイン</value>

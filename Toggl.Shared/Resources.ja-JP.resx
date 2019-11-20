@@ -509,11 +509,7 @@
         <value>パスワードリセットのリンクを取得</value>
     </data>
     <data name="TermsOfServiceDialogMessage" xml:space="preserve">
-        <value>Togglの利用規約とプライバシーポリシーに同意する</value>
-    </data>
-    <data name="TermsOfServiceDialogMessageDroid" xml:space="preserve">
-        <value>「同意する」をタップすることにより、
-Togglの規約とプライバシーポリシーを理解し同意したことになります</value>
+        <value>「同意する」をタップすることにより、Togglの{0}と{1}を理解し同意したことになります</value>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
         <value>居住国</value>

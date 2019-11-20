@@ -8,17 +8,17 @@ namespace Toggl.Droid.Extensions
     {
         public static void SetDrawableImageSafe(this FloatingActionButton button, Drawable drawable)
         {
-            var wasHiddenBeforeChange = button.IsOrWillBeHidden;
-
+            // HACK: This is a really nasty work around added in #4824
+            // and changed in #6597 to try fixing a bug that exists in
+            // the FloatingActionButton class. Don't remove it unless you know
+            // exactly what you are doing.
+            // Google Issue: https://issuetracker.google.com/issues/117476935
             button.Hide();
             button.SetImageDrawable(drawable);
             button.Show(new FabVisibilityListener(() =>
             {
                 button.ImageMatrix.SetScale(1, 1);
             }));
-
-            if (wasHiddenBeforeChange)
-                button.Hide();
         }
 
         public sealed class FabVisibilityListener : FloatingActionButton.OnVisibilityChangedListener

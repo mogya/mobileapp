@@ -51,8 +51,12 @@ namespace Toggl.Core.UI
         protected override void RecreateLazyDependenciesForLogin(ITogglApi togglApi)
         {
             base.RecreateLazyDependenciesForLogin(togglApi);
-            WidgetsService?.Dispose();
-            widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
+
+            if (widgetsService.IsValueCreated)
+            {
+                WidgetsService?.Dispose();
+                widgetsService = new Lazy<IWidgetsService>(CreateWidgetsService);
+            }
         }
 
         protected override void RecreateLazyDependenciesForLogout()

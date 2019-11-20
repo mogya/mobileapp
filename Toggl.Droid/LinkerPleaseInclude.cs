@@ -7,6 +7,7 @@ using AndroidX.ConstraintLayout.Widget;
 using AndroidX.Legacy.Widget;
 using AndroidX.Lifecycle;
 using Google.Android.Material.Internal;
+using Google.Android.Material.Snackbar;
 
 namespace Toggl.Droid
 {
@@ -99,6 +100,12 @@ namespace Toggl.Droid
         public void Include(BaselineLayout baselineLayout)
         {
             var baseLine = new BaselineLayout(null, null, 0);
+        }
+
+        public void Include(Snackbar.SnackbarLayout snackbarLayout)
+        {
+            var include = new Snackbar.SnackbarLayout(null);
+            var include2 = new Snackbar.SnackbarLayout(null, null);
         }
     }
 }

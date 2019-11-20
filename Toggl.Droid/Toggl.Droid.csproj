@@ -574,6 +574,7 @@
     <Compile Include="Adapters\SelectProjectRecyclerAdapter.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragment.cs" />
     <Compile Include="DebugHelpers\ErrorTriggeringFragmentShortcut.cs" />
+    <Compile Include="Extensions\SpannableExtensions.cs" />
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.cs" />
     <Compile Include="Fragments\Calendar\CalendarDayViewPageFragment.DialogProvider.cs">
       <DependentUpon>CalendarDayViewPageFragment.cs</DependentUpon>

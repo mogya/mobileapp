@@ -263,9 +263,6 @@ Start the timer and your most used time entries will appear here.</value>
     <data name="TermsOfService" xml:space="preserve">
         <value>Terms of Service</value>
     </data>
-    <data name="And" xml:space="preserve">
-        <value>and</value>
-    </data>
     <data name="TermsOfServiceUrl" xml:space="preserve">
         <value>https://toggl.com/legal/terms</value>
     </data>
@@ -507,11 +504,8 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Get password reset link</value>
     </data>
     <data name="TermsOfServiceDialogMessage" xml:space="preserve">
-        <value>By tapping I Agree, you understand and agree to Toggl’s Terms of Service and Privacy Policy.</value>
-    </data>
-    <data name="TermsOfServiceDialogMessageDroid" xml:space="preserve">
-        <value>By tapping "I Agree", you
-understand and agree to Toggl's</value>
+        <value>By tapping "I Agree", you understand and agree to Toggl's {0} and {1}</value>
+        <comment> This is shown in a popup when the user tries to sign up. {0} is a placeholder for where the words "Terms of Service" will be. {1} is a placeholder for where the words "Privacy Policy" will be. </comment>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
         <value>Country of residence</value>

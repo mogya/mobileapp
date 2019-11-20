@@ -81,7 +81,6 @@
             android:gravity="left"
             android:ellipsize="end"
             android:textSize="15sp"
-            app:layout_goneMarginBottom="8dp"
             android:textColor="@color/primaryText"
             tools:text="Exporting assets to Zeplin and organizing"
             app:layout_constraintVertical_chainStyle="packed"
@@ -113,14 +112,13 @@
         <ImageView
             android:id="@+id/TimeEntriesLogCellProjectArchivedIcon"
             android:src="@drawable/ic_archived"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/AddDescriptionLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/TimeEntriesLogCellProjectLabel"
+            app:layout_constraintTop_toTopOf="@+id/TimeEntriesLogCellProjectLabel"
             app:layout_constraintLeft_toRightOf="@id/TimeEntriesLogCellGroupCount"
             android:layout_marginStart="16dp"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginEnd="12dp" />
         <TextView
             android:id="@+id/TimeEntriesLogCellProjectLabel"
             tools:text="Design"
@@ -131,12 +129,13 @@
             android:textSize="15sp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            app:layout_constraintTop_toTopOf="@id/TimeEntriesLogCellProjectArchivedIcon"
-            app:layout_constraintBottom_toBottomOf="@id/TimeEntriesLogCellProjectArchivedIcon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/AddDescriptionLabel"
             app:layout_constraintLeft_toRightOf="@id/TimeEntriesLogCellProjectArchivedIcon"
             app:layout_constraintRight_toRightOf="@+id/TimeEntriesLogCellDurationGradient"
             app:layout_goneMarginStart="16dp"
             android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
         <View

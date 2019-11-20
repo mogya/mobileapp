@@ -233,6 +233,7 @@ namespace Toggl.Droid.Activities
 
         private void showFragment(Fragment fragment)
         {
+            SupportFragmentManager.ExecutePendingTransactions();
             var transaction = SupportFragmentManager.BeginTransaction();
 
             if (activeFragment is MainFragment mainFragmentToHide)
@@ -254,6 +255,7 @@ namespace Toggl.Droid.Activities
         private void showInitialFragment(int initialTabItemId)
         {
             SupportFragmentManager.RemoveAllFragments();
+            SupportFragmentManager.ExecutePendingTransactions();
 
             var initialFragment = getCachedFragment(initialTabItemId);
             if (!initialFragment.IsAdded)

@@ -334,12 +334,6 @@ namespace Toggl.Shared {
             }
         }
 
-        public static string And {
-            get {
-                return ResourceManager.GetString("And", resourceCulture);
-            }
-        }
-
         public static string TermsOfServiceUrl {
             get {
                 return ResourceManager.GetString("TermsOfServiceUrl", resourceCulture);
@@ -823,12 +817,6 @@ namespace Toggl.Shared {
         public static string TermsOfServiceDialogMessage {
             get {
                 return ResourceManager.GetString("TermsOfServiceDialogMessage", resourceCulture);
-            }
-        }
-
-        public static string TermsOfServiceDialogMessageDroid {
-            get {
-                return ResourceManager.GetString("TermsOfServiceDialogMessageDroid", resourceCulture);
             }
         }
 

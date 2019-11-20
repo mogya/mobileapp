@@ -18,8 +18,8 @@ namespace Toggl.iOS.ViewControllers
     {
         private const int fontSize = 15;
 
-        private readonly NSRange termsOfServiceTextRange = new NSRange(56, 16);
-        private readonly NSRange privacyPolicyRange = new NSRange(77, 14);
+        private readonly NSRange privacyPolicyRange;
+        private readonly NSRange termsOfServiceTextRange;
 
         private readonly UIStringAttributes normalTextAttributes = new UIStringAttributes
         {
@@ -36,6 +36,13 @@ namespace Toggl.iOS.ViewControllers
         public TermsOfServiceViewController(TermsOfServiceViewModel viewModel)
             : base(viewModel, nameof(TermsOfServiceViewController))
         {
+            privacyPolicyRange = new NSRange(
+                ViewModel.IndexOfPrivacyPolicy,
+                Resources.PrivacyPolicy.Length);
+
+            termsOfServiceTextRange = new NSRange(
+                ViewModel.IndexOfTermsOfService,
+                Resources.TermsOfService.Length);
         }
 
         public override void ViewDidLoad()
@@ -67,7 +74,7 @@ namespace Toggl.iOS.ViewControllers
             TextView.TextContainerInset = UIEdgeInsets.Zero;
             TextView.TextContainer.LineFragmentPadding = 0;
 
-            var text = new NSMutableAttributedString(Resources.TermsOfServiceDialogMessage, normalTextAttributes);
+            var text = new NSMutableAttributedString(ViewModel.FormattedDialogText, normalTextAttributes);
             text.AddAttributes(highlitedTextAttributes, termsOfServiceTextRange);
             text.AddAttributes(highlitedTextAttributes, privacyPolicyRange);
             TextView.AttributedText = text;
@@ -82,8 +89,7 @@ namespace Toggl.iOS.ViewControllers
             location.X -= TextView.TextContainerInset.Left;
             location.Y -= TextView.TextContainerInset.Top;
 
-            nfloat _ = 0;
-            var characterIndex = layoutManager.CharacterIndexForPoint(location, TextView.TextContainer, ref _);
+            var characterIndex = layoutManager.GetCharacterIndex(location, TextView.TextContainer);
 
             if (termsOfServiceTextRange.ContainsNumber(characterIndex))
                 ViewModel.ViewTermsOfService.Execute();

@@ -7,6 +7,9 @@ using Toggl.Core.UI.Extensions;
 using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Shared.Extensions;
+using Android.Text.Style;
+using Android.Text;
+using Android.Text.Method;
 
 namespace Toggl.Droid.Fragments
 {
@@ -31,13 +34,16 @@ namespace Toggl.Droid.Fragments
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            privacyPolicyTextView.Rx()
-                .BindAction(ViewModel.ViewPrivacyPolicy)
-                .DisposedBy(DisposeBag);
-
-            termsOfServiceTextView.Rx()
-                .BindAction(ViewModel.ViewTermsOfService)
-                .DisposedBy(DisposeBag);
+            termsMessageTextView.TextFormatted = new SpannableString(ViewModel.FormattedDialogText)
+                .SetClickableSpan(
+                    ViewModel.IndexOfPrivacyPolicy,
+                    Shared.Resources.PrivacyPolicy.Length,
+                    ViewModel.ViewPrivacyPolicy)
+                .SetClickableSpan(
+                    ViewModel.IndexOfTermsOfService,
+                    Shared.Resources.TermsOfService.Length,
+                    ViewModel.ViewTermsOfService);
+            termsMessageTextView.MovementMethod = LinkMovementMethod.Instance;
 
             acceptButton.Rx().Tap()
                 .Subscribe(() => ViewModel.Close(true))

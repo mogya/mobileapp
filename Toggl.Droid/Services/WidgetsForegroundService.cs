@@ -14,6 +14,7 @@ using Toggl.Droid.Widgets;
 using static Toggl.Droid.Services.JobServicesConstants;
 using static Toggl.Droid.Helper.NotificationsConstants;
 using static Toggl.Droid.Widgets.WidgetsConstants;
+using Toggl.Core.Exceptions;
 
 namespace Toggl.Droid.Services
 {
@@ -79,7 +80,18 @@ namespace Toggl.Droid.Services
         private async Task handleStopRunningTimeEntry()
         {
             var now = timeService.CurrentDateTime;
-            await interactorFactory.StopTimeEntry(now, TimeEntryStopOrigin.Widget).Execute();
+
+            try
+            {
+                await interactorFactory.StopTimeEntry(now, TimeEntryStopOrigin.Widget).Execute();
+            }
+            catch(NoRunningTimeEntryException)
+            {
+                /* There is no need to handle this because stopping a time entry should be
+                 * idempotent operation. This happens only when user is tapping the widget's
+                 * stop button multiple times in quick succession.
+                 */
+            }
         }
 
         private async Task continueTimeEntryFromSuggestion(Intent intent)

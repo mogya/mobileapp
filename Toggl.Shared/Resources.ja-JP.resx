@@ -265,9 +265,6 @@
     <data name="TermsOfService" xml:space="preserve">
         <value>利用規約</value>
     </data>
-    <data name="And" xml:space="preserve">
-        <value>と</value>
-    </data>
     <data name="TermsOfServiceUrl" xml:space="preserve">
         <value>https://toggl.com/legal/terms</value>
     </data>
